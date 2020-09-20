@@ -1,12 +1,16 @@
-﻿using System;
+﻿using main;
+using System;
 
 namespace rt
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
+            PixelBuffer pb = new PixelBuffer(256, 256);
+            pb.Fill();
+            pb.Save("test.bmp");
         }
     }
 }
