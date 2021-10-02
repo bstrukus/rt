@@ -1,4 +1,8 @@
-﻿using main;
+﻿/*
+ * Copyright Ben Strukus
+ */
+
+using main;
 using System;
 
 namespace rt

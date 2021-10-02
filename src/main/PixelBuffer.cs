@@ -1,4 +1,8 @@
-﻿using System.Drawing;
+﻿/*
+ * Copyright Ben Strukus
+ */
+
+using System.Drawing;
 
 namespace main
 {
