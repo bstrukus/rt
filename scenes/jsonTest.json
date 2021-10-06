@@ -1,0 +1,66 @@
+{
+    "image": {
+        "stepFactor": 100,
+        "format": ".bmp"
+    },
+    "shapes": {
+        "spheres": [ 
+            {
+                "transform": {
+                    "position": [
+                        0, 0, 0
+                    ],
+                    "orientation": [
+                        0, 0, 0, 1
+                    ],
+                    "scale": [
+                        1, 1, 1
+                    ]
+                },
+                "radius": 0.5
+            },
+            {
+                "transform": {
+                    "position": [
+                        0, 0, 0
+                    ],
+                    "orientation": [
+                        0, 0, 0, 1
+                    ],
+                    "scale": [
+                        1, 1, 1
+                    ]
+                },
+                "radius": 0.5
+            }
+        ],
+        "boxes": [ 
+            {
+                "transform": {
+                    "position": [
+                        0, 0, 0
+                    ],
+                    "orientation": [
+                        0, 0, 0, 1
+                    ],
+                    "scale": [
+                        1, 1, 1
+                    ]
+                }
+            },
+            {
+                "transform": {
+                    "position": [
+                        0, 0, 0
+                    ],
+                    "orientation": [
+                        0, 0, 0, 1
+                    ],
+                    "scale": [
+                        1, 1, 1
+                    ]
+                }
+            }
+        ]
+    }
+}
