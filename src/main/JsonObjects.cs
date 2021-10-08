@@ -16,6 +16,9 @@ namespace JsonObjects
         [JsonProperty("shapes")]
         public ShapeData Shapes { get; set; }
 
+        [JsonProperty("lights")]
+        public LightData Lights { get; set; }
+
         public bool Validate()
         {
             if (this.Image == null)
@@ -27,8 +30,11 @@ namespace JsonObjects
 
         public void PrintData()
         {
-            this.Image.PrintData();
-            this.Shapes.PrintData();
+            int indentation = 3;
+            Console.WriteLine("SCENE");
+            this.Image.PrintData(indentation);
+            this.Shapes.PrintData(indentation);
+            this.Lights.PrintData(indentation);
         }
     }
 
@@ -40,11 +46,12 @@ namespace JsonObjects
         [JsonProperty("format")]
         public string FileFormat { get; set; }
 
-        public void PrintData()
+        public void PrintData(int spaceCount = 0)
         {
-            Console.WriteLine("IMAGE");
-            Console.WriteLine($" - StepFactor: {this.StepFactor}");
-            Console.WriteLine($" - FileFormat: {this.FileFormat}");
+            string spaces = new string(' ', spaceCount);
+            Console.WriteLine($"{spaces}IMAGE");
+            Console.WriteLine($"{spaces} - StepFactor: {this.StepFactor}");
+            Console.WriteLine($"{spaces} - FileFormat: {this.FileFormat}");
         }
     }
 
@@ -78,11 +85,13 @@ namespace JsonObjects
         [JsonProperty("boxes")]
         public List<BoxData> Boxes { get; set; }
 
-        public void PrintData()
+        public void PrintData(int spaceCount = 0)
         {
-            Console.WriteLine("SHAPES");
+            string spaces = new string(' ', spaceCount);
 
-            int indentation = 3;
+            Console.WriteLine($"{spaces}SHAPES");
+
+            int indentation = 3 + spaceCount;
             foreach (var sphere in this.Spheres)
             {
                 sphere.PrintData(indentation);
@@ -102,6 +111,9 @@ namespace JsonObjects
         [JsonProperty("radius")]
         public float Radius { get; set; }
 
+        [JsonProperty("material")]
+        public MaterialData Material { get; set; }
+
         public void PrintData(int spaceCount)
         {
             string spaces = new string(' ', spaceCount);
@@ -110,6 +122,7 @@ namespace JsonObjects
             Console.WriteLine($"{spaces}SPHERE");
             this.Transform.PrintData(indentation);
             Console.WriteLine($"{spaces} - Radius: {this.Radius}");
+            this.Material.PrintData(indentation);
         }
     }
 
@@ -118,12 +131,69 @@ namespace JsonObjects
         [JsonProperty("transform")]
         public TransformData Transform { get; set; }
 
+        [JsonProperty("Material")]
+        public MaterialData Material { get; set; }
+
         public void PrintData(int indentAmount)
         {
             string indentation = new string(' ', indentAmount);
 
             Console.WriteLine($"{indentation}BOX");
             this.Transform.PrintData(indentAmount + 3);
+            this.Material.PrintData(indentAmount + 3);
+        }
+    }
+
+    public class PointData
+    {
+        [JsonProperty("transform")]
+        public TransformData Transform { get; set; }
+
+        [JsonProperty("color")]
+        public List<float> Color { get; set; }
+
+        public void PrintData(int spaceCount)
+        {
+            string spaces = new string(' ', spaceCount);
+            int indentation = spaceCount + 3;
+
+            Console.WriteLine($"{spaces}POINT");
+            this.Transform.PrintData(indentation);
+            Console.WriteLine($"{spaces} - Color: [{this.Color[0]}, {this.Color[1]}, {this.Color[2]}]");
+        }
+    }
+
+    public class LightData
+    {
+        [JsonProperty("points")]
+        public List<PointData> PointLights { get; set; }
+
+        public void PrintData(int spaceCount = 0)
+        {
+            string spaces = new string(' ', spaceCount);
+
+            Console.WriteLine($"{spaces}LIGHTS");
+
+            int indentation = 3 + spaceCount;
+            foreach (var light in this.PointLights)
+            {
+                light.PrintData(indentation);
+            }
+        }
+    }
+
+    public class MaterialData
+    {
+        [JsonProperty("color")]
+        public List<float> Color { get; set; }
+
+        public void PrintData(int spaceCount)
+        {
+            string spaces = new string(' ', spaceCount);
+            int indentation = spaceCount + 3;
+
+            Console.WriteLine($"{spaces}MATERIAL");
+            Console.WriteLine($"{spaces} - Color: [{this.Color[0]}, {this.Color[1]}, {this.Color[2]}]");
         }
     }
 }
