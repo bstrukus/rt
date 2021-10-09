@@ -4,85 +4,43 @@
         "format": ".bmp"
     },
     "camera": {
-        "transform": {
-            "position": {
-                "x": 0,
-                "y": 0,
-                "z": 0
-            },
-            "orientation": {
-                "x-axis":  { 
-                    "x": -1,
-                    "y": 0,
-                    "z": 0
-                },
-                "y-axis":  { 
-                    "x": 0,
-                    "y": 1,
-                    "z": 0
-                },                
-                "z-axis": { 
-                    "x": 0,
-                    "y": 0,
-                    "z": -1
-                }
-            },
-            "scale": {
-                "x": 2,
-                "y": 1,
-                "z": 1
-            }
+        "eyePosition": [
+            0, 0, 0
+        ],
+        "projectionPlane": 
+        {
+            "center": [
+                0, 0, -1
+            ],
+            "uAxis": [
+                2, 0, 0
+            ],
+            "vAxis": [
+                1, 0, 0
+            ]
         }
     },
-    "shapes": [{
-        "sphere1": {
-            "transform": {
-                "position": {
-                    "x": 0,
-                    "y": 0,
-                    "z": -1
+    "shapes": {
+        "spheres": [ 
+            {
+                "transform": {
+                    "position": [
+                        0, 0, -1
+                    ],
+                    "orientation": [
+                        0, 0, 0, 1
+                    ],
+                    "scale": [
+                        1, 1, 1
+                    ]
                 },
-                "orientation": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
+                "material": {
+                    "color": [
+                        1, 0, 0
+                    ]
                 },
-                "scale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                }
-            },
-            "radius": 0.5,
-            "material": {
-                "diffuse": {
-                    "r": 1.0,
-                    "g": 0.0,
-                    "b": 0.0
-                },
-                "specular": 0.5
+                "radius": 0.5
             }
-        }
-    }],
-    "lights": [{
-        "point1": {
-            "transform": {            
-                "position": {
-                    "x": 0,
-                    "y": 5,
-                    "z": -1
-                },
-                "orientation": {
-                    "x": 0,
-                    "y": 0,
-                    "z": 0
-                },
-                "scale": {
-                    "x": 1,
-                    "y": 1,
-                    "z": 1
-                }
-            }
-        }
-    }]
+        ]
+    }
 }

@@ -141,7 +141,7 @@ namespace JsonObjects
         [JsonProperty("transform")]
         public TransformData Transform { get; set; }
 
-        [JsonProperty("Material")]
+        [JsonProperty("material")]
         public MaterialData Material { get; set; }
 
         public void PrintData(int indentAmount)
