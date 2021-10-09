@@ -3,6 +3,23 @@
         "stepFactor": 100,
         "format": ".bmp"
     },
+    "camera": {
+        "eyePosition": [
+            0, 0, 0
+        ],
+        "projectionPlane": 
+        {
+            "center": [
+                0, 0, -0.5
+            ],
+            "uAxis": [
+                2, 0, 0
+            ],
+            "vAxis": [
+                1, 0, 0
+            ]
+        }
+    },
     "shapes": {
         "spheres": [ 
             {

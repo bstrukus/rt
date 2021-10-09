@@ -13,6 +13,9 @@ namespace JsonObjects
         [JsonProperty("image")]
         public ImageData Image { get; set; }
 
+        [JsonProperty("camera")]
+        public CameraData Camera { get; set; }
+
         [JsonProperty("shapes")]
         public ShapeData Shapes { get; set; }
 
@@ -33,8 +36,15 @@ namespace JsonObjects
             int indentation = 3;
             Console.WriteLine("SCENE");
             this.Image.PrintData(indentation);
+            this.Camera.PrintData(indentation);
             this.Shapes.PrintData(indentation);
             this.Lights.PrintData(indentation);
+        }
+
+        static public void PrintTitle(int spaceCount, string title)
+        {
+            string spaces = new string(' ', spaceCount - 2);
+            Console.WriteLine($"{spaces}- {title}");
         }
     }
 
@@ -49,7 +59,7 @@ namespace JsonObjects
         public void PrintData(int spaceCount = 0)
         {
             string spaces = new string(' ', spaceCount);
-            Console.WriteLine($"{spaces}IMAGE");
+            SceneData.PrintTitle(spaceCount, "IMAGE");
             Console.WriteLine($"{spaces} - StepFactor: {this.StepFactor}");
             Console.WriteLine($"{spaces} - FileFormat: {this.FileFormat}");
         }
@@ -58,19 +68,19 @@ namespace JsonObjects
     public class TransformData
     {
         [JsonProperty("position")]
-        public List<float> Position { get; set; }
+        public List<double> Position { get; set; }
 
         [JsonProperty("orientation")]
-        public List<float> Orientation { get; set; }
+        public List<double> Orientation { get; set; }
 
         [JsonProperty("scale")]
-        public List<float> Scale { get; set; }
+        public List<double> Scale { get; set; }
 
         public void PrintData(int spaceCount = 0)
         {
             string spaces = new string(' ', spaceCount);
 
-            Console.WriteLine($"{spaces}TRANSFORM");
+            SceneData.PrintTitle(spaceCount, "TRANSFORM");
             Console.WriteLine($"{spaces} - Position: [{this.Position[0]}, {this.Position[1]}, {this.Position[2]}]");
             Console.WriteLine($"{spaces} - Orientation: [{this.Orientation[0]}, {this.Orientation[1]}, {this.Orientation[2]}, {this.Orientation[3]}]");
             Console.WriteLine($"{spaces} - Scale: [{this.Scale[0]}, {this.Scale[1]}, {this.Scale[2]}]");
@@ -89,7 +99,7 @@ namespace JsonObjects
         {
             string spaces = new string(' ', spaceCount);
 
-            Console.WriteLine($"{spaces}SHAPES");
+            SceneData.PrintTitle(spaceCount, "SHAPES");
 
             int indentation = 3 + spaceCount;
             foreach (var sphere in this.Spheres)
@@ -109,7 +119,7 @@ namespace JsonObjects
         public TransformData Transform { get; set; }
 
         [JsonProperty("radius")]
-        public float Radius { get; set; }
+        public double Radius { get; set; }
 
         [JsonProperty("material")]
         public MaterialData Material { get; set; }
@@ -119,7 +129,7 @@ namespace JsonObjects
             string spaces = new string(' ', spaceCount);
             int indentation = spaceCount + 3;
 
-            Console.WriteLine($"{spaces}SPHERE");
+            SceneData.PrintTitle(spaceCount, "SPHERE");
             this.Transform.PrintData(indentation);
             Console.WriteLine($"{spaces} - Radius: {this.Radius}");
             this.Material.PrintData(indentation);
@@ -138,7 +148,7 @@ namespace JsonObjects
         {
             string indentation = new string(' ', indentAmount);
 
-            Console.WriteLine($"{indentation}BOX");
+            SceneData.PrintTitle(indentAmount, "BOX");
             this.Transform.PrintData(indentAmount + 3);
             this.Material.PrintData(indentAmount + 3);
         }
@@ -150,14 +160,14 @@ namespace JsonObjects
         public TransformData Transform { get; set; }
 
         [JsonProperty("color")]
-        public List<float> Color { get; set; }
+        public List<double> Color { get; set; }
 
         public void PrintData(int spaceCount)
         {
             string spaces = new string(' ', spaceCount);
             int indentation = spaceCount + 3;
 
-            Console.WriteLine($"{spaces}POINT");
+            SceneData.PrintTitle(spaceCount, "POINT");
             this.Transform.PrintData(indentation);
             Console.WriteLine($"{spaces} - Color: [{this.Color[0]}, {this.Color[1]}, {this.Color[2]}]");
         }
@@ -172,7 +182,7 @@ namespace JsonObjects
         {
             string spaces = new string(' ', spaceCount);
 
-            Console.WriteLine($"{spaces}LIGHTS");
+            SceneData.PrintTitle(spaceCount, "LIGHTS");
 
             int indentation = 3 + spaceCount;
             foreach (var light in this.PointLights)
@@ -185,15 +195,55 @@ namespace JsonObjects
     public class MaterialData
     {
         [JsonProperty("color")]
-        public List<float> Color { get; set; }
+        public List<double> Color { get; set; }
 
         public void PrintData(int spaceCount)
         {
             string spaces = new string(' ', spaceCount);
             int indentation = spaceCount + 3;
 
-            Console.WriteLine($"{spaces}MATERIAL");
+            SceneData.PrintTitle(spaceCount, "MATERIAL");
             Console.WriteLine($"{spaces} - Color: [{this.Color[0]}, {this.Color[1]}, {this.Color[2]}]");
+        }
+    }
+
+    public class ProjectionPlaneData
+    {
+        [JsonProperty("center")]
+        public List<double> Center { get; set; }
+
+        [JsonProperty("uAxis")]
+        public List<double> UAxis { get; set; }
+
+        [JsonProperty("vAxis")]
+        public List<double> VAxis { get; set; }
+
+        public void PrintData(int spaceCount)
+        {
+            string spaces = new string(' ', spaceCount);
+
+            SceneData.PrintTitle(spaceCount, "PROJECTION PLANE");
+            Console.WriteLine($"{spaces} - Center: [{this.Center[0]}, {this.Center[1]}, {this.Center[2]}]");
+            Console.WriteLine($"{spaces} - U-Axis: [{this.UAxis[0]}, {this.UAxis[1]}, {this.UAxis[2]}]");
+            Console.WriteLine($"{spaces} - V-Axis: [{this.VAxis[0]}, {this.VAxis[1]}, {this.VAxis[2]}]");
+        }
+    }
+
+    public class CameraData
+    {
+        [JsonProperty("eyePosition")]
+        public List<double> EyePosition { get; set; }
+
+        [JsonProperty("projectionPlane")]
+        public ProjectionPlaneData ProjectionPlane { get; set; }
+
+        public void PrintData(int spaceCount)
+        {
+            string spaces = new string(' ', spaceCount);
+
+            SceneData.PrintTitle(spaceCount, "CAMERA");
+            Console.WriteLine($"{spaces} - Eye Position: [{this.EyePosition[0]}, {this.EyePosition[1]}, {this.EyePosition[2]}]");
+            this.ProjectionPlane.PrintData(spaceCount + 3);
         }
     }
 }
