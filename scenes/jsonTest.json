@@ -1,0 +1,139 @@
+{
+    "image": {
+        "stepFactor": 100,
+        "format": ".bmp"
+    },
+    "camera": {
+        "eyePosition": [
+            0, 0, 0
+        ],
+        "projectionPlane": 
+        {
+            "center": [
+                0, 0, -0.5
+            ],
+            "uAxis": [
+                2, 0, 0
+            ],
+            "vAxis": [
+                1, 0, 0
+            ]
+        }
+    },
+    "shapes": {
+        "spheres": [ 
+            {
+                "transform": {
+                    "position": [
+                        0, 0, 0
+                    ],
+                    "orientation": [
+                        0, 0, 0, 1
+                    ],
+                    "scale": [
+                        1, 1, 1
+                    ]
+                },
+                "material": {
+                    "color": [
+                        0, 0, 1
+                    ]
+                },
+                "radius": 0.5
+            },
+            {
+                "transform": {
+                    "position": [
+                        0, 0, 0
+                    ],
+                    "orientation": [
+                        0, 0, 0, 1
+                    ],
+                    "scale": [
+                        1, 1, 1
+                    ]
+                },
+                "material": {
+                    "color": [
+                        1, 0, 0
+                    ]
+                },
+                "radius": 0.5
+            }
+        ],
+        "boxes": [ 
+            {
+                "transform": {
+                    "position": [
+                        0, 0, 0
+                    ],
+                    "orientation": [
+                        0, 0, 0, 1
+                    ],
+                    "scale": [
+                        1, 1, 1
+                    ]
+                },
+                "material": {
+                    "color": [
+                        0, 1, 0
+                    ]
+                }
+            },
+            {
+                "transform": {
+                    "position": [
+                        0, 0, 0
+                    ],
+                    "orientation": [
+                        0, 0, 0, 1
+                    ],
+                    "scale": [
+                        1, 1, 1
+                    ]
+                },
+                "material": {
+                    "color": [
+                        0, 1, 1
+                    ]
+                }
+            }
+        ]
+    },
+    "lights": {
+        "points": [
+            {
+                "transform": {
+                    "position": [
+                        0, 0, 0
+                    ],
+                    "orientation": [
+                        0, 0, 0, 1
+                    ],
+                    "scale": [
+                        1, 0, 1
+                    ]
+                },
+                "color": [
+                    1, 0, 0
+                ]
+            },
+            {
+                "transform": {
+                    "position": [
+                        1, 2, 3
+                    ],
+                    "orientation": [
+                        0, 0, 0, 1
+                    ],
+                    "scale": [
+                        0, 0, 1
+                    ]
+                },
+                "color": [
+                    0, 1, 1
+                ]
+            }
+        ]
+    }
+}

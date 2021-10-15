@@ -1,0 +1,46 @@
+{
+    "image": {
+        "stepFactor": 100,
+        "format": ".bmp"
+    },
+    "camera": {
+        "eyePosition": [
+            0, 0, 0
+        ],
+        "projectionPlane": 
+        {
+            "center": [
+                0, 0, -1
+            ],
+            "uAxis": [
+                2, 0, 0
+            ],
+            "vAxis": [
+                1, 0, 0
+            ]
+        }
+    },
+    "shapes": {
+        "spheres": [ 
+            {
+                "transform": {
+                    "position": [
+                        0, 0, -1
+                    ],
+                    "orientation": [
+                        0, 0, 0, 1
+                    ],
+                    "scale": [
+                        1, 1, 1
+                    ]
+                },
+                "material": {
+                    "color": [
+                        1, 0, 0
+                    ]
+                },
+                "radius": 0.5
+            }
+        ]
+    }
+}

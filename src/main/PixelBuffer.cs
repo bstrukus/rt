@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright Ben Strukus
+ * #copyright_placeholder Copyright Ben Strukus
  */
 
 using System.Drawing;
