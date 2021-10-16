@@ -41,6 +41,8 @@ namespace UnitTests.Math
             Assert.AreEqual(5.0f, fiveX.X, Epsilon);
         }
 
+        #region Cross Product
+
         [TestMethod]
         public void CrossProductOfXAndYAxes()
         {
@@ -92,6 +94,10 @@ namespace UnitTests.Math
             Assert.IsTrue(result);
         }
 
+        #endregion Cross Product
+
+        #region Dot Product
+
         [TestMethod]
         public void DotProductOfTheSameVector()
         {
@@ -118,5 +124,7 @@ namespace UnitTests.Math
             // Assert
             Assert.AreEqual(result, 0.0f);
         }
+
+        #endregion Dot Product
     }
 }
