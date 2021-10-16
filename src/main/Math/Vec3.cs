@@ -93,6 +93,22 @@ namespace rt.Math
                 lhs.val[2] - rhs.val[2]);
         }
 
+        static public bool operator ==(Vec3 lhs, Vec3 rhs)
+        {
+            // #todo Replace with epsilon
+            return lhs.X == rhs.X &&
+                   lhs.Y == rhs.Y &&
+                   lhs.Z == rhs.Z;
+        }
+
+        static public bool operator !=(Vec3 lhs, Vec3 rhs)
+        {
+            // #todo Replace with epsilon
+            return lhs.X != rhs.X &&
+                   lhs.Y != rhs.Y &&
+                   lhs.Z != rhs.Z;
+        }
+
         static public float Dot(Vec3 lhs, Vec3 rhs)
         {
             return lhs.val[0] * rhs.val[0] +
