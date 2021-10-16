@@ -2,11 +2,17 @@
  * #copyright_placeholder Copyright Ben Strukus
  */
 
-using System;
 using System.Diagnostics;
 
 namespace rt.Math
 {
+    /// <summary>
+    /// 3D vector class used for linear algebra operations.
+    /// </summary>
+    /// <remarks>
+    /// I could have used the .NET implementation of Vector3 in System.Numerics, but since this
+    /// project is a learning exercise I've decided to roll my own.
+    /// </remarks>
     public class Vec3
     {
         public static Vec3 Zero = new Vec3(0.0f, 0.0f, 0.0f);
@@ -36,7 +42,7 @@ namespace rt.Math
         {
             float squaredLength = Dot(this, this);
 
-            Debug.Assert(squaredLength > Constants.Epsilon, "Vec3 - Can't get length of zero vector");
+            Debug.Assert(squaredLength > Utils.Epsilon, "Vec3 - Can't get length of zero vector");
 
             return (float)System.Math.Sqrt(squaredLength);
         }
@@ -47,6 +53,14 @@ namespace rt.Math
         }
 
         static public Vec3 operator *(Vec3 vec, float scalar)
+        {
+            return new Vec3(
+                vec.val[0] * scalar,
+                vec.val[1] * scalar,
+                vec.val[2] * scalar);
+        }
+
+        static public Vec3 operator *(float scalar, Vec3 vec)
         {
             return new Vec3(
                 vec.val[0] * scalar,
