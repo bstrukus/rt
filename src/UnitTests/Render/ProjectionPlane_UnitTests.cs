@@ -3,10 +3,12 @@
  */
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using rt.Math;
 
 namespace UnitTests.Render
 {
+    using rt.Math;
+    using rt.Render;
+
     [TestClass]
     public class ProjectionPlane_UnitTests
     {
@@ -14,7 +16,7 @@ namespace UnitTests.Render
         public void GetCenterOfProjectionPlane()
         {
             // Arrange
-            var projectionPlane = new rt.ProjectionPlane(Vec3.Zero, Vec3.AxisX, Vec3.AxisY);
+            var projectionPlane = new ProjectionPlane(Vec3.Zero, Vec3.AxisX, Vec3.AxisY);
 
             // Act
             var planeCenter = projectionPlane.GetPointOnPlane(0.0f, 0.0f);
@@ -37,7 +39,7 @@ namespace UnitTests.Render
             // Arrange
             float hScale = 3.0f;    // Testing non-uniform projection plane
             float vScale = 2.0f;    // Testing non-uniform projection plane
-            var projectionPlane = new rt.ProjectionPlane(Vec3.AxisZ, hScale * Vec3.AxisX, vScale * Vec3.AxisY);
+            var projectionPlane = new ProjectionPlane(Vec3.AxisZ, hScale * Vec3.AxisX, vScale * Vec3.AxisY);
 
             // Act
             var topLeft = projectionPlane.GetPointOnPlane(hVal, vVal);

@@ -31,7 +31,7 @@ namespace rt
             string fileContents = file.ReadToEnd();
             Console.WriteLine($"FILE: {fileContents}\r\n");
 
-            var sceneData = Newtonsoft.Json.JsonConvert.DeserializeObject<JsonObjects.SceneData>(fileContents);
+            var sceneData = Newtonsoft.Json.JsonConvert.DeserializeObject<Data.SceneData>(fileContents);
             if (!sceneData.Validate())
             {
                 Console.WriteLine("Error parsing JSON");

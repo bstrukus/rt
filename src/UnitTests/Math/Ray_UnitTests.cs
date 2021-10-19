@@ -4,10 +4,11 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using rt.Math;
-
 namespace UnitTests.Math
 {
+    using rt.Math;
+    using rt.Collide;
+
     [TestClass]
     public class Ray_UnitTests
     {
@@ -19,7 +20,7 @@ namespace UnitTests.Math
             var direction = Vec3.AxisX * 2.0f;
 
             // Act
-            var ray = new rt.Ray(origin, direction);
+            var ray = new Ray(origin, direction);
 
             // Assert
             Assert.IsTrue(ray.Direction.Length() == 1.0f);
@@ -33,7 +34,7 @@ namespace UnitTests.Math
             var direction = Vec3.AxisX;
 
             // Act
-            var ray = new rt.Ray(origin, direction, true);
+            var ray = new Ray(origin, direction, true);
 
             // Assert
             Assert.IsTrue(ray.Direction.Length() == 1.0f);

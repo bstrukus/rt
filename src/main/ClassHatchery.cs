@@ -14,6 +14,8 @@ namespace rt
 {
     namespace Render
     {
+        using Collide;
+
         /// <summary>
         /// The surface that rays pass through.
         /// </summary>
@@ -34,8 +36,8 @@ namespace rt
 
             public Vec3 GetPointOnPlane(float hValue, float vValue)
             {
-                Debug.Assert(Utils.InRange(hValue, -1.0f, 1.0f));
-                Debug.Assert(Utils.InRange(vValue, -1.0f, 1.0f));
+                Debug.Assert(Numbers.InRange(hValue, -1.0f, 1.0f));
+                Debug.Assert(Numbers.InRange(vValue, -1.0f, 1.0f));
 
                 return this.center + (hValue * this.axes[0]) + (vValue * this.axes[1]);
             }
@@ -62,8 +64,8 @@ namespace rt
 
             public Ray GenerateRay(int xStep, int yStep)
             {
-                Debug.Assert(Utils.InRange(xStep, 0, 1));
-                Debug.Assert(Utils.InRange(yStep, 0, 1));
+                Debug.Assert(Numbers.InRange(xStep, 0, 1));
+                Debug.Assert(Numbers.InRange(yStep, 0, 1));
 
                 float hValue = this.StepToInterpolationValue(xStep);
                 float vValue = this.StepToInterpolationValue(yStep);
