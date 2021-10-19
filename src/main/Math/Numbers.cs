@@ -4,7 +4,7 @@
 
 namespace rt.Math
 {
-    public class Utils
+    public class Numbers
     {
         public const float Epsilon = 0.000001f;
 
