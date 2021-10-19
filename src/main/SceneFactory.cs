@@ -2,13 +2,7 @@
  * Copyright Ben Strukus
  */
 
-using JsonObjects;
-using System;
-using System.Diagnostics;
-using rt.Math;
-using System.Collections.Generic;
-
-namespace rt
+namespace rt.Present
 {
     internal class SceneFactory
     {
@@ -17,7 +11,7 @@ namespace rt
             //Singleton stuff
         }
 
-        public Scene CreateScene(JsonObjects.SceneData sceneData)
+        public Scene CreateScene(Data.SceneData sceneData)
         {
             return new Scene();
         }

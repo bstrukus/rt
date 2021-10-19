@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace JsonObjects
+namespace rt.Data
 {
     public class SceneData
     {

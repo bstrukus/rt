@@ -4,7 +4,7 @@
 
 using System.Drawing;
 
-namespace rt
+namespace rt.Render
 {
     public class PixelBuffer
     {
