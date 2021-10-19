@@ -52,6 +52,8 @@ namespace rt.Math
             return this / this.Length();
         }
 
+        #region Operators
+
         static public Vec3 operator *(Vec3 vec, float scalar)
         {
             return new Vec3(
@@ -108,6 +110,20 @@ namespace rt.Math
                    lhs.Y != rhs.Y &&
                    lhs.Z != rhs.Z;
         }
+
+        public override bool Equals(object o)
+        {
+            var otherVector = (Vec3)o;
+
+            return this == otherVector;
+        }
+
+        public override int GetHashCode()
+        {
+            return X.GetHashCode() + Y.GetHashCode() + Z.GetHashCode();
+        }
+
+        #endregion Operators
 
         static public float Dot(Vec3 lhs, Vec3 rhs)
         {
