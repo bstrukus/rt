@@ -42,7 +42,7 @@ namespace rt.Math
         {
             float squaredLength = Dot(this, this);
 
-            Debug.Assert(squaredLength > Utils.Epsilon, "Vec3 - Can't get length of zero vector");
+            Debug.Assert(squaredLength > Numbers.Epsilon, "Vec3 - Can't get length of zero vector");
 
             return (float)System.Math.Sqrt(squaredLength);
         }
