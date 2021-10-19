@@ -180,4 +180,20 @@ namespace rt
             }
         }
     }
+
+    namespace Execute
+    {
+        public class Job
+        {
+            // Collection of Rays
+            // Scene reference
+            // Collection of HitInfo?
+            // Collection of RayResults (pixel values)
+        }
+
+        public class Runner
+        {
+            // Jobs
+        }
+    }
 }
