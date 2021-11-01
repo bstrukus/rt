@@ -8,6 +8,18 @@ using System.Collections.Generic;
 
 namespace rt.Data
 {
+    using System.Diagnostics;
+
+    public static class Helpers
+    {
+        public static Math.Vec3 Vec3FromListOfDoubles(List<double> vec3)
+        {
+            Debug.Assert(vec3 != null);
+            Debug.Assert(vec3.Count == 3);
+            return new Math.Vec3((float)vec3[0], (float)vec3[1], (float)vec3[2]);
+        }
+    };
+
     public class SceneData
     {
         [JsonProperty("image")]
