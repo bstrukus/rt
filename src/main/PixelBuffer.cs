@@ -15,6 +15,17 @@ namespace rt.Render
             this.bitmap = new Bitmap(width, height);
         }
 
+        public void SetPixel(int x, int y, Math.Vec3 color)
+        {
+            int[] intColor =
+            {
+                (int)(color.X * 255.0f),
+                (int)(color.Y * 255.0f),
+                (int)(color.Z * 255.0f),
+            };
+            this.bitmap.SetPixel(x, y, Color.FromArgb(intColor[0], intColor[1], intColor[2]));
+        }
+
         public void Fill()
         {
             for (int x = 0; x < this.bitmap.Width; ++x)
