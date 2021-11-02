@@ -11,7 +11,7 @@ namespace rt
     {
         private const string ScenePath = "..\\..\\scenes\\";
 
-        private const string SceneFile = "jsonTest.json";
+        private const string SceneFile = "simpleSphere.json";
 
         private static void Main(string[] args)
         {
@@ -27,18 +27,14 @@ namespace rt
 
         private static void LoadScene(string sceneFile)
         {
-            using StreamReader file = File.OpenText(sceneFile);
-            string fileContents = file.ReadToEnd();
-            Console.WriteLine($"FILE: {fileContents}\r\n");
+            rt.Data.DataFactory dataFactory = new rt.Data.DataFactory();
+            dataFactory.Load(sceneFile);
 
-            var sceneData = Newtonsoft.Json.JsonConvert.DeserializeObject<Data.SceneData>(fileContents);
-            if (!sceneData.Validate())
-            {
-                Console.WriteLine("Error parsing JSON");
-                return;
-            }
-
-            sceneData.PrintData();
+            // Error checking is done on the SceneData side, should be fine to
+            // build out the actual Scene in the constructor
+            //             rt.Present.Scene scene = new rt.Present.Scene(sceneData);
+            //
+            //             rt.Execute.Runner runner = new rt.Execute.Runner(null, scene);
         }
     }
 }
