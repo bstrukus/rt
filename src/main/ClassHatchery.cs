@@ -12,25 +12,36 @@ using System.Numerics;
 /// </summary>
 namespace rt
 {
+    /// <summary>
+    /// Information specific to setting up the render.
+    /// </summary>
     namespace Render
     {
         using Collide;
+
+        public enum Axis : int
+        {
+            Horizontal = 0,
+            Vertical
+        }
 
         /// <summary>
         /// The surface that rays pass through.
         /// </summary>
         public class ProjectionPlane
         {
+            public float HorizontalScale => this.axes[(int)Axis.Horizontal].Length();
+            public float VerticalScale => this.axes[(int)Axis.Vertical].Length();
+
             private readonly Vec3 center;
             private readonly Vec3[] axes;
 
             public ProjectionPlane(Vec3 center, Vec3 horizontalAxis, Vec3 verticalAxis)
             {
                 this.center = center;
-                this.axes = new Vec3[]
-                {
-                horizontalAxis,
-                verticalAxis
+                this.axes = new Vec3[] {
+                    horizontalAxis,
+                    verticalAxis
                 };
             }
 
@@ -51,32 +62,38 @@ namespace rt
         /// </remarks>
         public class Camera
         {
-            private Vec3 eyePosition;
-            private ProjectionPlane projectionPlane;
-            private int stepCount;
+            public int HorizontalStepCount => this.stepCount[(int)Axis.Horizontal];
+            public int VerticalStepCount => this.stepCount[(int)Axis.Vertical];
+
+            private readonly Vec3 eyePosition;
+            private readonly ProjectionPlane projectionPlane;
+            private readonly int[] stepCount;
 
             public Camera(Vec3 eyePosition, ProjectionPlane plane, int stepCount)
             {
                 this.eyePosition = eyePosition;
                 this.projectionPlane = plane;
-                this.stepCount = stepCount;
+                this.stepCount = new int[] {
+                    stepCount * (int)plane.HorizontalScale,
+                    stepCount * (int)plane.VerticalScale
+                };
             }
 
             public Ray GenerateRay(int xStep, int yStep)
             {
-                Debug.Assert(Numbers.InRange(xStep, 0, 1));
-                Debug.Assert(Numbers.InRange(yStep, 0, 1));
+                Debug.Assert(Numbers.InRange(xStep, 0, this.HorizontalStepCount));
+                Debug.Assert(Numbers.InRange(yStep, 0, this.VerticalStepCount));
 
-                float hValue = this.StepToInterpolationValue(xStep);
-                float vValue = this.StepToInterpolationValue(yStep);
+                float hValue = this.StepToInterpolationValue(xStep, this.HorizontalStepCount);
+                float vValue = this.StepToInterpolationValue(yStep, this.VerticalStepCount);
                 Vec3 direction = this.projectionPlane.GetPointOnPlane(hValue, vValue) - this.eyePosition;
                 return new Ray(eyePosition, direction);
             }
 
-            private float StepToInterpolationValue(int step)
+            private float StepToInterpolationValue(int step, int stepCount)
             {
                 // [0, 1] -> [-1, 1] => [0, 1] * 2 => [0, 2] - 1 => [-1, 1]
-                float floatStep = (float)step;
+                float floatStep = (float)step / (float)stepCount;
                 floatStep *= 2.0f;
                 floatStep -= 1.0f;
                 return floatStep;
@@ -89,6 +106,9 @@ namespace rt
         }
     }
 
+    /// <summary>
+    /// Where rays & objects meet.
+    /// </summary>
     namespace Collide
     {
         /// <summary>
@@ -144,6 +164,9 @@ namespace rt
         }
     }
 
+    /// <summary>
+    /// Worker classes for basic mathematical functions.
+    /// </summary>
     namespace Math
     {
         public class Quat
@@ -152,6 +175,9 @@ namespace rt
         }
     }
 
+    /// <summary>
+    /// How objects are represented in the "world".
+    /// </summary>
     namespace Present
     {
         using Render;
@@ -169,10 +195,22 @@ namespace rt
             public Vec3 Scale { get; set; }
         }
 
-        internal class Scene
+        /// <summary>
+        /// Holds information about hittable objects, lights, and other data.
+        /// </summary>
+        public class Scene
         {
-            private Camera camera;
             private List<IHittable> hittables;
+
+            public Scene(Data.SceneData sceneData)
+            {
+                //
+            }
+
+            public HitInfo Project(Ray ray)
+            {
+                return new HitInfo();
+            }
 
             public void Print()
             {
@@ -181,8 +219,13 @@ namespace rt
         }
     }
 
+    /// <summary>
+    /// Handles the execution of the ray tracing, including how the work gets distributed.
+    /// </summary>
     namespace Execute
     {
+        using Present;
+
         public class Job
         {
             // Collection of Rays
@@ -191,9 +234,72 @@ namespace rt
             // Collection of RayResults (pixel values)
         }
 
+        public class JobManager
+        {
+            // Breaks a Scene down into Jobs
+            public JobManager(/* Some config to control job creation */)
+            {
+                // Maybe it knows about the capabilities, and creates
+                // the workload based on what's available + specified
+                // - GPU
+                // - Other machines
+                // - Threads
+            }
+
+            public Workload CreateJobs(Scene scene)
+            {
+                return new Workload();
+            }
+        }
+
+        public class Workload
+        {
+            // Set of Jobs
+            public Workload(/* Set of jobs? */)
+            {
+            }
+        }
+
         public class Runner
         {
+            private Render.Camera camera;
+            private Present.Scene scene;
+
             // Jobs
+            public Runner(Workload workload)
+            {
+                //
+            }
+
+            public Runner(Render.Camera camera, Present.Scene scene)
+            {
+                this.camera = camera;
+                this.scene = scene;
+            }
+
+            public void Execute()
+            {
+                Render.PixelBuffer buffer = new Render.PixelBuffer(
+                    this.camera.HorizontalStepCount,
+                    this.camera.VerticalStepCount
+                    );
+                // Generate rays from the camera's eye through the projection plane
+                for (int y = 0; y < this.camera.VerticalStepCount; ++y)
+                {
+                    for (int x = 0; x < this.camera.HorizontalStepCount; ++x)
+                    {
+                        var ray = this.camera.GenerateRay(x, y);
+                        var hitInfo = this.scene.Project(ray);
+                        if (hitInfo == null)
+                        {
+                            // Nothing
+                            continue;
+                        }
+
+                        buffer.SetPixel(x, y, color: Math.Vec3.AxisX);
+                    }
+                }
+            }
         }
     }
 }
