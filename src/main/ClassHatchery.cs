@@ -111,6 +111,8 @@ namespace rt
     /// </summary>
     namespace Collide
     {
+        using Present;
+
         /// <summary>
         /// Data returned from a collision.
         /// </summary>
@@ -147,7 +149,14 @@ namespace rt
         /// </summary>
         public abstract class Shape : IHittable
         {
-            // Transform
+            public Transform Transform { get; private set; }
+            public Material Material { get; private set; }
+
+            public Shape(Transform transform, Material material)
+            {
+                this.Transform = transform;
+                this.Material = material;
+            }
 
             public abstract HitInfo TryIntersect(Ray ray);
         }
@@ -157,6 +166,30 @@ namespace rt
         /// </summary>
         public class Sphere : Shape
         {
+            // A unit sphere has a diameter of 1, so a radius of 1/2
+            public float Radius { get; private set; }
+
+            public Sphere(Transform transform, Material material, float radius)
+                : base(transform, material)
+            {
+                this.Radius = radius;
+            }
+
+            public override HitInfo TryIntersect(Ray ray)
+            {
+                return new HitInfo();
+            }
+        }
+
+        public class Box : Shape
+        {
+            public Vec3 HalfExtents => base.Transform.Scale * 0.5f;
+
+            public Box(Transform transform, Material material)
+                : base(transform, material)
+            {
+            }
+
             public override HitInfo TryIntersect(Ray ray)
             {
                 return new HitInfo();
@@ -195,6 +228,11 @@ namespace rt
             public Vec3 Scale { get; set; }
         }
 
+        public class Material
+        {
+            //
+        }
+
         /// <summary>
         /// Holds information about hittable objects, lights, and other data.
         /// </summary>
@@ -202,19 +240,14 @@ namespace rt
         {
             private List<IHittable> hittables;
 
-            public Scene(Data.SceneData sceneData)
+            public Scene(List<IHittable> hittables)
             {
-                //
+                this.hittables = hittables;
             }
 
             public HitInfo Project(Ray ray)
             {
                 return new HitInfo();
-            }
-
-            public void Print()
-            {
-                //
             }
         }
     }

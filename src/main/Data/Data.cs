@@ -8,6 +8,9 @@ using System.Collections.Generic;
 
 namespace rt.Data
 {
+    using Collide;
+    using Present;
+
     using System.Diagnostics;
     using System.IO;
 
@@ -45,7 +48,52 @@ namespace rt.Data
             return true;
         }
 
-        //public Scene CreateScene
+        public Scene CreateScene()
+        {
+            if (!this.sceneData.HasShapes())
+            {
+                return null;
+            }
+
+            var shapeCollection = this.sceneData.Shapes;
+
+            // Go through the list of Spheres & Boxes to create a list of IHittables
+            List<IHittable> hittables = new List<IHittable>();
+            if (shapeCollection.HasSpheres())
+            {
+                foreach (var sphereData in shapeCollection.Spheres)
+                {
+                    hittables.Add(new Sphere(
+                        this.CreateTransform(sphereData.Transform),
+                        this.CreateMaterial(sphereData.Material),
+                        (float)sphereData.Radius
+                        ));
+                }
+            }
+
+            if (shapeCollection.HasBoxes())
+            {
+                foreach (var boxData in shapeCollection.Boxes)
+                {
+                    hittables.Add(new Box(
+                        this.CreateTransform(boxData.Transform),
+                        this.CreateMaterial(boxData.Material)
+                        ));
+                }
+            }
+
+            return new Scene(hittables);
+        }
+
+        private Transform CreateTransform(TransformData data)
+        {
+            return new Transform();
+        }
+
+        private Material CreateMaterial(MaterialData data)
+        {
+            return new Material();
+        }
 
         //         public Camera(Data.CameraData cameraData)
         //         {
@@ -72,6 +120,8 @@ namespace rt.Data
 
         [JsonProperty("lights")]
         public LightData Lights { get; set; }
+
+        public bool HasShapes() => this.Shapes != null && (this.Shapes.HasSpheres() || this.Shapes.HasBoxes());
 
         public bool Validate()
         {
@@ -145,6 +195,10 @@ namespace rt.Data
 
         [JsonProperty("boxes")]
         public List<BoxData> Boxes { get; set; }
+
+        public bool HasSpheres() => this.Spheres != null && this.Spheres.Count > 0;
+
+        public bool HasBoxes() => this.Boxes != null && this.Boxes.Count > 0;
 
         public void PrintData(int spaceCount = 0)
         {
