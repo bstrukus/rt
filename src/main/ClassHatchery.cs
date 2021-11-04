@@ -100,9 +100,22 @@ namespace rt
             }
         }
 
+        /// <summary>
+        ///
+        /// </summary>
         public class Image
         {
-            //
+            public int StepFactor { get; private set; }
+
+            private string fileFormat;
+            private PixelBuffer buffer;
+
+            public Image(int stepFactor, string fileFormat)
+            {
+                this.StepFactor = stepFactor;
+                this.fileFormat = fileFormat;
+                //this.buffer = new PixelBuffer()
+            }
         }
     }
 
@@ -332,6 +345,21 @@ namespace rt
                         buffer.SetPixel(x, y, color: Math.Vec3.AxisX);
                     }
                 }
+
+                buffer.Save("test.bmp");
+            }
+        }
+    }
+
+    namespace Utility
+    {
+        using System;
+
+        internal static class Log
+        {
+            static public void Info(string info)
+            {
+                Console.WriteLine(info);
             }
         }
     }

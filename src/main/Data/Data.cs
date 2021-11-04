@@ -10,18 +10,14 @@ namespace rt.Data
 {
     using Collide;
     using Present;
+    using Render;
+    using Utility;
 
     using System.Diagnostics;
     using System.IO;
 
     public static class Helpers
     {
-        public static Math.Vec3 Vec3FromListOfDoubles(List<double> vec3)
-        {
-            Debug.Assert(vec3 != null);
-            Debug.Assert(vec3.Count == 3);
-            return new Math.Vec3((float)vec3[0], (float)vec3[1], (float)vec3[2]);
-        }
     };
 
     /// <summary>
@@ -35,12 +31,12 @@ namespace rt.Data
         {
             using StreamReader file = File.OpenText(filename);
             string fileContents = file.ReadToEnd();
-            Console.WriteLine($"FILE: {fileContents}\r\n");
+            Log.Info($"FILE: {fileContents}\r\n");
 
             this.sceneData = Newtonsoft.Json.JsonConvert.DeserializeObject<Data.SceneData>(fileContents);
             if (!sceneData.Validate())
             {
-                Console.WriteLine("Error parsing JSON");
+                Log.Info("Error parsing JSON");
                 return false;
             }
 
@@ -85,6 +81,33 @@ namespace rt.Data
             return new Scene(hittables);
         }
 
+        public Camera CreateCamera()
+        {
+            var cameraData = this.sceneData.Camera;
+            var imageData = this.sceneData.Image;
+
+            return new Camera(
+                eyePosition: DoubleListToVec3(cameraData.EyePosition),
+                plane: this.CreateProjectionPlane(),
+                stepCount: imageData.StepFactor);
+        }
+
+        public Image CreateImage()
+        {
+            var imageData = this.sceneData.Image;
+            return new Image(imageData.StepFactor, imageData.FileFormat);
+        }
+
+        private ProjectionPlane CreateProjectionPlane()
+        {
+            var projectionPlaneData = this.sceneData.Camera.ProjectionPlane;
+
+            return new ProjectionPlane(
+                center: DoubleListToVec3(projectionPlaneData.Center),
+                horizontalAxis: DoubleListToVec3(projectionPlaneData.UAxis),
+                verticalAxis: DoubleListToVec3(projectionPlaneData.VAxis));
+        }
+
         private Transform CreateTransform(TransformData data)
         {
             return new Transform();
@@ -105,6 +128,13 @@ namespace rt.Data
         //                     this.projectionPlane. * (int)projectionPlane.VerticalScale
         //                 };
         //         }
+
+        public static Math.Vec3 DoubleListToVec3(List<double> vec3)
+        {
+            Debug.Assert(vec3 != null);
+            Debug.Assert(vec3.Count == 3);
+            return new Math.Vec3((float)vec3[0], (float)vec3[1], (float)vec3[2]);
+        }
     }
 
     public class SceneData
@@ -135,7 +165,7 @@ namespace rt.Data
         public void PrintData()
         {
             int indentation = 3;
-            Console.WriteLine("SCENE");
+            Log.Info("SCENE");
             this.Image?.PrintData(indentation);
             this.Camera?.PrintData(indentation);
             this.Shapes?.PrintData(indentation);
@@ -145,7 +175,7 @@ namespace rt.Data
         static public void PrintTitle(int spaceCount, string title)
         {
             string spaces = new string(' ', spaceCount - 2);
-            Console.WriteLine($"{spaces}- {title}");
+            Log.Info($"{spaces}- {title}");
         }
     }
 
@@ -161,8 +191,8 @@ namespace rt.Data
         {
             string spaces = new string(' ', spaceCount);
             SceneData.PrintTitle(spaceCount, "IMAGE");
-            Console.WriteLine($"{spaces} - StepFactor: {this.StepFactor}");
-            Console.WriteLine($"{spaces} - FileFormat: {this.FileFormat}");
+            Log.Info($"{spaces} - StepFactor: {this.StepFactor}");
+            Log.Info($"{spaces} - FileFormat: {this.FileFormat}");
         }
     }
 
@@ -182,9 +212,9 @@ namespace rt.Data
             string spaces = new string(' ', spaceCount);
 
             SceneData.PrintTitle(spaceCount, "TRANSFORM");
-            Console.WriteLine($"{spaces} - Position: [{this.Position[0]}, {this.Position[1]}, {this.Position[2]}]");
-            Console.WriteLine($"{spaces} - Orientation: [{this.Orientation[0]}, {this.Orientation[1]}, {this.Orientation[2]}, {this.Orientation[3]}]");
-            Console.WriteLine($"{spaces} - Scale: [{this.Scale[0]}, {this.Scale[1]}, {this.Scale[2]}]");
+            Log.Info($"{spaces} - Position: [{this.Position[0]}, {this.Position[1]}, {this.Position[2]}]");
+            Log.Info($"{spaces} - Orientation: [{this.Orientation[0]}, {this.Orientation[1]}, {this.Orientation[2]}, {this.Orientation[3]}]");
+            Log.Info($"{spaces} - Scale: [{this.Scale[0]}, {this.Scale[1]}, {this.Scale[2]}]");
         }
     }
 
@@ -253,7 +283,7 @@ namespace rt.Data
 
             SceneData.PrintTitle(spaceCount, "SPHERE");
             this.Transform.PrintData(indentation);
-            Console.WriteLine($"{spaces} - Radius: {this.Radius}");
+            Log.Info($"{spaces} - Radius: {this.Radius}");
             this.Material.PrintData(indentation);
         }
     }
@@ -291,7 +321,7 @@ namespace rt.Data
 
             SceneData.PrintTitle(spaceCount, "POINT");
             this.Transform.PrintData(indentation);
-            Console.WriteLine($"{spaces} - Color: [{this.Color[0]}, {this.Color[1]}, {this.Color[2]}]");
+            Log.Info($"{spaces} - Color: [{this.Color[0]}, {this.Color[1]}, {this.Color[2]}]");
         }
     }
 
@@ -325,7 +355,7 @@ namespace rt.Data
             int indentation = spaceCount + 3;
 
             SceneData.PrintTitle(spaceCount, "MATERIAL");
-            Console.WriteLine($"{spaces} - Color: [{this.Color[0]}, {this.Color[1]}, {this.Color[2]}]");
+            Log.Info($"{spaces} - Color: [{this.Color[0]}, {this.Color[1]}, {this.Color[2]}]");
         }
     }
 
@@ -345,9 +375,9 @@ namespace rt.Data
             string spaces = new string(' ', spaceCount);
 
             SceneData.PrintTitle(spaceCount, "PROJECTION PLANE");
-            Console.WriteLine($"{spaces} - Center: [{this.Center[0]}, {this.Center[1]}, {this.Center[2]}]");
-            Console.WriteLine($"{spaces} - U-Axis: [{this.UAxis[0]}, {this.UAxis[1]}, {this.UAxis[2]}]");
-            Console.WriteLine($"{spaces} - V-Axis: [{this.VAxis[0]}, {this.VAxis[1]}, {this.VAxis[2]}]");
+            Log.Info($"{spaces} - Center: [{this.Center[0]}, {this.Center[1]}, {this.Center[2]}]");
+            Log.Info($"{spaces} - U-Axis: [{this.UAxis[0]}, {this.UAxis[1]}, {this.UAxis[2]}]");
+            Log.Info($"{spaces} - V-Axis: [{this.VAxis[0]}, {this.VAxis[1]}, {this.VAxis[2]}]");
         }
     }
 
@@ -364,7 +394,7 @@ namespace rt.Data
             string spaces = new string(' ', spaceCount);
 
             SceneData.PrintTitle(spaceCount, "CAMERA");
-            Console.WriteLine($"{spaces} - Eye Position: [{this.EyePosition[0]}, {this.EyePosition[1]}, {this.EyePosition[2]}]");
+            Log.Info($"{spaces} - Eye Position: [{this.EyePosition[0]}, {this.EyePosition[1]}, {this.EyePosition[2]}]");
             this.ProjectionPlane.PrintData(spaceCount + 3);
         }
     }
