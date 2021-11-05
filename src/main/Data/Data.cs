@@ -110,7 +110,10 @@ namespace rt.Data
 
         private Transform CreateTransform(TransformData data)
         {
-            return new Transform();
+            return new Transform(
+                position: DoubleListToVec3(data.Position),
+                orientation: DoubleListToQuat(data.Orientation),
+                scale: DoubleListToVec3(data.Scale));
         }
 
         private Material CreateMaterial(MaterialData data)
@@ -134,6 +137,13 @@ namespace rt.Data
             Debug.Assert(vec3 != null);
             Debug.Assert(vec3.Count == 3);
             return new Math.Vec3((float)vec3[0], (float)vec3[1], (float)vec3[2]);
+        }
+
+        public static Math.Quat DoubleListToQuat(List<double> quat)
+        {
+            Debug.Assert(quat != null);
+            Debug.Assert(quat.Count == 4);
+            return new Math.Quat((float)quat[0], (float)quat[1], (float)quat[2], (float)quat[3]);
         }
     }
 

@@ -125,12 +125,34 @@ namespace rt
     namespace Collide
     {
         using Present;
+        using System;
 
         /// <summary>
         /// Data returned from a collision.
         /// </summary>
         public class HitInfo
         {
+            /// <summary>
+            /// First point of intersection with ray.
+            /// </summary>
+            public Vec3 Point { get; private set; }
+
+            /// <summary>
+            /// Normal at point of intersection.
+            /// </summary>
+            public Vec3 Normal { get; private set; }
+
+            /// <summary>
+            /// Distance along ray of first point of intersection.
+            /// </summary>
+            public float Distance { get; private set; }
+
+            public HitInfo(Vec3 hitPoint, Vec3 surfaceNormal, float hitDistance)
+            {
+                this.Point = hitPoint;
+                this.Normal = surfaceNormal;
+                this.Distance = hitDistance;
+            }
         }
 
         /// <summary>
@@ -145,6 +167,11 @@ namespace rt
             {
                 this.Origin = origin;
                 this.Direction = normalized ? direction : direction.Normalized();
+            }
+
+            public Vec3 GetPointAlong(float interpolationValue)
+            {
+                return this.Origin + interpolationValue * this.Direction;
             }
         }
 
@@ -182,6 +209,8 @@ namespace rt
             // A unit sphere has a diameter of 1, so a radius of 1/2
             public float Radius { get; private set; }
 
+            public Vec3 Center => this.Transform.Position;
+
             public Sphere(Transform transform, Material material, float radius)
                 : base(transform, material)
             {
@@ -190,7 +219,44 @@ namespace rt
 
             public override HitInfo TryIntersect(Ray ray)
             {
-                return new HitInfo();
+                // Vector from sphere origin to ray origin
+                Vec3 m = ray.Origin - this.Center;
+
+                float b = Vec3.Dot(m, ray.Direction);
+                float c = Vec3.Dot(m, m) - (this.Radius * this.Radius);
+
+                // Exit if ray's origin is outside sphere (c > 0) and
+                // ray is pointing away from sphere (b > 0)
+                if (c > 0.0f && b > 0.0f)
+                {
+                    return null;
+                }
+
+                float discr = b * b - c;
+
+                // A negative discriminant corresponds to ray missing sphere
+                if (discr < 0.0f)
+                {
+                    return null;
+                }
+
+                // Ray now found to intersect sphere, compute smallest t-value of intersection
+                float sqrt = MathF.Sqrt(discr);
+                float t = -b - sqrt;
+
+                // If t is negative, ray started inside sphere so clamp t to zero
+                // #todo Revisit this, might need to be altered to support refractions
+                if (t < 0.0f)
+                {
+                    t = 0.0f;
+                }
+
+                Vec3 hitPoint = ray.GetPointAlong(t);
+
+                // #todo Figure out how I want to normalize this on-demand instead of every time
+                Vec3 normal = (hitPoint - this.Transform.Position).Normalized();
+
+                return new HitInfo(hitPoint, normal, t);
             }
         }
 
@@ -205,7 +271,7 @@ namespace rt
 
             public override HitInfo TryIntersect(Ray ray)
             {
-                return new HitInfo();
+                return null;
             }
         }
     }
@@ -218,6 +284,14 @@ namespace rt
         public class Quat
         {
             private float[] val = new float[4];
+
+            public Quat(float x, float y, float z, float w)
+            {
+                this.val[0] = x;
+                this.val[1] = y;
+                this.val[2] = z;
+                this.val[3] = w;
+            }
         }
     }
 
@@ -239,6 +313,13 @@ namespace rt
             public Quat Orientation { get; set; }
 
             public Vec3 Scale { get; set; }
+
+            public Transform(Vec3 position, Quat orientation, Vec3 scale)
+            {
+                this.Position = position;
+                this.Orientation = orientation;
+                this.Scale = scale;
+            }
         }
 
         public class Material
@@ -260,7 +341,17 @@ namespace rt
 
             public HitInfo Project(Ray ray)
             {
-                return new HitInfo();
+                HitInfo result = null;
+                float hitDistance = float.MaxValue;
+                foreach (var hittable in this.hittables)
+                {
+                    var hitInfo = hittable.TryIntersect(ray);
+                    if (hitInfo != null && hitInfo.Distance < hitDistance)
+                    {
+                        result = hitInfo;
+                    }
+                }
+                return result;
             }
         }
     }
@@ -329,6 +420,7 @@ namespace rt
                     this.camera.HorizontalStepCount,
                     this.camera.VerticalStepCount
                     );
+
                 // Generate rays from the camera's eye through the projection plane
                 for (int y = 0; y < this.camera.VerticalStepCount; ++y)
                 {
@@ -338,10 +430,12 @@ namespace rt
                         var hitInfo = this.scene.Project(ray);
                         if (hitInfo == null)
                         {
-                            // Nothing
+                            // Set to black
+                            buffer.SetPixel(x, y, color: Math.Vec3.One);
                             continue;
                         }
 
+                        // Set to red
                         buffer.SetPixel(x, y, color: Math.Vec3.AxisX);
                     }
                 }

@@ -16,6 +16,7 @@ namespace rt.Math
     public class Vec3
     {
         public static Vec3 Zero = new Vec3(0.0f, 0.0f, 0.0f);
+        public static Vec3 One = new Vec3(1.0f, 1.0f, 1.0f);
         public static Vec3 AxisX = new Vec3(1.0f, 0.0f, 0.0f);
         public static Vec3 AxisY = new Vec3(0.0f, 1.0f, 0.0f);
         public static Vec3 AxisZ = new Vec3(0.0f, 0.0f, 1.0f);
