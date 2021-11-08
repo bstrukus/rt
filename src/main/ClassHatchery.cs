@@ -24,17 +24,17 @@ namespace rt
         /// </summary>
         public class ProjectionPlane
         {
-            private readonly Vec3 center;
+            public Vec3 Center { get; private set; }
 
             // These need to be scaled
             private readonly Vec3[] axes;
 
             public ProjectionPlane(Vec3 center, Vec3 horizontalAxis, Vec3 verticalAxis)
             {
-                this.center = center;
+                this.Center = center;
                 this.axes = new Vec3[] {
-                    horizontalAxis.Normalized(),
-                    verticalAxis.Normalized()
+                    horizontalAxis,
+                    verticalAxis
                 };
             }
 
@@ -43,7 +43,7 @@ namespace rt
                 Debug.Assert(Numbers.InRange(hValue, -1.0f, 1.0f));
                 Debug.Assert(Numbers.InRange(vValue, -1.0f, 1.0f));
 
-                return this.center + (hValue * this.axes[0]) + (vValue * this.axes[1]);
+                return (hValue * this.axes[0]) + (vValue * this.axes[1]);
             }
 
             public float CalculateAspectRatio()
@@ -60,22 +60,24 @@ namespace rt
         /// </remarks>
         public class Camera
         {
+            public float AspectRatio { get; private set; }
+
+            private readonly Vec3 eyePosition;
             private readonly Vec3 eyeDirection;
             private readonly ProjectionPlane projectionPlane;
-
-            public float AspectRatio { get; private set; }
 
             public Camera(Vec3 eyeDirection, ProjectionPlane plane)
             {
                 this.eyeDirection = eyeDirection;
                 this.projectionPlane = plane;
+                this.eyePosition = this.projectionPlane.Center + this.eyeDirection;
                 this.AspectRatio = this.projectionPlane.CalculateAspectRatio();
             }
 
             public Ray GenerateRay(Vec2 unitCoords)
             {
                 Vec3 direction = this.projectionPlane.GetPointOnPlane(unitCoords.X, unitCoords.Y) - this.eyeDirection;
-                return new Ray(eyeDirection, direction);
+                return new Ray(this.eyePosition, direction);
             }
         }
 
@@ -284,8 +286,7 @@ namespace rt
                 // #todo Figure out how I want to normalize this on-demand instead of every time
                 Vec3 normal = (hitPoint - this.Transform.Position).Normalized();
 
-                //return new HitInfo(hitPoint, normal, t);
-                return null;
+                return new HitInfo(hitPoint, normal, t, base.Material);
             }
         }
 
@@ -418,6 +419,7 @@ namespace rt
     namespace Execute
     {
         using Present;
+        using rt.Utility;
 
         public class Job
         {
@@ -480,6 +482,10 @@ namespace rt
                 {
                     for (int x = 0; x < this.image.Width; ++x)
                     {
+                        if (x == 100 && y == 50)
+                        {
+                            Log.Info("foo");
+                        }
                         var scaledPixel = this.image.InterpolatedPixel(x, y);
                         var ray = this.camera.GenerateRay(scaledPixel);
                         var hitInfo = this.scene.Project(ray);

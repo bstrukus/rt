@@ -34,8 +34,9 @@ namespace rt
 
             var scene = dataFactory.CreateScene();
             var camera = dataFactory.CreateCamera();
+            var image = dataFactory.CreateImage();
 
-            var runner = new rt.Execute.Runner(camera, scene);
+            var runner = new rt.Execute.Runner(scene, camera, image);
             runner.Execute();
 
             // Error checking is done on the SceneData side, should be fine to
