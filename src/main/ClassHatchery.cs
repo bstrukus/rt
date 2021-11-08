@@ -19,29 +19,22 @@ namespace rt
     {
         using Collide;
 
-        public enum Axis : int
-        {
-            Horizontal = 0,
-            Vertical
-        }
-
         /// <summary>
         /// The surface that rays pass through.
         /// </summary>
         public class ProjectionPlane
         {
-            public float HorizontalScale => this.axes[(int)Axis.Horizontal].Length();
-            public float VerticalScale => this.axes[(int)Axis.Vertical].Length();
-
             private readonly Vec3 center;
+
+            // These need to be scaled
             private readonly Vec3[] axes;
 
             public ProjectionPlane(Vec3 center, Vec3 horizontalAxis, Vec3 verticalAxis)
             {
                 this.center = center;
                 this.axes = new Vec3[] {
-                    horizontalAxis,
-                    verticalAxis
+                    horizontalAxis.Normalized(),
+                    verticalAxis.Normalized()
                 };
             }
 
@@ -51,6 +44,11 @@ namespace rt
                 Debug.Assert(Numbers.InRange(vValue, -1.0f, 1.0f));
 
                 return this.center + (hValue * this.axes[0]) + (vValue * this.axes[1]);
+            }
+
+            public float CalculateAspectRatio()
+            {
+                return this.axes[0].Length() / this.axes[1].Length();
             }
         }
 
@@ -62,35 +60,71 @@ namespace rt
         /// </remarks>
         public class Camera
         {
-            public int HorizontalStepCount => this.stepCount[(int)Axis.Horizontal];
-            public int VerticalStepCount => this.stepCount[(int)Axis.Vertical];
-
-            private readonly Vec3 eyePosition;
+            private readonly Vec3 eyeDirection;
             private readonly ProjectionPlane projectionPlane;
-            private readonly int[] stepCount;
 
-            public Camera(Vec3 eyePosition, ProjectionPlane plane, int stepCount)
+            public float AspectRatio { get; private set; }
+
+            public Camera(Vec3 eyeDirection, ProjectionPlane plane)
             {
-                this.eyePosition = eyePosition;
+                this.eyeDirection = eyeDirection;
                 this.projectionPlane = plane;
-                this.stepCount = new int[] {
-                    stepCount * (int)plane.HorizontalScale,
-                    stepCount * (int)plane.VerticalScale
-                };
+                this.AspectRatio = this.projectionPlane.CalculateAspectRatio();
             }
 
-            public Ray GenerateRay(int xStep, int yStep)
+            public Ray GenerateRay(Vec2 unitCoords)
             {
-                Debug.Assert(Numbers.InRange(xStep, 0, this.HorizontalStepCount));
-                Debug.Assert(Numbers.InRange(yStep, 0, this.VerticalStepCount));
+                Vec3 direction = this.projectionPlane.GetPointOnPlane(unitCoords.X, unitCoords.Y) - this.eyeDirection;
+                return new Ray(eyeDirection, direction);
+            }
+        }
 
-                float hValue = this.StepToInterpolationValue(xStep, this.HorizontalStepCount);
-                float vValue = this.StepToInterpolationValue(yStep, this.VerticalStepCount);
-                Vec3 direction = this.projectionPlane.GetPointOnPlane(hValue, vValue) - this.eyePosition;
-                return new Ray(eyePosition, direction);
+        /// <summary>
+        /// #todo
+        /// </summary>
+        public class Image
+        {
+            /// <summary>
+            /// Width of image, in pixels.
+            /// </summary>
+            public int Width { get; private set; }
+
+            /// <summary>
+            /// Height of image, in pixels.
+            /// </summary>
+            public int Height { get; private set; }
+
+            private readonly string fileName;
+            private PixelBuffer buffer;
+
+            public Image(int width, int height, string fileName)
+            {
+                this.Width = width;
+                this.Height = height;
+                this.fileName = fileName;
+
+                this.buffer = new PixelBuffer(this.Width, this.Height);
             }
 
-            private float StepToInterpolationValue(int step, int stepCount)
+            public void SetPixel(int x, int y, Vec3 color)
+            {
+                Debug.Assert(Numbers.InRange(x, 0, this.Width));
+                Debug.Assert(Numbers.InRange(y, 0, this.Height));
+
+                this.buffer.SetPixel(x, y, color);
+            }
+
+            public void Save()
+            {
+                this.buffer.Save(this.fileName);
+            }
+
+            public Vec2 InterpolatedPixel(int x, int y)
+            {
+                return new Vec2(this.InterpolatedStep(x, this.Width), this.InterpolatedStep(y, this.Height));
+            }
+
+            private float InterpolatedStep(int step, int stepCount)
             {
                 // [0, 1] -> [-1, 1] => [0, 1] * 2 => [0, 2] - 1 => [-1, 1]
                 float floatStep = (float)step / (float)stepCount;
@@ -100,22 +134,9 @@ namespace rt
             }
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        public class Image
+        public class ColorReport
         {
-            public int StepFactor { get; private set; }
-
-            private string fileFormat;
-            private PixelBuffer buffer;
-
-            public Image(int stepFactor, string fileFormat)
-            {
-                this.StepFactor = stepFactor;
-                this.fileFormat = fileFormat;
-                //this.buffer = new PixelBuffer()
-            }
+            public Vec3 Color { get; set; }
         }
     }
 
@@ -147,11 +168,18 @@ namespace rt
             /// </summary>
             public float Distance { get; private set; }
 
-            public HitInfo(Vec3 hitPoint, Vec3 surfaceNormal, float hitDistance)
+            /// <summary>
+            /// Material information of the object hit.
+            /// </summary>
+            public Material Material { get; private set; }
+
+            public HitInfo(Vec3 hitPoint, Vec3 surfaceNormal, float hitDistance, Material material)
             {
                 this.Point = hitPoint;
                 this.Normal = surfaceNormal;
                 this.Distance = hitDistance;
+
+                this.Material = material;
             }
         }
 
@@ -256,7 +284,8 @@ namespace rt
                 // #todo Figure out how I want to normalize this on-demand instead of every time
                 Vec3 normal = (hitPoint - this.Transform.Position).Normalized();
 
-                return new HitInfo(hitPoint, normal, t);
+                //return new HitInfo(hitPoint, normal, t);
+                return null;
             }
         }
 
@@ -281,6 +310,20 @@ namespace rt
     /// </summary>
     namespace Math
     {
+        public class Vec2
+        {
+            public float X => val[0];
+            public float Y => val[1];
+
+            public Vec2(float x, float y)
+            {
+                this.val[0] = x;
+                this.val[1] = y;
+            }
+
+            private readonly float[] val = new float[2];
+        }
+
         public class Quat
         {
             private float[] val = new float[4];
@@ -304,15 +347,15 @@ namespace rt
         using Collide;
 
         /// <summary>
-        /// Describes an object's representation in the <see cref="Scene"/>
+        /// Describes an object's spatial representation in the <see cref="Scene"/>
         /// </summary>
         public class Transform
         {
-            public Vec3 Position { get; set; }
+            public Vec3 Position { get; private set; }
 
-            public Quat Orientation { get; set; }
+            public Quat Orientation { get; private set; }
 
-            public Vec3 Scale { get; set; }
+            public Vec3 Scale { get; private set; }
 
             public Transform(Vec3 position, Quat orientation, Vec3 scale)
             {
@@ -322,9 +365,17 @@ namespace rt
             }
         }
 
+        /// <summary>
+        /// Describes the object's visual representation in the <see cref="Scene"/>
+        /// </summary>
         public class Material
         {
-            //
+            public Vec3 Color { get; private set; }
+
+            public Material(Vec3 color)
+            {
+                this.Color = color;
+            }
         }
 
         /// <summary>
@@ -332,11 +383,16 @@ namespace rt
         /// </summary>
         public class Scene
         {
+            public Vec3 AmbientColor { get; private set; }
+
             private List<IHittable> hittables;
 
             public Scene(List<IHittable> hittables)
             {
                 this.hittables = hittables;
+
+                // #todo Read Scene.AmbientColor in from data
+                this.AmbientColor = Vec3.One;
             }
 
             public HitInfo Project(Ray ray)
@@ -400,6 +456,7 @@ namespace rt
         public class Runner
         {
             private Render.Camera camera;
+            private Render.Image image;
             private Present.Scene scene;
 
             // Jobs
@@ -408,39 +465,35 @@ namespace rt
                 //
             }
 
-            public Runner(Render.Camera camera, Present.Scene scene)
+            public Runner(Present.Scene scene, Render.Camera camera, Render.Image image)
             {
-                this.camera = camera;
                 this.scene = scene;
+
+                this.camera = camera;
+                this.image = image;
             }
 
             public void Execute()
             {
-                Render.PixelBuffer buffer = new Render.PixelBuffer(
-                    this.camera.HorizontalStepCount,
-                    this.camera.VerticalStepCount
-                    );
-
                 // Generate rays from the camera's eye through the projection plane
-                for (int y = 0; y < this.camera.VerticalStepCount; ++y)
+                for (int y = 0; y < this.image.Height; ++y)
                 {
-                    for (int x = 0; x < this.camera.HorizontalStepCount; ++x)
+                    for (int x = 0; x < this.image.Width; ++x)
                     {
-                        var ray = this.camera.GenerateRay(x, y);
+                        var scaledPixel = this.image.InterpolatedPixel(x, y);
+                        var ray = this.camera.GenerateRay(scaledPixel);
                         var hitInfo = this.scene.Project(ray);
                         if (hitInfo == null)
                         {
-                            // Set to black
-                            buffer.SetPixel(x, y, color: Math.Vec3.One);
+                            image.SetPixel(x, y, color: scene.AmbientColor);
                             continue;
                         }
 
-                        // Set to red
-                        buffer.SetPixel(x, y, color: Math.Vec3.AxisX);
+                        image.SetPixel(x, y, color: hitInfo.Material.Color);
                     }
                 }
 
-                buffer.Save("test.bmp");
+                image.Save();
             }
         }
     }

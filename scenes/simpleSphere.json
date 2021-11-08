@@ -1,11 +1,11 @@
 {
     "image": {
-        "stepFactor": 100,
-        "format": ".bmp"
+        "width": 200,
+        "filename": "simpleSphere.bmp"
     },
     "camera": {
-        "eyePosition": [
-            0, 0, 0
+        "eyeDirection": [
+            0, 0, 1
         ],
         "projectionPlane": 
         {

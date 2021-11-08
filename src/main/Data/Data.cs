@@ -3,18 +3,18 @@
  */
 
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
+using System;
 
 namespace rt.Data
 {
     using Collide;
     using Present;
     using Render;
-    using Utility;
-
     using System.Diagnostics;
     using System.IO;
+    using System.Text;
+    using Utility;
 
     public static class Helpers
     {
@@ -31,7 +31,7 @@ namespace rt.Data
         {
             using StreamReader file = File.OpenText(filename);
             string fileContents = file.ReadToEnd();
-            Log.Info($"FILE: {fileContents}\r\n");
+            //Log.Info($"FILE: {fileContents}\r\n");
 
             this.sceneData = Newtonsoft.Json.JsonConvert.DeserializeObject<Data.SceneData>(fileContents);
             if (!sceneData.Validate())
@@ -84,18 +84,25 @@ namespace rt.Data
         public Camera CreateCamera()
         {
             var cameraData = this.sceneData.Camera;
-            var imageData = this.sceneData.Image;
 
             return new Camera(
-                eyePosition: DoubleListToVec3(cameraData.EyePosition),
-                plane: this.CreateProjectionPlane(),
-                stepCount: imageData.StepFactor);
+                eyeDirection: DoubleListToVec3(cameraData.EyeDirection),
+                plane: this.CreateProjectionPlane());
         }
 
         public Image CreateImage()
         {
             var imageData = this.sceneData.Image;
-            return new Image(imageData.StepFactor, imageData.FileFormat);
+            var camera = this.CreateCamera();
+
+            Debug.Assert(imageData != null);
+            Debug.Assert(camera != null);
+
+            float aspectRatio = camera.AspectRatio;
+            int width = imageData.Width;
+            int height = (int)((float)width / aspectRatio);
+
+            return new Image(width, height, imageData.FileName);
         }
 
         private ProjectionPlane CreateProjectionPlane()
@@ -118,7 +125,8 @@ namespace rt.Data
 
         private Material CreateMaterial(MaterialData data)
         {
-            return new Material();
+            return new Material(
+                color: DoubleListToVec3(data.Color));
         }
 
         //         public Camera(Data.CameraData cameraData)
@@ -144,6 +152,20 @@ namespace rt.Data
             Debug.Assert(quat != null);
             Debug.Assert(quat.Count == 4);
             return new Math.Quat((float)quat[0], (float)quat[1], (float)quat[2], (float)quat[3]);
+        }
+
+        public static string FormatList(List<double> vectorDoubles)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("[");
+            for (int i = 0; i < vectorDoubles.Count; ++i)
+            {
+                sb.Append($"{vectorDoubles[i]}");
+                if (i != (vectorDoubles.Count - 1))
+                    sb.Append(",");
+            }
+            sb.Append("]");
+            return sb.ToString();
         }
     }
 
@@ -191,18 +213,18 @@ namespace rt.Data
 
     public class ImageData
     {
-        [JsonProperty("stepFactor")]
-        public int StepFactor { get; set; }
+        [JsonProperty("width")]
+        public int Width { get; set; }
 
-        [JsonProperty("format")]
-        public string FileFormat { get; set; }
+        [JsonProperty("filename")]
+        public string FileName { get; set; }
 
         public void PrintData(int spaceCount = 0)
         {
             string spaces = new string(' ', spaceCount);
             SceneData.PrintTitle(spaceCount, "IMAGE");
-            Log.Info($"{spaces} - StepFactor: {this.StepFactor}");
-            Log.Info($"{spaces} - FileFormat: {this.FileFormat}");
+            Log.Info($"{spaces} - Width:    {this.Width}");
+            Log.Info($"{spaces} - FileName: {this.FileName}");
         }
     }
 
@@ -222,9 +244,9 @@ namespace rt.Data
             string spaces = new string(' ', spaceCount);
 
             SceneData.PrintTitle(spaceCount, "TRANSFORM");
-            Log.Info($"{spaces} - Position: [{this.Position[0]}, {this.Position[1]}, {this.Position[2]}]");
+            Log.Info($"{spaces} - Position:    [{this.Position[0]}, {this.Position[1]}, {this.Position[2]}]");
             Log.Info($"{spaces} - Orientation: [{this.Orientation[0]}, {this.Orientation[1]}, {this.Orientation[2]}, {this.Orientation[3]}]");
-            Log.Info($"{spaces} - Scale: [{this.Scale[0]}, {this.Scale[1]}, {this.Scale[2]}]");
+            Log.Info($"{spaces} - Scale:       [{this.Scale[0]}, {this.Scale[1]}, {this.Scale[2]}]");
         }
     }
 
@@ -292,8 +314,8 @@ namespace rt.Data
             int indentation = spaceCount + 3;
 
             SceneData.PrintTitle(spaceCount, "SPHERE");
-            this.Transform.PrintData(indentation);
             Log.Info($"{spaces} - Radius: {this.Radius}");
+            this.Transform.PrintData(indentation);
             this.Material.PrintData(indentation);
         }
     }
@@ -385,16 +407,16 @@ namespace rt.Data
             string spaces = new string(' ', spaceCount);
 
             SceneData.PrintTitle(spaceCount, "PROJECTION PLANE");
-            Log.Info($"{spaces} - Center: [{this.Center[0]}, {this.Center[1]}, {this.Center[2]}]");
-            Log.Info($"{spaces} - U-Axis: [{this.UAxis[0]}, {this.UAxis[1]}, {this.UAxis[2]}]");
-            Log.Info($"{spaces} - V-Axis: [{this.VAxis[0]}, {this.VAxis[1]}, {this.VAxis[2]}]");
+            Log.Info($"{spaces} - Center: {DataFactory.FormatList(Center)}");
+            Log.Info($"{spaces} - U-Axis: {DataFactory.FormatList(UAxis)}");
+            Log.Info($"{spaces} - V-Axis: {DataFactory.FormatList(VAxis)}");
         }
     }
 
     public class CameraData
     {
-        [JsonProperty("eyePosition")]
-        public List<double> EyePosition { get; set; }
+        [JsonProperty("eyeDirection")]
+        public List<double> EyeDirection { get; set; }
 
         [JsonProperty("projectionPlane")]
         public ProjectionPlaneData ProjectionPlane { get; set; }
@@ -404,7 +426,7 @@ namespace rt.Data
             string spaces = new string(' ', spaceCount);
 
             SceneData.PrintTitle(spaceCount, "CAMERA");
-            Log.Info($"{spaces} - Eye Position: [{this.EyePosition[0]}, {this.EyePosition[1]}, {this.EyePosition[2]}]");
+            Log.Info($"{spaces} - Eye Direction: {DataFactory.FormatList(EyeDirection)}");
             this.ProjectionPlane.PrintData(spaceCount + 3);
         }
     }
