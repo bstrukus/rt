@@ -141,6 +141,6 @@ namespace rt.Math
                 lhs.X * rhs.Y - lhs.Y * rhs.X);
         }
 
-        private float[] val = new float[3];
+        private readonly float[] val = new float[3];
     }
 }
