@@ -42,14 +42,14 @@ namespace UnitTests.Render
             var projectionPlane = new ProjectionPlane(Vec3.AxisZ, hScale * Vec3.AxisX, vScale * Vec3.AxisY);
 
             // Act
-            var topLeft = projectionPlane.GetPointOnPlane(hVal, vVal);
+            var planePoint = projectionPlane.GetPointOnPlane(hVal, vVal);
 
             // Assert
             float xTestVal = hScale * hVal;
             float yTestVal = vScale * vVal;
-            bool result = topLeft.X == xTestVal &&
-                          topLeft.Y == yTestVal &&
-                          topLeft.Z == 1.0f;
+            bool result = planePoint.X == xTestVal &&
+                          planePoint.Y == yTestVal &&
+                          planePoint.Z == 0.0f;
 
             Assert.IsTrue(result);
         }
