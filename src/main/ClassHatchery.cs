@@ -220,35 +220,24 @@ namespace rt
     {
         using Collide;
 
-        /// <summary>
-        /// Describes an object's spatial representation in the <see cref="Scene"/>
-        /// </summary>
-        public class Transform
+        public abstract class Light
         {
-            public Vec3 Position { get; private set; }
+            public Transform Transform { get; private set; }
+            public Vec3 Color { get; private set; }
 
-            public Quat Orientation { get; private set; }
-
-            public Vec3 Scale { get; private set; }
-
-            public Transform(Vec3 position, Quat orientation, Vec3 scale)
+            public Light(Transform transform, Vec3 color)
             {
-                this.Position = position;
-                this.Orientation = orientation;
-                this.Scale = scale;
+                this.Transform = transform;
+                this.Color = color;
             }
         }
 
-        /// <summary>
-        /// Describes the object's visual representation in the <see cref="Scene"/>
-        /// </summary>
-        public class Material
+        public class PointLight : Light
         {
-            public Vec3 Color { get; private set; }
-
-            public Material(Vec3 color)
+            public PointLight(Transform transform, Vec3 color)
+                : base(transform, color)
             {
-                this.Color = color;
+                //
             }
         }
 
@@ -260,6 +249,7 @@ namespace rt
             public Vec3 AmbientColor { get; private set; }
 
             private List<IHittable> hittables;
+            private List<Light> lights;
 
             public Scene(List<IHittable> hittables)
             {
