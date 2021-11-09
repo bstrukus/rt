@@ -74,7 +74,7 @@ namespace rt.Render
     }
 
     /// <summary>
-    /// #todo
+    /// Represents the final output image and all its properties.
     /// </summary>
     public class Image
     {

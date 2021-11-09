@@ -17,5 +17,11 @@ namespace rt.Math
         {
             return min <= val && val <= max;
         }
+
+        static public bool AreEqual(float lhs, float rhs)
+        {
+            // #todo Replace with epsilon
+            return lhs == rhs;
+        }
     }
 }
