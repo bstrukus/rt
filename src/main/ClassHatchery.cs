@@ -251,9 +251,10 @@ namespace rt
             private List<IHittable> hittables;
             private List<Light> lights;
 
-            public Scene(List<IHittable> hittables)
+            public Scene(List<IHittable> hittables, List<Light> lights)
             {
                 this.hittables = hittables;
+                this.lights = lights;
 
                 // #todo Read Scene.AmbientColor in from data
                 this.AmbientColor = Vec3.One;

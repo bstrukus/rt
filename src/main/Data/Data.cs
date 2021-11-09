@@ -46,6 +46,7 @@ namespace rt.Data
 
         public Scene CreateScene()
         {
+            //////////////////////////////////////////////////////////////////////////
             if (!this.sceneData.HasShapes())
             {
                 return null;
@@ -78,7 +79,21 @@ namespace rt.Data
                 }
             }
 
-            return new Scene(hittables);
+            //////////////////////////////////////////////////////////////////////////
+            var lightCollection = this.sceneData.Lights;
+            List<Light> lights = new List<Light>();
+            if (lightCollection.HasLights())
+            {
+                foreach (var pointLightData in lightCollection.PointLights)
+                {
+                    lights.Add(new PointLight(
+                        this.CreateTransform(pointLightData.Transform),
+                        DoubleListToVec3(pointLightData.Color)
+                        ));
+                }
+            }
+
+            return new Scene(hittables, lights);
         }
 
         public Camera CreateCamera()
@@ -184,6 +199,8 @@ namespace rt.Data
         public LightData Lights { get; set; }
 
         public bool HasShapes() => this.Shapes != null && (this.Shapes.HasSpheres() || this.Shapes.HasBoxes());
+
+        public bool HasLights() => this.Lights != null && this.Lights.HasLights();
 
         public bool Validate()
         {
@@ -361,6 +378,8 @@ namespace rt.Data
     {
         [JsonProperty("points")]
         public List<PointData> PointLights { get; set; }
+
+        public bool HasLights() => this.PointLights != null && this.PointLights.Count > 0;
 
         public void PrintData(int spaceCount = 0)
         {
