@@ -130,6 +130,11 @@ namespace rt.Render
 
     public class ColorReport
     {
-        public Vec3 Color { get; set; }
+        public Vec3 Color { get; private set; }
+
+        public ColorReport(Vec3 color)
+        {
+            this.Color = color;
+        }
     }
 }
