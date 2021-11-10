@@ -4,6 +4,7 @@
 
 using rt.Math;
 using System.Collections.Generic;
+using rt.Render;
 
 /* TODO LIST
  * [ ] Lighting
@@ -219,6 +220,7 @@ namespace rt
     namespace Present
     {
         using Collide;
+        using rt.Render;
 
         public abstract class Light
         {
@@ -258,6 +260,32 @@ namespace rt
 
                 // #todo Read Scene.AmbientColor in from data
                 this.AmbientColor = Vec3.One;
+            }
+
+            public ColorReport Trace(Ray ray)
+            {
+                HitInfo hitInfo = this.Project(ray);
+                if (hitInfo == null)
+                {
+                    return new ColorReport(this.AmbientColor);
+                }
+
+                // #todo Unit tests for diffuse lighting calculations
+                Vec3 color = hitInfo.Material.Color;
+                foreach (var light in this.lights)
+                {
+                    Vec3 pointToLight = (light.Transform.Position - hitInfo.Point).Normalized();
+                    float diffuseCoefficient = Vec3.Dot(hitInfo.Normal, pointToLight);
+                    diffuseCoefficient = diffuseCoefficient > 0.0f ? 1.0f : 0.0f;
+                    {
+                        color *= diffuseCoefficient;
+                    }
+                }
+
+                // #todo Create flag to draw normals as a debugging option
+                //color = hitInfo.Normal.Clamped(0.0f, 1.0f);
+
+                return new ColorReport(color);
             }
 
             public HitInfo Project(Ray ray)
@@ -348,14 +376,10 @@ namespace rt
                     {
                         var scaledPixel = this.image.InterpolatedPixel(x, y);
                         var ray = this.camera.GenerateRay(scaledPixel);
-                        var hitInfo = this.scene.Project(ray);
-                        if (hitInfo == null)
-                        {
-                            image.SetPixel(x, y, color: scene.AmbientColor);
-                            continue;
-                        }
+                        //var hitInfo = this.scene.Project(ray);
 
-                        image.SetPixel(x, y, color: hitInfo.Material.Color);
+                        var colorReport = this.scene.Trace(ray);
+                        image.SetPixel(x, y, color: colorReport.Color);
                     }
                 }
 
