@@ -18,6 +18,19 @@ namespace rt.Math
             return min <= val && val <= max;
         }
 
+        static public float Clamp(float val, float min, float max)
+        {
+            if (val < min)
+            {
+                return min;
+            }
+            else if (val > max)
+            {
+                return max;
+            }
+            return val;
+        }
+
         static public bool AreEqual(float lhs, float rhs)
         {
             // #todo Replace with epsilon

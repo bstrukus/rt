@@ -53,6 +53,14 @@ namespace rt.Math
             return this / this.Length();
         }
 
+        public Vec3 Clamped(float min, float max)
+        {
+            return new Vec3(
+                Numbers.Clamp(this.X, min, max),
+                Numbers.Clamp(this.Y, min, max),
+                Numbers.Clamp(this.Z, min, max));
+        }
+
         #region Operators
 
         static public Vec3 operator *(Vec3 vec, float scalar)
