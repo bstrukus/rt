@@ -39,6 +39,8 @@ namespace rt.Render
 
         public void Save(string filename)
         {
+            // #todo Need to flip along the x- and y-axes, or redo how I place pixels
+            this.bitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
             this.bitmap.Save(filename);
         }
     }
