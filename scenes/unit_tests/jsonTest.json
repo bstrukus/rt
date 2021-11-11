@@ -1,10 +1,10 @@
 {
     "image": {
-        "stepFactor": 100,
-        "format": ".bmp"
+        "width": 100,
+        "format": "jsonTest.bmp"
     },
     "camera": {
-        "eyePosition": [
+        "eyeDirection": [
             0, 0, 0
         ],
         "projectionPlane": 

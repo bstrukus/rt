@@ -4,7 +4,6 @@
 
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System;
 
 namespace rt.Data
 {
@@ -34,12 +33,13 @@ namespace rt.Data
             //Log.Info($"FILE: {fileContents}\r\n");
 
             this.sceneData = Newtonsoft.Json.JsonConvert.DeserializeObject<Data.SceneData>(fileContents);
-            if (!sceneData.Validate())
+            if (this.sceneData == null || !this.sceneData.IsValid())
             {
-                Log.Info("Error parsing JSON");
+                Log.Error("Error loading Scene");
                 return false;
             }
 
+            // #todo Make this togglable, debug option
             this.sceneData.PrintData();
             return true;
         }
@@ -47,11 +47,6 @@ namespace rt.Data
         public Scene CreateScene()
         {
             //////////////////////////////////////////////////////////////////////////
-            if (!this.sceneData.HasShapes())
-            {
-                return null;
-            }
-
             var shapeCollection = this.sceneData.Shapes;
 
             // Go through the list of Spheres & Boxes to create a list of IHittables
@@ -82,7 +77,7 @@ namespace rt.Data
             //////////////////////////////////////////////////////////////////////////
             var lightCollection = this.sceneData.Lights;
             List<Light> lights = new List<Light>();
-            if (lightCollection.HasLights())
+            if (lightCollection.IsValid())
             {
                 foreach (var pointLightData in lightCollection.PointLights)
                 {
@@ -169,6 +164,11 @@ namespace rt.Data
             return new Math.Quat((float)quat[0], (float)quat[1], (float)quat[2], (float)quat[3]);
         }
 
+        public static bool ValidateList(List<double> vector, int expectedCount)
+        {
+            return vector != null && vector.Count == expectedCount;
+        }
+
         public static string FormatList(List<double> vectorDoubles)
         {
             StringBuilder sb = new StringBuilder();
@@ -182,9 +182,22 @@ namespace rt.Data
             sb.Append("]");
             return sb.ToString();
         }
+
+        static public void PrintTitle(int spaceCount, string title)
+        {
+            string spaces = new string(' ', spaceCount - 2);
+            Log.Info($"{spaces}- {title}");
+        }
     }
 
-    public class SceneData
+    public interface IData
+    {
+        public bool IsValid();
+
+        public void PrintData(int spaceCount = 0);
+    }
+
+    public class SceneData : IData
     {
         [JsonProperty("image")]
         public ImageData Image { get; set; }
@@ -198,37 +211,51 @@ namespace rt.Data
         [JsonProperty("lights")]
         public LightData Lights { get; set; }
 
-        public bool HasShapes() => this.Shapes != null && (this.Shapes.HasSpheres() || this.Shapes.HasBoxes());
-
-        public bool HasLights() => this.Lights != null && this.Lights.HasLights();
-
-        public bool Validate()
+        public bool IsValid()
         {
-            if (this.Image == null)
+            bool isImageValid = this.Image != null || this.Image.IsValid();
+            if (!isImageValid)
             {
+                Log.Error("Image data could not be loaded");
                 return false;
             }
+
+            bool isCameraValid = this.Camera != null || this.Camera.IsValid();
+            if (!isCameraValid)
+            {
+                Log.Error("Camera data could not be loaded");
+                return false;
+            }
+
+            bool areShapesValid = this.Shapes != null || this.Shapes.IsValid();
+            if (!areShapesValid)
+            {
+                Log.Error("Shape data could not be loaded");
+                return false;
+            }
+
+            bool areLightsValid = this.Lights != null || this.Lights.IsValid();
+            if (!areLightsValid)
+            {
+                Log.Error("Light data could not be loaded");
+                return false;
+            }
+
             return true;
         }
 
-        public void PrintData()
+        public void PrintData(int spaceCount = 0)
         {
             int indentation = 3;
             Log.Info("SCENE");
-            this.Image?.PrintData(indentation);
-            this.Camera?.PrintData(indentation);
-            this.Shapes?.PrintData(indentation);
-            this.Lights?.PrintData(indentation);
-        }
-
-        static public void PrintTitle(int spaceCount, string title)
-        {
-            string spaces = new string(' ', spaceCount - 2);
-            Log.Info($"{spaces}- {title}");
+            this.Image.PrintData(indentation);
+            this.Camera.PrintData(indentation);
+            this.Shapes.PrintData(indentation);
+            this.Lights.PrintData(indentation);
         }
     }
 
-    public class ImageData
+    public class ImageData : IData
     {
         [JsonProperty("width")]
         public int Width { get; set; }
@@ -236,16 +263,21 @@ namespace rt.Data
         [JsonProperty("filename")]
         public string FileName { get; set; }
 
+        public bool IsValid()
+        {
+            return this.Width > 0 && !string.IsNullOrEmpty(this.FileName);
+        }
+
         public void PrintData(int spaceCount = 0)
         {
             string spaces = new string(' ', spaceCount);
-            SceneData.PrintTitle(spaceCount, "IMAGE");
+            DataFactory.PrintTitle(spaceCount, "IMAGE");
             Log.Info($"{spaces} - Width:    {this.Width}");
             Log.Info($"{spaces} - FileName: {this.FileName}");
         }
     }
 
-    public class TransformData
+    public class TransformData : IData
     {
         [JsonProperty("position")]
         public List<double> Position { get; set; }
@@ -256,18 +288,25 @@ namespace rt.Data
         [JsonProperty("scale")]
         public List<double> Scale { get; set; }
 
+        public bool IsValid()
+        {
+            return DataFactory.ValidateList(this.Position, 3) &&
+                DataFactory.ValidateList(this.Orientation, 4) &&
+                DataFactory.ValidateList(this.Scale, 3);
+        }
+
         public void PrintData(int spaceCount = 0)
         {
             string spaces = new string(' ', spaceCount);
 
-            SceneData.PrintTitle(spaceCount, "TRANSFORM");
-            Log.Info($"{spaces} - Position:    [{this.Position[0]}, {this.Position[1]}, {this.Position[2]}]");
-            Log.Info($"{spaces} - Orientation: [{this.Orientation[0]}, {this.Orientation[1]}, {this.Orientation[2]}, {this.Orientation[3]}]");
-            Log.Info($"{spaces} - Scale:       [{this.Scale[0]}, {this.Scale[1]}, {this.Scale[2]}]");
+            DataFactory.PrintTitle(spaceCount, "TRANSFORM");
+            Log.Info($"{spaces} - Position:    {DataFactory.FormatList(this.Position)}");
+            Log.Info($"{spaces} - Orientation: {DataFactory.FormatList(this.Orientation)}");
+            Log.Info($"{spaces} - Scale:       {DataFactory.FormatList(this.Scale)}");
         }
     }
 
-    public class ShapeData
+    public class ShapeData : IData
     {
         [JsonProperty("spheres")]
         public List<SphereData> Spheres { get; set; }
@@ -279,11 +318,17 @@ namespace rt.Data
 
         public bool HasBoxes() => this.Boxes != null && this.Boxes.Count > 0;
 
+        public bool IsValid()
+        {
+            bool hasShapes = this.HasSpheres() || this.HasBoxes();
+            return hasShapes;
+        }
+
         public void PrintData(int spaceCount = 0)
         {
             string spaces = new string(' ', spaceCount);
 
-            SceneData.PrintTitle(spaceCount, "SHAPES");
+            DataFactory.PrintTitle(spaceCount, "SHAPES");
 
             int indentation = 3 + spaceCount;
             this.PrintSpheres(indentation);
@@ -314,7 +359,7 @@ namespace rt.Data
         }
     }
 
-    public class SphereData
+    public class SphereData : IData
     {
         [JsonProperty("transform")]
         public TransformData Transform { get; set; }
@@ -325,19 +370,24 @@ namespace rt.Data
         [JsonProperty("material")]
         public MaterialData Material { get; set; }
 
+        public bool IsValid()
+        {
+            return this.Transform.IsValid() && this.Material.IsValid() && this.Radius > 0.0f;
+        }
+
         public void PrintData(int spaceCount)
         {
             string spaces = new string(' ', spaceCount);
             int indentation = spaceCount + 3;
 
-            SceneData.PrintTitle(spaceCount, "SPHERE");
+            DataFactory.PrintTitle(spaceCount, "SPHERE");
             Log.Info($"{spaces} - Radius: {this.Radius}");
             this.Transform.PrintData(indentation);
             this.Material.PrintData(indentation);
         }
     }
 
-    public class BoxData
+    public class BoxData : IData
     {
         [JsonProperty("transform")]
         public TransformData Transform { get; set; }
@@ -345,17 +395,22 @@ namespace rt.Data
         [JsonProperty("material")]
         public MaterialData Material { get; set; }
 
+        public bool IsValid()
+        {
+            return this.Transform.IsValid() && this.Material.IsValid();
+        }
+
         public void PrintData(int indentAmount)
         {
             string indentation = new string(' ', indentAmount);
 
-            SceneData.PrintTitle(indentAmount, "BOX");
+            DataFactory.PrintTitle(indentAmount, "BOX");
             this.Transform.PrintData(indentAmount + 3);
             this.Material.PrintData(indentAmount + 3);
         }
     }
 
-    public class PointData
+    public class PointLightData : IData
     {
         [JsonProperty("transform")]
         public TransformData Transform { get; set; }
@@ -363,29 +418,40 @@ namespace rt.Data
         [JsonProperty("color")]
         public List<double> Color { get; set; }
 
+        public bool IsValid()
+        {
+            return this.Transform.IsValid() && DataFactory.ValidateList(this.Color, 3);
+        }
+
         public void PrintData(int spaceCount)
         {
             string spaces = new string(' ', spaceCount);
             int indentation = spaceCount + 3;
 
-            SceneData.PrintTitle(spaceCount, "POINT");
+            DataFactory.PrintTitle(spaceCount, "POINT");
             this.Transform.PrintData(indentation);
-            Log.Info($"{spaces} - Color: [{this.Color[0]}, {this.Color[1]}, {this.Color[2]}]");
+            Log.Info($"{spaces} - Color: {DataFactory.FormatList(this.Color)}");
         }
     }
 
-    public class LightData
+    public class LightData : IData
     {
         [JsonProperty("points")]
-        public List<PointData> PointLights { get; set; }
+        public List<PointLightData> PointLights { get; set; }
 
-        public bool HasLights() => this.PointLights != null && this.PointLights.Count > 0;
+        // #todo Spot/Shaped lights
+        // #todo Ambient light
+
+        public bool IsValid()
+        {
+            return this.PointLights != null && this.PointLights.Count > 0;
+        }
 
         public void PrintData(int spaceCount = 0)
         {
             string spaces = new string(' ', spaceCount);
 
-            SceneData.PrintTitle(spaceCount, "LIGHTS");
+            DataFactory.PrintTitle(spaceCount, "LIGHTS");
 
             int indentation = 3 + spaceCount;
             foreach (var light in this.PointLights)
@@ -395,22 +461,27 @@ namespace rt.Data
         }
     }
 
-    public class MaterialData
+    public class MaterialData : IData
     {
         [JsonProperty("color")]
         public List<double> Color { get; set; }
+
+        public bool IsValid()
+        {
+            return DataFactory.ValidateList(this.Color, 3);
+        }
 
         public void PrintData(int spaceCount)
         {
             string spaces = new string(' ', spaceCount);
             int indentation = spaceCount + 3;
 
-            SceneData.PrintTitle(spaceCount, "MATERIAL");
+            DataFactory.PrintTitle(spaceCount, "MATERIAL");
             Log.Info($"{spaces} - Color: [{this.Color[0]}, {this.Color[1]}, {this.Color[2]}]");
         }
     }
 
-    public class ProjectionPlaneData
+    public class ProjectionPlaneData : IData
     {
         [JsonProperty("center")]
         public List<double> Center { get; set; }
@@ -421,18 +492,25 @@ namespace rt.Data
         [JsonProperty("vAxis")]
         public List<double> VAxis { get; set; }
 
+        public bool IsValid()
+        {
+            return DataFactory.ValidateList(this.Center, 3) &&
+                DataFactory.ValidateList(this.UAxis, 3) &&
+                DataFactory.ValidateList(this.VAxis, 3);
+        }
+
         public void PrintData(int spaceCount)
         {
             string spaces = new string(' ', spaceCount);
 
-            SceneData.PrintTitle(spaceCount, "PROJECTION PLANE");
+            DataFactory.PrintTitle(spaceCount, "PROJECTION PLANE");
             Log.Info($"{spaces} - Center: {DataFactory.FormatList(Center)}");
             Log.Info($"{spaces} - U-Axis: {DataFactory.FormatList(UAxis)}");
             Log.Info($"{spaces} - V-Axis: {DataFactory.FormatList(VAxis)}");
         }
     }
 
-    public class CameraData
+    public class CameraData : IData
     {
         [JsonProperty("eyeDirection")]
         public List<double> EyeDirection { get; set; }
@@ -440,11 +518,17 @@ namespace rt.Data
         [JsonProperty("projectionPlane")]
         public ProjectionPlaneData ProjectionPlane { get; set; }
 
+        public bool IsValid()
+        {
+            bool isProjectionPlaneValid = this.ProjectionPlane != null && this.ProjectionPlane.IsValid();
+            return DataFactory.ValidateList(this.EyeDirection, 3) && isProjectionPlaneValid;
+        }
+
         public void PrintData(int spaceCount)
         {
             string spaces = new string(' ', spaceCount);
 
-            SceneData.PrintTitle(spaceCount, "CAMERA");
+            DataFactory.PrintTitle(spaceCount, "CAMERA");
             Log.Info($"{spaces} - Eye Direction: {DataFactory.FormatList(EyeDirection)}");
             this.ProjectionPlane.PrintData(spaceCount + 3);
         }
