@@ -396,12 +396,17 @@ namespace rt
         {
             static public void Info(string info)
             {
-                Console.WriteLine(info);
+                Console.WriteLine($"INFO: {info}");
+            }
+
+            static public void Warning(string warning)
+            {
+                Console.WriteLine($"WARNING: {warning}");
             }
 
             static public void Error(string error)
             {
-                Console.WriteLine(error);
+                Console.WriteLine($"ERROR: {error}");
             }
         }
     }
