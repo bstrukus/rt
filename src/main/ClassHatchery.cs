@@ -398,6 +398,11 @@ namespace rt
             {
                 Console.WriteLine(info);
             }
+
+            static public void Error(string error)
+            {
+                Console.WriteLine(error);
+            }
         }
     }
 }
