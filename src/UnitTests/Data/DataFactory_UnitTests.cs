@@ -7,19 +7,18 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace UnitTests.Data
 {
     using rt.Data;
+    using rt.Utility;
 
     [TestClass]
     public class DataFactory_UnitTests
     {
-        private const string TestScenePath = "..\\..\\..\\..\\..\\scenes\\unit_tests\\";
-        private const string SceneFile = "jsonTest.json";
-
         [TestMethod]
         public void LoadInValidSceneWithNoIssues()
         {
             // Arrange
+            const string validSceneFile = "jsonTest.json";
             var dataFactory = new DataFactory();
-            string sceneFilePath = TestScenePath + SceneFile;
+            string sceneFilePath = Dir.GetTestSceneFilePath(validSceneFile);
 
             // Act
             bool result = dataFactory.Load(sceneFilePath);
