@@ -2,7 +2,7 @@
  * #copyright_placeholder Copyright Ben Strukus
  */
 
-namespace Utility
+namespace rt.Utility
 {
     using System;
 
