@@ -13,12 +13,12 @@ namespace UnitTests.Data
     public class DataFactory_UnitTests
     {
         [TestMethod]
-        public void LoadInValidSceneWithNoIssues()
+        [DataRow("validSceneNoIssues.json")]
+        public void LoadInValidSceneWithNoIssues(string sceneFile)
         {
             // Arrange
-            const string validSceneFile = "jsonTest.json";
             var dataFactory = new DataFactory();
-            string sceneFilePath = Dir.GetTestSceneFilePath(validSceneFile);
+            string sceneFilePath = Dir.GetTestSceneFilePath(sceneFile);
 
             // Act
             bool result = dataFactory.Load(sceneFilePath);
@@ -28,14 +28,18 @@ namespace UnitTests.Data
         }
 
         [TestMethod]
-        public void LoadInSceneWithMissingDataAndRegisterIt()
+        [DataRow("missingImage.json")]
+        public void LoadInSceneWithMissingDataAndRegisterIt(string sceneFile)
         {
             // Arrange
+            var dataFactory = new DataFactory();
+            string sceneFilePath = Dir.GetTestSceneFilePath(sceneFile);
 
             // Act
+            bool result = dataFactory.Load(sceneFilePath);
 
             // Assert
-            Assert.IsTrue(false);
+            Assert.IsFalse(result);
         }
 
         [TestMethod]

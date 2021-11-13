@@ -199,6 +199,7 @@ namespace rt.Data
 
     public class SceneData : IData
     {
+        // #idea Considering these are all of type IData, could store them in a list and do a lookup to "get" them. Would make it simpler to process all data at once (error checking, printing, etc)
         [JsonProperty("image")]
         public ImageData Image { get; set; }
 
@@ -213,35 +214,36 @@ namespace rt.Data
 
         public bool IsValid()
         {
-            bool isImageValid = this.Image != null || this.Image.IsValid();
-            if (!isImageValid)
+            if (!this.IsValid(this.Image))
             {
                 Log.Error("Image data could not be loaded");
                 return false;
             }
 
-            bool isCameraValid = this.Camera != null || this.Camera.IsValid();
-            if (!isCameraValid)
+            if (!this.IsValid(this.Camera))
             {
                 Log.Error("Camera data could not be loaded");
                 return false;
             }
 
-            bool areShapesValid = this.Shapes != null || this.Shapes.IsValid();
-            if (!areShapesValid)
+            if (!this.IsValid(this.Shapes))
             {
                 Log.Error("Shape data could not be loaded");
                 return false;
             }
 
-            bool areLightsValid = this.Lights != null || this.Lights.IsValid();
-            if (!areLightsValid)
+            if (!this.IsValid(this.Lights))
             {
                 Log.Error("Light data could not be loaded");
                 return false;
             }
 
             return true;
+        }
+
+        private bool IsValid(IData data)
+        {
+            return data != null && data.IsValid();
         }
 
         public void PrintData(int spaceCount = 0)

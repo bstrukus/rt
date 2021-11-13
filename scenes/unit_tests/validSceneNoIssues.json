@@ -1,7 +1,7 @@
 {
     "image": {
         "width": 100,
-        "format": "jsonTest.bmp"
+        "fileName": "jsonTest.bmp"
     },
     "camera": {
         "eyeDirection": [
