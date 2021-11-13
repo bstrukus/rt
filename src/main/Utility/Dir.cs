@@ -6,7 +6,10 @@ namespace rt.Utility
 {
     using System;
 
-    static public class Dir
+    /// <summary>
+    /// Helper class to handle directory resolving logic.
+    /// </summary>
+    internal static class Dir
     {
         // App dir: "rt\OUTPUT\netcoreapp3.0\"
         // Need to go up 2 levels to get to rt\

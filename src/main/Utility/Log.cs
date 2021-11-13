@@ -6,6 +6,9 @@ namespace rt.Utility
 {
     using System;
 
+    /// <summary>
+    /// Helper class to handle logging out information of varying severity.
+    /// </summary>
     internal static class Log
     {
         static public void Info(string info)
