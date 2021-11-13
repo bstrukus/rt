@@ -10,7 +10,7 @@ namespace UnitTests.Render
     using rt.Render;
 
     [TestClass]
-    public class ProjectionPlane_UnitTests
+    public class ProjectionPlaneTests
     {
         [TestMethod]
         public void GetCenterOfProjectionPlane()
@@ -22,11 +22,7 @@ namespace UnitTests.Render
             var planeCenter = projectionPlane.GetPointOnPlane(0.0f, 0.0f);
 
             // Assert
-            bool result = planeCenter.X == 0.0f &&
-                          planeCenter.Y == 0.0f &&
-                          planeCenter.Z == 0.0f;
-
-            Assert.IsTrue(result);
+            Assert.AreEqual(Vec3.Zero, planeCenter);
         }
 
         [TestMethod]
@@ -47,11 +43,9 @@ namespace UnitTests.Render
             // Assert
             float xTestVal = hScale * hVal;
             float yTestVal = vScale * vVal;
-            bool result = planePoint.X == xTestVal &&
-                          planePoint.Y == yTestVal &&
-                          planePoint.Z == 0.0f;
+            Vec3 expected = new Vec3(xTestVal, yTestVal, 0.0f);
 
-            Assert.IsTrue(result);
+            Assert.AreEqual(expected, planePoint);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace UnitTests.Collide
     using rt.Math;
 
     [TestClass]
-    public class Sphere_UnitTests
+    public class SphereTests
     {
         [TestMethod]
         [DataRow(0.0f, 0.0f, 1.0f)]

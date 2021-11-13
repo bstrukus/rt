@@ -10,7 +10,7 @@ namespace UnitTests.Data
     using rt.Utility;
 
     [TestClass]
-    public class DataFactory_UnitTests
+    public class DataFactoryTests
     {
         [TestMethod]
         [DataRow("validSceneNoIssues.json")]

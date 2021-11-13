@@ -10,7 +10,7 @@ namespace UnitTests.Math
     using rt.Collide;
 
     [TestClass]
-    public class Ray_UnitTests
+    public class RayTests
     {
         [TestMethod]
         public void VerifyNonNormalizedConstructorNormalizes()

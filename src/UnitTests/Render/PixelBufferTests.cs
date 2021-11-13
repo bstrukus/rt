@@ -10,7 +10,7 @@ namespace UnitTests.Render
     using rt.Math;
 
     [TestClass]
-    public class PixelBuffer_UnitTests
+    public class PixelBufferTests
     {
         [TestMethod]
         [DataRow(100, 100, "test100.bmp")]

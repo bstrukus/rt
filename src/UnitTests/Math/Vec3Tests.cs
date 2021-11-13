@@ -9,7 +9,7 @@ using rt.Math;
 namespace UnitTests.Math
 {
     [TestClass]
-    public class Vec3_UnitTests
+    public class Vec3Tests
     {
         private const float Epsilon = 0.00001f;
 
