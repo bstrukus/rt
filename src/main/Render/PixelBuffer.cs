@@ -39,8 +39,11 @@ namespace rt.Render
 
         public void Save(string filename)
         {
-            // #todo Need to flip along the x- and y-axes, or redo how I place pixels
-            this.bitmap.RotateFlip(RotateFlipType.Rotate180FlipX);
+            // Bitmap's [0, 0] is in the upper-left, but ray casts start in the lower-left. FLIP!
+            RotateFlipType flipType =
+                RotateFlipType.RotateNoneFlipY; // If just the y-axis is flipped, this should be all I need
+
+            this.bitmap.RotateFlip(flipType);
             this.bitmap.Save(filename);
         }
     }
