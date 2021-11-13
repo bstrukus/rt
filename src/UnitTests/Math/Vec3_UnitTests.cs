@@ -57,7 +57,7 @@ namespace UnitTests.Math
             bool result = zAxis.X == 0.0f &&
                           zAxis.Y == 0.0f &&
                           zAxis.Z == 1.0f;
-            Assert.IsTrue(result);
+            Assert.AreEqual(Vec3.AxisZ, zAxis);
         }
 
         [TestMethod]
@@ -71,10 +71,7 @@ namespace UnitTests.Math
             Vec3 yAxis = Vec3.Cross(zAxis, xAxis);
 
             // Assert
-            bool result = yAxis.X == 0.0f &&
-                          yAxis.Y == 1.0f &&
-                          yAxis.Z == 0.0f;
-            Assert.IsTrue(result);
+            Assert.AreEqual(Vec3.AxisY, yAxis);
         }
 
         [TestMethod]
@@ -88,10 +85,7 @@ namespace UnitTests.Math
             Vec3 xAxis = Vec3.Cross(yAxis, zAxis);
 
             // Assert
-            bool result = xAxis.X == 1.0f &&
-                          xAxis.Y == 0.0f &&
-                          xAxis.Z == 0.0f;
-            Assert.IsTrue(result);
+            Assert.AreEqual(xAxis, Vec3.AxisX);
         }
 
         #endregion Cross Product

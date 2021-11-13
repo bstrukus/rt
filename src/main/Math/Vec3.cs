@@ -63,6 +63,11 @@ namespace rt.Math
 
         #region Operators
 
+        static public Vec3 operator -(Vec3 vec)
+        {
+            return new Vec3(-vec.X, -vec.Y, -vec.Z);
+        }
+
         static public Vec3 operator *(Vec3 vec, float scalar)
         {
             return new Vec3(
