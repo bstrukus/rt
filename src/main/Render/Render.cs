@@ -137,4 +137,30 @@ namespace rt.Render
             this.Color = color;
         }
     }
+
+    public static class Calc
+    {
+        public static float DiffuseCoefficient(Vec3 normal, Vec3 lightVector)
+        {
+            Debug.Assert(normal.IsNormalized());
+            Debug.Assert(lightVector.IsNormalized());
+
+            return Numbers.Clamp(Vec3.Dot(normal, lightVector), 0.0f, 1.0f);
+        }
+
+        public static float SpecularCoefficient()
+        {
+            return 0.0f;
+        }
+
+        public static Vec3 Reflect()
+        {
+            return Vec3.Zero;
+        }
+
+        public static Vec3 Refract()
+        {
+            return Vec3.Zero;
+        }
+    }
 }

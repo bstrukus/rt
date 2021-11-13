@@ -61,6 +61,11 @@ namespace rt.Math
                 Numbers.Clamp(this.Z, min, max));
         }
 
+        public bool IsNormalized()
+        {
+            return Numbers.AreEqual(Dot(this, this), 1.0f);            
+        }
+
         #region Operators
 
         static public Vec3 operator -(Vec3 vec)
