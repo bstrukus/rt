@@ -202,7 +202,7 @@ namespace rt
 
         public class Quat
         {
-            private float[] val = new float[4];
+            public static Quat Identity = new Quat(0.0f, 0.0f, 0.0f, 1.0f);
 
             public Quat(float x, float y, float z, float w)
             {
@@ -211,6 +211,8 @@ namespace rt
                 this.val[2] = z;
                 this.val[3] = w;
             }
+
+            private readonly float[] val = new float[4];
         }
     }
 
@@ -283,7 +285,7 @@ namespace rt
                 }
 
                 // #todo Create flag to draw normals as a debugging option
-                //color = hitInfo.Normal.Clamped(0.0f, 1.0f);
+                color = hitInfo.Normal.Clamped(0.0f, 1.0f);
 
                 return new ColorReport(color);
             }
