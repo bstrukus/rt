@@ -272,22 +272,19 @@ namespace rt
                     return new ColorReport(this.AmbientColor);
                 }
 
-                // #todo Unit tests for diffuse lighting calculations
-                Vec3 color = hitInfo.Material.Color;
+                Vec3 objectColor = hitInfo.Material.Color;
+                Vec3 finalColor = Vec3.Zero;
                 foreach (var light in this.lights)
                 {
                     Vec3 pointToLight = (light.Transform.Position - hitInfo.Point).Normalized();
-                    float diffuseCoefficient = Vec3.Dot(hitInfo.Normal, pointToLight);
-                    diffuseCoefficient = diffuseCoefficient > 0.0f ? 1.0f : 0.0f;
-                    {
-                        color *= diffuseCoefficient;
-                    }
+                    float diffuseCoefficient = Calc.DiffuseCoefficient(hitInfo.Normal, pointToLight);
+                    finalColor += objectColor * diffuseCoefficient * light.Color.X;
                 }
 
                 // #todo Create flag to draw normals as a debugging option
-                color = hitInfo.Normal.Clamped(0.0f, 1.0f);
+                //color = hitInfo.Normal.Clamped(0.0f, 1.0f);
 
-                return new ColorReport(color);
+                return new ColorReport(finalColor);
             }
 
             public HitInfo Project(Ray ray)
@@ -346,46 +343,6 @@ namespace rt
             // Set of Jobs
             public Workload(/* Set of jobs? */)
             {
-            }
-        }
-
-        public class Runner
-        {
-            private Render.Camera camera;
-            private Render.Image image;
-            private Present.Scene scene;
-
-            // Jobs
-            public Runner(Workload workload)
-            {
-                //
-            }
-
-            public Runner(Present.Scene scene, Render.Camera camera, Render.Image image)
-            {
-                this.scene = scene;
-
-                this.camera = camera;
-                this.image = image;
-            }
-
-            public void Execute()
-            {
-                // Generate rays from the camera's eye through the projection plane
-                for (int y = 0; y < this.image.Height; ++y)
-                {
-                    for (int x = 0; x < this.image.Width; ++x)
-                    {
-                        var scaledPixel = this.image.InterpolatedPixel(x, y);
-                        var ray = this.camera.GenerateRay(scaledPixel);
-                        //var hitInfo = this.scene.Project(ray);
-
-                        var colorReport = this.scene.Trace(ray);
-                        image.SetPixel(x, y, color: colorReport.Color);
-                    }
-                }
-
-                image.Save();
             }
         }
     }

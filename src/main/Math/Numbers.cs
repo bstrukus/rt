@@ -34,7 +34,7 @@ namespace rt.Math
         static public bool AreEqual(float lhs, float rhs)
         {
             // #todo Replace with epsilon
-            return lhs == rhs;
+            return (lhs - rhs) < Epsilon;
         }
     }
 }
