@@ -5,6 +5,7 @@
 namespace rt.Utility
 {
     using rt.Data;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
 
@@ -80,7 +81,11 @@ namespace rt.Utility
         {
             Debug.Assert(!string.IsNullOrEmpty(data));
 
-            return new MaterialData();
+            return null;
+//             return new MaterialData
+//             {
+//                 Diffuse = ReadVector(data)
+//             };
         }
 
         static private PointLightData ReadPointLight(string data)
@@ -111,15 +116,12 @@ namespace rt.Utility
         static private TransformData ReadSimpleTransform(string position)
         {
             Debug.Assert(!string.IsNullOrEmpty(position));
-            
-            position = position.Trim('(', ')');
-            var tokens = position.Split(',');
 
-            var transformData = new TransformData();
 
-            transformData.Position.Add(float.Parse(tokens[0]));
-            transformData.Position.Add(float.Parse(tokens[1]));
-            transformData.Position.Add(float.Parse(tokens[2]));
+            var transformData = new TransformData
+            {
+                Position = ReadVector(position)
+            };
 
             transformData.Orientation.Add(0.0f);
             transformData.Orientation.Add(0.0f);
@@ -131,6 +133,20 @@ namespace rt.Utility
             transformData.Scale.Add(1.0f);
 
             return transformData;
+        }
+
+        static private List<double> ReadVector(string vector)
+        {
+            vector = vector.Trim('(', ')');
+            var tokens = vector.Split(',');
+
+            List<double> parsedVector = new List<double>(tokens.Length);
+            foreach (var value in tokens)
+            {
+                parsedVector.Add(double.Parse(value));
+            }
+
+            return parsedVector;
         }
     }
 }
