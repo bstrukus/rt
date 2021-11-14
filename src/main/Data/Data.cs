@@ -264,6 +264,20 @@ namespace rt.Data
             this.Shapes.Boxes.Add(boxData);
         }
 
+        public void AddShape(PolygonData polygonData)
+        {
+            // #todo Implement adding Polygons
+            //             Debug.Assert(this.Shapes != null && this.Shapes.Boxes != null);
+            //             this.Shapes.Boxes.Add(polygonData);
+        }
+
+        public void AddShape(EllipsoidData ellipsoidData)
+        {
+            // #todo Implement adding Ellipsoids
+            //             Debug.Assert(this.Shapes != null && this.Shapes.Boxes != null);
+            //             this.Shapes.Boxes.Add(EllipsoidData);
+        }
+
         public void AddLight(PointLightData pointLightData)
         {
             Debug.Assert(this.Lights != null && this.Lights.PointLights != null);
@@ -304,7 +318,7 @@ namespace rt.Data
             return data != null && data.IsValid();
         }
 
-        public new void PrintData(int spaceCount = 0)
+        public new void PrintData(int spaceCount)
         {
             base.PrintData(spaceCount);
 
@@ -329,7 +343,7 @@ namespace rt.Data
             return this.Width > 0 && !string.IsNullOrEmpty(this.FileName);
         }
 
-        public new void PrintData(int spaceCount = 0)
+        public new void PrintData(int spaceCount)
         {
             base.PrintData(spaceCount);
             base.Print("Width", this.Width);
@@ -500,7 +514,7 @@ namespace rt.Data
             return hasShapes;
         }
 
-        public new void PrintData(int spaceCount = 0)
+        public new void PrintData(int spaceCount)
         {
             base.PrintData(spaceCount);
 
@@ -583,6 +597,52 @@ namespace rt.Data
         }
     }
 
+    // #todo Support Polygons
+    public class PolygonData : DataBase
+    {
+        [JsonProperty("transform")]
+        public TransformData Transform { get; set; }
+
+        [JsonProperty("material")]
+        public MaterialData Material { get; set; }
+
+        public override bool IsValid()
+        {
+            return this.Transform.IsValid() && this.Material.IsValid();
+        }
+
+        public new void PrintData(int spaceCount)
+        {
+            base.PrintData(spaceCount);
+
+            this.Transform.PrintData(spaceCount + 3);
+            this.Material.PrintData(spaceCount + 3);
+        }
+    }
+
+    // #todo Support Ellipsoids
+    public class EllipsoidData : DataBase
+    {
+        [JsonProperty("transform")]
+        public TransformData Transform { get; set; }
+
+        [JsonProperty("material")]
+        public MaterialData Material { get; set; }
+
+        public override bool IsValid()
+        {
+            return this.Transform.IsValid() && this.Material.IsValid();
+        }
+
+        public new void PrintData(int spaceCount)
+        {
+            base.PrintData(spaceCount);
+
+            this.Transform.PrintData(spaceCount + 3);
+            this.Material.PrintData(spaceCount + 3);
+        }
+    }
+
     public class LightData : DataBase
     {
         [JsonProperty("points")]
@@ -607,7 +667,7 @@ namespace rt.Data
             return this.PointLights != null && this.PointLights.Count > 0;
         }
 
-        public new void PrintData(int spaceCount = 0)
+        public new void PrintData(int spaceCount)
         {
             base.PrintData(spaceCount);
 
@@ -647,6 +707,7 @@ namespace rt.Data
         }
     }
 
+    // #todo Store AirData somewhere in the SceneData
     public class AirData : DataBase
     {
         public override bool IsValid()
@@ -660,6 +721,7 @@ namespace rt.Data
         }
     }
 
+    // #todo Store AmbientData somewhere in the SceneData
     public class AmbientData : DataBase
     {
         public override bool IsValid()

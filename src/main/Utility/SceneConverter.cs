@@ -41,6 +41,18 @@ namespace rt.Utility
                     {
                         sceneData.AddShape(ReadSphere(line, sr.ReadLine()));
                     }
+                    else if (string.Compare(tag, "BOX", true) == 0)
+                    {
+                        sceneData.AddShape(ReadBox(line, sr.ReadLine()));
+                    }
+                    else if (string.Compare(tag, "POLYGON", true) == 0)
+                    {
+                        sceneData.AddShape(ReadPolygon(line, sr.ReadLine()));
+                    }
+                    else if (string.Compare(tag, "ELLIPSOID", true) == 0)
+                    {
+                        sceneData.AddShape(ReadEllipsoid(line, sr.ReadLine()));
+                    }
                     else if (string.Compare(tag, "LIGHT", true) == 0)
                     {
                         sceneData.AddLight(ReadPointLight(line));
@@ -48,6 +60,16 @@ namespace rt.Utility
                     else if (string.Compare(tag, "CAMERA", true) == 0)
                     {
                         sceneData.Camera = (ReadCamera(line));
+                    }
+                    else if (string.Compare(tag, "AIR", true) == 0)
+                    {
+                        // #todo Store Air data somewhere
+                        ReadAir(line);
+                    }
+                    else if (string.Compare(tag, "AMBIENT", true) == 0)
+                    {
+                        // #todo Store Ambient data somewhere
+                        ReadAmbient(line);
                     }
 
                     line = sr.ReadLine();
@@ -76,6 +98,8 @@ namespace rt.Utility
             return fileNameParts[0] + ".json";
         }
 
+        #region Read Objects
+
         private static SphereData ReadSphere(string sphereLine, string materialLine)
         {
             Debug.Assert(!string.IsNullOrEmpty(sphereLine));
@@ -91,6 +115,59 @@ namespace rt.Utility
 
             return sphereData;
         }
+
+        private static BoxData ReadBox(string boxLine, string materialLine)
+        {
+            // #todo Read in Box shape
+            Debug.Assert(!string.IsNullOrEmpty(boxLine));
+
+            var tokens = boxLine.Split(' ');
+
+            //             var sphereData = new SphereData
+            //             {
+            //                 Radius = double.Parse(tokens[2]),
+            //                 Transform = ReadSimpleTransform(tokens[1]),
+            //                 Material = ReadMaterial(materialLine)
+            //             };
+
+            return null;
+        }
+
+        private static PolygonData ReadPolygon(string polygonLine, string materialLine)
+        {
+            // #todo Read in Polygon shape
+            Debug.Assert(!string.IsNullOrEmpty(polygonLine));
+
+            var tokens = polygonLine.Split(' ');
+
+            //             var sphereData = new SphereData
+            //             {
+            //                 Radius = double.Parse(tokens[2]),
+            //                 Transform = ReadSimpleTransform(tokens[1]),
+            //                 Material = ReadMaterial(materialLine)
+            //             };
+
+            return null;
+        }
+
+        private static EllipsoidData ReadEllipsoid(string ellipsoidLine, string materialLine)
+        {
+            // #todo Read in Ellipsoid shape
+            Debug.Assert(!string.IsNullOrEmpty(ellipsoidLine));
+
+            var tokens = ellipsoidLine.Split(' ');
+
+            //             var sphereData = new SphereData
+            //             {
+            //                 Radius = double.Parse(tokens[2]),
+            //                 Transform = ReadSimpleTransform(tokens[1]),
+            //                 Material = ReadMaterial(materialLine)
+            //             };
+
+            return null;
+        }
+
+        #endregion Read Objects
 
         private static MaterialData ReadMaterial(string data)
         {
@@ -152,12 +229,14 @@ namespace rt.Utility
 
         private static AmbientData ReadAmbient(string data)
         {
+            // #todo Read in Ambient data
             Debug.Assert(!string.IsNullOrEmpty(data));
             return null;
         }
 
         private static AirData ReadAir(string data)
         {
+            // #todo Read in Air data
             Debug.Assert(!string.IsNullOrEmpty(data));
             return null;
         }
