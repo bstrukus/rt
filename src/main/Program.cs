@@ -15,7 +15,14 @@ namespace rt
         {
             Log.Info("PROGRAM START");
 
-            LoadScene(Utility.Dir.GetSceneFilePath(SceneFile));
+            if (args.Length == 0)
+            {
+                LoadScene(Utility.Dir.GetSceneFilePath(SceneFile));
+            }
+            else if (args.Length == 1)
+            {
+                ConvertFile(args[0]);
+            }
 
             Log.Info("PROGRAM END");
         }
@@ -31,6 +38,11 @@ namespace rt
 
             var runner = new rt.Execute.Runner(scene, camera, image);
             runner.Execute();
+        }
+
+        private static void ConvertFile(string filename)
+        {
+            rt.Utility.SceneConverter.Convert(filename);
         }
     }
 }

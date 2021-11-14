@@ -19,6 +19,8 @@ namespace rt.Utility
         // Need to go up 5 levels to get to rt\
         static private string TestSceneDirectory => $"{AppDomain.CurrentDomain.BaseDirectory}..\\..\\..\\..\\scenes\\unit_tests\\";
 
+        static private string OldSceneDirectory => $"{AppDomain.CurrentDomain.BaseDirectory}..\\..\\..\\..\\scenes\\unconverted\\";
+
         static public string GetSceneFilePath(string sceneFile)
         {
             return $"{SceneDirectory}{sceneFile}";
@@ -27,6 +29,11 @@ namespace rt.Utility
         static public string GetTestSceneFilePath(string sceneFile)
         {
             return $"{TestSceneDirectory}{sceneFile}";
+        }
+
+        static public string GetOldSceneFilePath(string oldSceneFile)
+        {
+            return $"{OldSceneDirectory}{oldSceneFile}";
         }
     }
 }
