@@ -139,17 +139,6 @@ namespace rt.Data
                 color: DoubleListToVec3(data.Diffuse));
         }
 
-        //         public Camera(Data.CameraData cameraData)
-        //         {
-        //             this.eyePosition = Data.Helpers.Vec3FromListOfDoubles(cameraData.EyePosition);
-        //
-        //             this.projectionPlane = new ProjectionPlane(cameraData.ProjectionPlane);
-        //             this.stepCount = new int[] {
-        //                     this.HorizontalStepCount * (int)projectionPlane.HorizontalScale,
-        //                     this.projectionPlane. * (int)projectionPlane.VerticalScale
-        //                 };
-        //         }
-
         public static Math.Vec3 DoubleListToVec3(List<double> vec3)
         {
             Debug.Assert(vec3 != null);
@@ -168,13 +157,18 @@ namespace rt.Data
         {
             return vector != null && vector.Count == expectedCount;
         }
-
-
     }
 
+    /// <summary>
+    /// Handles common pretty-print formatting
+    /// </summary>
+    /// <remarks>
+    /// In general, it's not advised to add "Base" as a suffix for abstract classes, but in this case I couldn't help myself.
+    /// </remarks>
     public abstract class DataBase
     {
         private int spaceCount;
+
         private string indentation
         {
             get
@@ -186,28 +180,33 @@ namespace rt.Data
         }
 
         // Error checking
-        abstract public bool IsValid();
+        public abstract bool IsValid();
+
+        #region Pretty Print
 
         // Pretty-Print
-        virtual public void PrintData(int spaceCount = 0)
+        public virtual void PrintData(int spaceCount = 0)
         {
             this.spaceCount = spaceCount;
             this.PrintTitle(this.GetType().Name.ToUpper());
         }
 
-        virtual public void Print(string label, string value)
+        public virtual void Print(string label, string value)
         {
             Log.Info($"{this.indentation}{label}: {value}");
         }
-        virtual public void Print(string label, int value)
+
+        public virtual void Print(string label, int value)
         {
             Print(label, value.ToString());
         }
-        virtual public void Print(string label, double value)
+
+        public virtual void Print(string label, double value)
         {
             Print(label, value.ToString());
         }
-        virtual public void Print(string label, List<double> list)
+
+        public virtual void Print(string label, List<double> list)
         {
             Log.Info($"{this.indentation}{label}: [{Format(list)}]");
         }
@@ -231,6 +230,8 @@ namespace rt.Data
             sb.Append("]");
             return sb.ToString();
         }
+
+        #endregion Pretty Print
     }
 
     public class SceneData : DataBase
@@ -312,7 +313,6 @@ namespace rt.Data
             base.PrintData(spaceCount);
 
             int indentation = 3;
-            Log.Info("SCENE");
             this.Image.PrintData(indentation);
             this.Camera.PrintData(indentation);
             this.Shapes.PrintData(indentation);
@@ -349,6 +349,11 @@ namespace rt.Data
         [JsonProperty("projectionPlane")]
         public ProjectionPlaneData ProjectionPlane { get; set; }
 
+        public CameraData()
+        {
+            this.EyeDirection = new List<double>();
+        }
+
         public override bool IsValid()
         {
             bool isProjectionPlaneValid = this.ProjectionPlane != null && this.ProjectionPlane.IsValid();
@@ -362,6 +367,7 @@ namespace rt.Data
             this.ProjectionPlane.PrintData(spaceCount + 3);
         }
     }
+
     public class ProjectionPlaneData : DataBase
     {
         [JsonProperty("center")]
@@ -372,6 +378,13 @@ namespace rt.Data
 
         [JsonProperty("vAxis")]
         public List<double> VAxis { get; set; }
+
+        public ProjectionPlaneData()
+        {
+            this.Center = new List<double>();
+            this.UAxis = new List<double>();
+            this.VAxis = new List<double>();
+        }
 
         public override bool IsValid()
         {
@@ -431,16 +444,17 @@ namespace rt.Data
         public List<double> Diffuse { get; set; }
 
         // Specular reflection coefficients
-        public float SpecularCoefficient { get; set; }
-        public float SpecularExponent { get; set; } // Phong model
+        public double SpecularCoefficient { get; set; }
+
+        public double SpecularExponent { get; set; } // Phong model
 
         // Transmission attenuation factors
         public List<double> TransmissionAttenuation;
 
         // Index of refraction
-        public float ElectricPermittivity { get; set; } // Relative
-        public float MagneticPermeability { get; set; } // Relative
+        public double ElectricPermittivity { get; set; } // Relative
 
+        public double MagneticPermeability { get; set; } // Relative
 
         public MaterialData()
         {
@@ -617,6 +631,8 @@ namespace rt.Data
         [JsonProperty("color")]
         public List<double> Color { get; set; }
 
+        [JsonProperty("radius")]
+        public double Radius { get; set; }
 
         public override bool IsValid()
         {
@@ -631,6 +647,7 @@ namespace rt.Data
             this.Transform.PrintData(indentation);
 
             base.Print("Color", this.Color);
+            base.Print("Radius", this.Radius);
         }
     }
 

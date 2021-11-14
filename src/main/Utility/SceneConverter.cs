@@ -11,7 +11,7 @@ namespace rt.Utility
 
     internal class SceneConverter
     {
-        static public void Convert(string filename)
+        public static void Convert(string filename)
         {
             // Find the actual file
             string fullFilePath = Dir.GetOldSceneFilePath(filename);
@@ -29,6 +29,12 @@ namespace rt.Utility
                 string line = sr.ReadLine();
                 while (line != null)
                 {
+                    if (ShouldIgnoreLine(line))
+                    {
+                        line = sr.ReadLine();
+                        continue;
+                    }
+
                     var tag = line.Split(' ')[0];
 
                     if (string.Compare(tag, "SPHERE", true) == 0)
@@ -47,6 +53,10 @@ namespace rt.Utility
                     line = sr.ReadLine();
                 }
 
+                if (!sceneData.IsValid())
+                {
+                    Log.Error("Error loading in CS500 file format");
+                }
             }
             catch (System.Exception ex)
             {
@@ -54,14 +64,19 @@ namespace rt.Utility
             }
         }
 
-        static private string ReplaceFileExtension(string filename)
+        private static bool ShouldIgnoreLine(string line)
+        {
+            line = line.Trim();
+            return string.IsNullOrEmpty(line) || line[0] == '#';
+        }
+
+        private static string ReplaceFileExtension(string filename)
         {
             string[] fileNameParts = filename.Split('.');
             return fileNameParts[0] + ".json";
         }
 
-
-        static private SphereData ReadSphere(string sphereLine, string materialLine)
+        private static SphereData ReadSphere(string sphereLine, string materialLine)
         {
             Debug.Assert(!string.IsNullOrEmpty(sphereLine));
 
@@ -77,46 +92,79 @@ namespace rt.Utility
             return sphereData;
         }
 
-        static private MaterialData ReadMaterial(string data)
+        private static MaterialData ReadMaterial(string data)
         {
             Debug.Assert(!string.IsNullOrEmpty(data));
 
+            var tokens = data.Trim().Split(' ');
+
+            return new MaterialData
+            {
+                Diffuse = ReadVector(tokens[0]),
+                SpecularCoefficient = double.Parse(tokens[1]),
+                SpecularExponent = double.Parse(tokens[2]),
+                TransmissionAttenuation = ReadVector(tokens[3]),
+                ElectricPermittivity = double.Parse(tokens[4]),
+                MagneticPermeability = double.Parse(tokens[5])
+            };
+        }
+
+        private static PointLightData ReadPointLight(string data)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(data));
+
+            var tokens = data.Split(' ');
+
+            return new PointLightData
+            {
+                Transform = ReadSimpleTransform(tokens[1]),
+                Color = ReadVector(tokens[2]),
+                Radius = double.Parse(tokens[3])
+            };
+        }
+
+        private static CameraData ReadCamera(string data)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(data));
+
+            var eyeDirectionData = data.Split(' ')[4];
+
+            return new CameraData
+            {
+                EyeDirection = ReadVector(eyeDirectionData),
+                ProjectionPlane = ReadProjectionPlane(data)
+            };
+        }
+
+        private static ProjectionPlaneData ReadProjectionPlane(string data)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(data));
+
+            var tokens = data.Split(' ');
+
+            return new ProjectionPlaneData
+            {
+                Center = ReadVector(tokens[1]),
+                UAxis = ReadVector(tokens[2]),
+                VAxis = ReadVector(tokens[3]),
+            };
+        }
+
+        private static AmbientData ReadAmbient(string data)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(data));
             return null;
-//             return new MaterialData
-//             {
-//                 Diffuse = ReadVector(data)
-//             };
         }
 
-        static private PointLightData ReadPointLight(string data)
-        {
-            Debug.Assert(!string.IsNullOrEmpty(data));
-
-            return new PointLightData();
-        }
-
-        static private CameraData ReadCamera(string data)
-        {
-            Debug.Assert(!string.IsNullOrEmpty(data));
-            return new CameraData();
-        }
-
-        static private AmbientData ReadAmbient(string data)
+        private static AirData ReadAir(string data)
         {
             Debug.Assert(!string.IsNullOrEmpty(data));
             return null;
         }
 
-        static private AirData ReadAir(string data)
-        {
-            Debug.Assert(!string.IsNullOrEmpty(data));
-            return null;
-        }
-
-        static private TransformData ReadSimpleTransform(string position)
+        private static TransformData ReadSimpleTransform(string position)
         {
             Debug.Assert(!string.IsNullOrEmpty(position));
-
 
             var transformData = new TransformData
             {
@@ -135,7 +183,7 @@ namespace rt.Utility
             return transformData;
         }
 
-        static private List<double> ReadVector(string vector)
+        private static List<double> ReadVector(string vector)
         {
             vector = vector.Trim('(', ')');
             var tokens = vector.Split(',');
