@@ -15,10 +15,6 @@ namespace rt.Data
     using System.Text;
     using Utility;
 
-    public static class Helpers
-    {
-    };
-
     /// <summary>
     /// Consumes a data file, outputs components of the ray tracer
     /// </summary>

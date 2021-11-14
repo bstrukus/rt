@@ -8,17 +8,17 @@ namespace rt.Math
     {
         public const float Epsilon = 0.000001f;
 
-        static public bool InRange(float val, float min, float max)
+        public static bool InRange(float val, float min, float max)
         {
             return min <= val && val <= max;
         }
 
-        static public bool InRange(int val, int min, int max)
+        public static bool InRange(int val, int min, int max)
         {
             return min <= val && val <= max;
         }
 
-        static public float Clamp(float val, float min, float max)
+        public static float Clamp(float val, float min, float max)
         {
             if (val < min)
             {
@@ -31,9 +31,8 @@ namespace rt.Math
             return val;
         }
 
-        static public bool AreEqual(float lhs, float rhs)
+        public static bool AreEqual(float lhs, float rhs)
         {
-            // #todo Replace with epsilon
             return (lhs - rhs) < Epsilon;
         }
     }

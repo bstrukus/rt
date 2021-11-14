@@ -4,7 +4,6 @@
 
 using rt.Math;
 using System.Collections.Generic;
-using rt.Render;
 
 /* TODO LIST
  * [ ] Lighting
@@ -310,7 +309,6 @@ namespace rt
     namespace Execute
     {
         using Present;
-        using rt.Utility;
 
         public class Job
         {

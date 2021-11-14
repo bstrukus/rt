@@ -63,17 +63,17 @@ namespace rt.Math
 
         public bool IsNormalized()
         {
-            return Numbers.AreEqual(Dot(this, this), 1.0f);            
+            return Numbers.AreEqual(Dot(this, this), 1.0f);
         }
 
         #region Operators
 
-        static public Vec3 operator -(Vec3 vec)
+        public static Vec3 operator -(Vec3 vec)
         {
             return new Vec3(-vec.X, -vec.Y, -vec.Z);
         }
 
-        static public Vec3 operator *(Vec3 vec, float scalar)
+        public static Vec3 operator *(Vec3 vec, float scalar)
         {
             return new Vec3(
                 vec.val[0] * scalar,
@@ -81,7 +81,7 @@ namespace rt.Math
                 vec.val[2] * scalar);
         }
 
-        static public Vec3 operator *(float scalar, Vec3 vec)
+        public static Vec3 operator *(float scalar, Vec3 vec)
         {
             return new Vec3(
                 vec.val[0] * scalar,
@@ -89,7 +89,7 @@ namespace rt.Math
                 vec.val[2] * scalar);
         }
 
-        static public Vec3 operator /(Vec3 vec, float scalar)
+        public static Vec3 operator /(Vec3 vec, float scalar)
         {
             Debug.Assert(scalar != 0.0f, "Vec3 - Scalar value cannot be zero when dividing");
             return new Vec3(
@@ -98,7 +98,7 @@ namespace rt.Math
                 vec.val[2] / scalar);
         }
 
-        static public Vec3 operator +(Vec3 lhs, Vec3 rhs)
+        public static Vec3 operator +(Vec3 lhs, Vec3 rhs)
         {
             return new Vec3(
                 lhs.val[0] + rhs.val[0],
@@ -106,7 +106,7 @@ namespace rt.Math
                 lhs.val[2] + rhs.val[2]);
         }
 
-        static public Vec3 operator -(Vec3 lhs, Vec3 rhs)
+        public static Vec3 operator -(Vec3 lhs, Vec3 rhs)
         {
             return new Vec3(
                 lhs.val[0] - rhs.val[0],
@@ -114,14 +114,14 @@ namespace rt.Math
                 lhs.val[2] - rhs.val[2]);
         }
 
-        static public bool operator ==(Vec3 lhs, Vec3 rhs)
+        public static bool operator ==(Vec3 lhs, Vec3 rhs)
         {
             return Numbers.AreEqual(lhs.X, rhs.X) &&
                    Numbers.AreEqual(lhs.Y, rhs.Y) &&
                    Numbers.AreEqual(lhs.Z, rhs.Z);
         }
 
-        static public bool operator !=(Vec3 lhs, Vec3 rhs)
+        public static bool operator !=(Vec3 lhs, Vec3 rhs)
         {
             return !(lhs == rhs);
         }
@@ -140,14 +140,14 @@ namespace rt.Math
 
         #endregion Operators
 
-        static public float Dot(Vec3 lhs, Vec3 rhs)
+        public static float Dot(Vec3 lhs, Vec3 rhs)
         {
             return lhs.val[0] * rhs.val[0] +
                    lhs.val[1] * rhs.val[1] +
                    lhs.val[2] * rhs.val[2];
         }
 
-        static public Vec3 Cross(Vec3 lhs, Vec3 rhs)
+        public static Vec3 Cross(Vec3 lhs, Vec3 rhs)
         {
             return new Vec3(
                 lhs.Y * rhs.Z - lhs.Z * rhs.Y,
