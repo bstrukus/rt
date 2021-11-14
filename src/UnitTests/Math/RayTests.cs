@@ -6,8 +6,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests.Math
 {
-    using rt.Math;
     using rt.Collide;
+    using rt.Math;
 
     [TestClass]
     public class RayTests

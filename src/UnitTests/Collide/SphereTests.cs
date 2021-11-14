@@ -6,9 +6,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests.Collide
 {
-    using rt.Present;
     using rt.Collide;
     using rt.Math;
+    using rt.Present;
 
     [TestClass]
     public class SphereTests

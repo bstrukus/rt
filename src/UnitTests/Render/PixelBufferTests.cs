@@ -6,8 +6,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests.Render
 {
-    using rt.Render;
     using rt.Math;
+    using rt.Render;
 
     [TestClass]
     public class PixelBufferTests
