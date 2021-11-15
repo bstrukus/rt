@@ -296,6 +296,7 @@ namespace rt
                 int debugLimit = 40;
                 int maxCount = this.hittables.Count;
 
+                // #bug There's an issue with how the correct hit is reported, I'm getting overdraw for objects that should be behind others
                 foreach (var hittable in this.hittables)
                 {
                     var hitInfo = hittable.TryIntersect(ray);
