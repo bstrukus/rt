@@ -19,6 +19,7 @@ namespace rt.Utility
             Log.Info(fullFilePath);
 
             var sceneData = new SceneData();
+            sceneData.Image = CreateImageData(500, filename);
 
             try
             {
@@ -84,7 +85,7 @@ namespace rt.Utility
                 Log.Error(ex.Message);
             }
 
-            if (Save(sceneData, ReplaceFileExtension(filename)))
+            if (Save(sceneData, filename))
             {
                 Log.Info("File successfully saved.");
             }
@@ -94,15 +95,26 @@ namespace rt.Utility
             }
         }
 
+        private static ImageData CreateImageData(int width, string filename)
+        {
+            return new ImageData
+            {
+                Width = width,
+                FileName = ReplaceFileExtension(filename, ".bmp")
+            };
+        }
+
         private static bool Save(SceneData sceneData, string outputFilename)
         {
-            string outputFilePath = Dir.GetSceneFilePath(outputFilename);
+            string newFilename = ReplaceFileExtension(outputFilename, ".json");
+            string outputFilePath = Dir.GetSceneFilePath(newFilename);
             using (StreamWriter file = File.CreateText(outputFilePath))
             {
                 JsonSerializer serializer = new JsonSerializer();
+                serializer.Formatting = Formatting.Indented;
                 serializer.Serialize(file, sceneData);
+                return true;
             }
-            return false;
         }
 
         private static bool ShouldIgnoreLine(string line)
@@ -111,10 +123,10 @@ namespace rt.Utility
             return string.IsNullOrEmpty(line) || line[0] == '#';
         }
 
-        private static string ReplaceFileExtension(string filename)
+        private static string ReplaceFileExtension(string filename, string extension)
         {
             string[] fileNameParts = filename.Split('.');
-            return fileNameParts[0] + ".json";
+            return fileNameParts[0] + extension;
         }
 
         #region Read Objects
