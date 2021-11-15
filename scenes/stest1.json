@@ -1,0 +1,1808 @@
+{
+  "image": {
+    "width": 500,
+    "filename": "stest1.bmp"
+  },
+  "camera": {
+    "eyeDirection": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "projectionPlane": {
+      "center": [
+        0.1,
+        0.1,
+        1.0
+      ],
+      "uAxis": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "vAxis": [
+        0.0,
+        0.5,
+        0.0
+      ]
+    }
+  },
+  "shapes": {
+    "spheres": [
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.5,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.675,
+            0.0,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.175,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.25,
+            0.0,
+            0.75
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            -0.675,
+            0.0,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.175,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.25,
+            0.0,
+            0.75
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.675,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.175,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.25,
+            0.0,
+            0.75
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            -0.675,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.175,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.25,
+            0.0,
+            0.75
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.0,
+            0.675
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.175,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.25,
+            0.0,
+            0.75
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.0,
+            -0.675
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.175,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.25,
+            0.0,
+            0.75
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.91125,
+            0.0,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            -0.43875,
+            0.0,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.23625,
+            0.675,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.23625,
+            -0.675,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.23625,
+            0.0,
+            0.675
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.23625,
+            0.0,
+            -0.675
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.43875,
+            0.0,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            -0.91125,
+            0.0,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            -0.23625,
+            0.675,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            -0.23625,
+            -0.675,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            -0.23625,
+            0.0,
+            0.675
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            -0.23625,
+            0.0,
+            -0.675
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.675,
+            0.23625,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            -0.675,
+            0.23625,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.91125,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            -0.43875,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.23625,
+            0.675
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.23625,
+            -0.675
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.675,
+            -0.23625,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            -0.675,
+            -0.23625,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.43875,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            -0.91125,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            -0.23625,
+            0.675
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            -0.23625,
+            -0.675
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.675,
+            0.0,
+            0.23625
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            -0.675,
+            0.0,
+            0.23625
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.675,
+            0.23625
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            -0.675,
+            0.23625
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.0,
+            0.91125
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.0,
+            -0.43875
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.675,
+            0.0,
+            -0.23625
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            -0.675,
+            0.0,
+            -0.23625
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.675,
+            -0.23625
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            -0.675,
+            -0.23625
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.0,
+            0.43875
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.0,
+            -0.91125
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.06125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4375,
+            0.0,
+            0.5625
+          ],
+          "specularCoefficient ": 0.5,
+          "specularExponent": 90.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.0,
+            -1000.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 990.0,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "specularCoefficient ": 0.3,
+          "specularExponent": 5.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            -1000.0,
+            0.0,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 990.0,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.5,
+            0.5,
+            0.0
+          ],
+          "specularCoefficient ": 0.3,
+          "specularExponent": 5.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      }
+    ],
+    "boxes": []
+  },
+  "lights": {
+    "points": [
+      {
+        "transform": {
+          "position": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            -1.0,
+            -1.0,
+            1.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            1.0,
+            0.0,
+            0.5
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.25,
+          0.25,
+          0.25
+        ],
+        "radius": 0.1
+      }
+    ]
+  }
+}

@@ -280,7 +280,7 @@ namespace rt
                     finalColor += objectColor * diffuseCoefficient * light.Color.X;
                 }
 
-                // #todo Create flag to draw normals as a debugging option
+                // #todo #debug-lever Create flag to draw normals as a debugging option
                 //color = hitInfo.Normal.Clamped(0.0f, 1.0f);
 
                 return new ColorReport(finalColor);
@@ -290,12 +290,25 @@ namespace rt
             {
                 HitInfo result = null;
                 float hitDistance = float.MaxValue;
+
+                int i = 0;
+                // #debug-lever Restricting object count
+                int debugLimit = 40;
+                int maxCount = this.hittables.Count;
+
                 foreach (var hittable in this.hittables)
                 {
                     var hitInfo = hittable.TryIntersect(ray);
                     if (hitInfo != null && hitInfo.Distance < hitDistance)
                     {
                         result = hitInfo;
+                    }
+
+                    ++i;
+
+                    if (i < maxCount && i > debugLimit)
+                    {
+                        break;
                     }
                 }
                 return result;
