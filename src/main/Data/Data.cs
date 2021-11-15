@@ -37,7 +37,7 @@ namespace rt.Data
             }
 
             // #todo Make this togglable, debug option
-            this.sceneData.PrintData();
+            this.sceneData.PrintData(0);
             return true;
         }
 
@@ -193,10 +193,11 @@ namespace rt.Data
         #region Pretty Print
 
         // Pretty-Print
-        public virtual void PrintData(int spaceCount = 0)
+        public virtual void PrintData(int spaceCount)
         {
             this.spaceCount = spaceCount;
-            this.PrintTitle(this.GetType().Name.ToUpper());
+            string title = this.GetType().Name.ToUpper();
+            this.PrintTitle(title.Substring(0, title.Length - 4));
         }
 
         public virtual void Print(string label, string value)
@@ -245,6 +246,7 @@ namespace rt.Data
     public class SceneData : DataBase
     {
         // #idea Considering these are all of type IData, could store them in a list and do a lookup to "get" them. Would make it simpler to process all data at once (error checking, printing, etc)
+        // #todo Get rid of the ImageData from the SceneData, load it in another way, maybe read in a standard config file that contains image data & scene filename
         [JsonProperty("image")]
         public ImageData Image { get; set; }
 
@@ -334,7 +336,7 @@ namespace rt.Data
         {
             base.PrintData(spaceCount);
 
-            int indentation = 3;
+            int indentation = spaceCount + 5;
             this.Image.PrintData(indentation);
             this.Camera.PrintData(indentation);
             this.Shapes.PrintData(indentation);
