@@ -10,6 +10,7 @@ namespace rt.Data
     using Collide;
     using Present;
     using Render;
+    using rt.Math;
     using System.Diagnostics;
     using System.IO;
     using System.Text;
@@ -151,7 +152,18 @@ namespace rt.Data
 
         public static bool ValidateList(List<double> vector, int expectedCount)
         {
-            return vector != null && vector.Count == expectedCount;
+            if (vector != null && vector.Count == expectedCount)
+            {
+                foreach (var value in vector)
+                {
+                    if (!Numbers.InRange(value, 0.0f, 1.0f))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
         }
     }
 
@@ -209,7 +221,7 @@ namespace rt.Data
 
         public void PrintTitle(string label)
         {
-            string spaces = new string(' ', this.spaceCount - 2);
+            string spaces = this.spaceCount > 0 ? new string(' ', this.spaceCount - 2) : string.Empty;
             Log.Info($"{spaces}- {label}");
         }
 
@@ -448,22 +460,26 @@ namespace rt.Data
 
     public class MaterialData : DataBase
     {
-        // #todo Rename to "Diffuse"
         // Diffuse reflection coefficients
-        [JsonProperty("color")]
+        [JsonProperty("diffuse")]
         public List<double> Diffuse { get; set; }
 
         // Specular reflection coefficients
+        [JsonProperty("specularCoefficient ")]
         public double SpecularCoefficient { get; set; }
 
+        [JsonProperty("specularExponent")]
         public double SpecularExponent { get; set; } // Phong model
 
         // Transmission attenuation factors
+        [JsonProperty("transmissionAttenuation")]
         public List<double> TransmissionAttenuation;
 
         // Index of refraction
+        [JsonProperty("electricPermittivity")]
         public double ElectricPermittivity { get; set; } // Relative
 
+        [JsonProperty("magneticPermeability")]
         public double MagneticPermeability { get; set; } // Relative
 
         public MaterialData()
@@ -475,7 +491,11 @@ namespace rt.Data
         public override bool IsValid()
         {
             return DataFactory.ValidateList(this.Diffuse, 3) &&
-                DataFactory.ValidateList(this.TransmissionAttenuation, 3);
+                DataFactory.ValidateList(this.TransmissionAttenuation, 3) &&
+                this.SpecularCoefficient >= 0.0f &&
+                this.SpecularExponent >= 0.0f &&
+                this.ElectricPermittivity >= 0.0f &&
+                this.MagneticPermeability >= 0.0f;
         }
 
         public new void PrintData(int spaceCount)
