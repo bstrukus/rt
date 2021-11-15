@@ -13,6 +13,11 @@ namespace rt.Math
             return min <= val && val <= max;
         }
 
+        public static bool InRange(double val, double min, double max)
+        {
+            return min <= val && val <= max;
+        }
+
         public static bool InRange(int val, int min, int max)
         {
             return min <= val && val <= max;
