@@ -41,6 +41,8 @@ namespace rt.Execute
             }
 
             image.Save();
+
+            image.Open();
         }
     }
 }

@@ -11,6 +11,8 @@ namespace rt.Utility
     /// </summary>
     public static class Dir
     {
+        private static string OutputDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}";
+
         // App dir: "rt\OUTPUT\rt\<target_config>\<netcoreapp_ver>\"
         // Need to go up 2 levels to get to rt\
         private static string SceneDirectory => $"{AppDomain.CurrentDomain.BaseDirectory}..\\..\\..\\..\\scenes\\";
@@ -34,6 +36,11 @@ namespace rt.Utility
         public static string GetOldSceneFilePath(string oldSceneFile)
         {
             return $"{OldSceneDirectory}{oldSceneFile}";
+        }
+
+        public static string GetOutputFilePath(string outputFile)
+        {
+            return $"{OutputDirectory}{outputFile}";
         }
     }
 }

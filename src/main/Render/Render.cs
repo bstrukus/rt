@@ -9,6 +9,7 @@ namespace rt.Render
 {
     using Collide;
     using Math;
+    using rt.Utility;
     using System.Diagnostics;
 
     /// <summary>
@@ -113,6 +114,18 @@ namespace rt.Render
             this.buffer.Save(this.fileName);
         }
 
+        public void Open()
+        {
+            string outputFile = Dir.GetOutputFilePath(this.fileName);
+
+            var p = new Process();
+            p.StartInfo = new ProcessStartInfo(outputFile)
+            {
+                UseShellExecute = true
+            };
+            p.Start();
+        }
+
         public Vec2 InterpolatedPixel(int x, int y)
         {
             return new Vec2(this.InterpolatedStep(x, this.Width), this.InterpolatedStep(y, this.Height));
@@ -134,7 +147,7 @@ namespace rt.Render
 
         public ColorReport(Vec3 color)
         {
-            this.Color = color;
+            this.Color = color.Clamped(0.0f, 1.0f);
         }
     }
 
