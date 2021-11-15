@@ -8,6 +8,7 @@ namespace rt.Utility
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using Newtonsoft.Json;
 
     internal class SceneConverter
     {
@@ -16,8 +17,6 @@ namespace rt.Utility
             // Find the actual file
             string fullFilePath = Dir.GetOldSceneFilePath(filename);
             Log.Info(fullFilePath);
-
-            Log.Info($"New File: {ReplaceFileExtension(filename)}");
 
             var sceneData = new SceneData();
 
@@ -84,6 +83,26 @@ namespace rt.Utility
             {
                 Log.Error(ex.Message);
             }
+
+            if (Save(sceneData, ReplaceFileExtension(filename)))
+            {
+                Log.Info("File successfully saved.");
+            }
+            else
+            {
+                Log.Error("Something went wrong.");
+            }
+        }
+
+        private static bool Save(SceneData sceneData, string outputFilename)
+        {
+            string outputFilePath = Dir.GetSceneFilePath(outputFilename);
+            using (StreamWriter file = File.CreateText(outputFilePath))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(file, sceneData);
+            }
+            return false;
         }
 
         private static bool ShouldIgnoreLine(string line)

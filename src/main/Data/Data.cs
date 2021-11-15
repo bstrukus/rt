@@ -47,7 +47,7 @@ namespace rt.Data
 
             // Go through the list of Spheres & Boxes to create a list of IHittables
             List<IHittable> hittables = new List<IHittable>();
-            if (shapeCollection.HasSpheres)
+            if (shapeCollection.HasSpheres())
             {
                 foreach (var sphereData in shapeCollection.Spheres)
                 {
@@ -59,7 +59,7 @@ namespace rt.Data
                 }
             }
 
-            if (shapeCollection.HasBoxes)
+            if (shapeCollection.HasBoxes())
             {
                 foreach (var boxData in shapeCollection.Boxes)
                 {
@@ -498,9 +498,9 @@ namespace rt.Data
         [JsonProperty("boxes")]
         public List<BoxData> Boxes { get; set; }
 
-        public bool HasSpheres => this.Spheres != null && this.Spheres.Count > 0;
+        public bool HasSpheres() => this.Spheres != null && this.Spheres.Count > 0;
 
-        public bool HasBoxes => this.Boxes != null && this.Boxes.Count > 0;
+        public bool HasBoxes() => this.Boxes != null && this.Boxes.Count > 0;
 
         public ShapeData()
         {
@@ -510,7 +510,7 @@ namespace rt.Data
 
         public override bool IsValid()
         {
-            bool hasShapes = this.HasSpheres || this.HasBoxes;
+            bool hasShapes = this.HasSpheres() || this.HasBoxes();
             return hasShapes;
         }
 
