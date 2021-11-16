@@ -16,16 +16,16 @@ namespace rt.Present
     {
         public Vec3 AmbientColor { get; private set; }
 
-        private List<IHittable> hittables;
-        private List<Light> lights;
+        private readonly List<IHittable> hittables;
+        private readonly List<Light> lights;
 
         public Scene(List<IHittable> hittables, List<Light> lights)
         {
             this.hittables = hittables;
             this.lights = lights;
 
-            // #todo Read Scene.AmbientColor in from data
-            this.AmbientColor = Vec3.One;
+            // #todo Read Scene.AmbientColor in from data, assume zero for now!
+            this.AmbientColor = Vec3.Zero;
         }
 
         public ColorReport Trace(Ray ray)
@@ -36,8 +36,15 @@ namespace rt.Present
                 return new ColorReport(this.AmbientColor);
             }
 
+            if (!this.HasLights())
+            {
+                return new ColorReport(hitInfo.Material.Color);
+            }
+
             Vec3 objectColor = hitInfo.Material.Color;
             Vec3 finalColor = Vec3.Zero;
+
+            // Light contribution, no shadow tests yet
             foreach (var light in this.lights)
             {
                 Vec3 pointToLight = (light.Transform.Position - hitInfo.Point).Normalized();
@@ -56,29 +63,21 @@ namespace rt.Present
             HitInfo result = null;
             float hitDistance = float.MaxValue;
 
-            int i = 0;
-            // #debug-lever Restricting object count
-            int debugLimit = 25;
-            int maxCount = this.hittables.Count;
-
-            // #bug There's an issue with how the correct hit is reported, I'm getting overdraw for objects that should be behind others
-            // #todo Add unit test for Project
             foreach (var hittable in this.hittables)
             {
                 var hitInfo = hittable.TryIntersect(ray);
                 if (hitInfo != null && hitInfo.Distance < hitDistance)
                 {
                     result = hitInfo;
-                }
-
-                ++i;
-
-                if (i < maxCount && i > debugLimit)
-                {
-                    break;
+                    hitDistance = hitInfo.Distance;
                 }
             }
             return result;
+        }
+
+        private bool HasLights()
+        {
+            return this.lights != null & this.lights.Count > 0;
         }
     }
 }

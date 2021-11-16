@@ -24,8 +24,8 @@ namespace UnitTests.Collide
         {
             // Arrange
             var sphere = new Sphere(
-                this.SimpleTransform(Vec3.Zero, 1.0f),
-                this.SimpleMaterial(Vec3.AxisX),
+                Helpers.SimpleTransform(Vec3.Zero, 1.0f),
+                Helpers.SimpleMaterial(Vec3.AxisX),
                 0.5f);
             Vec3 rayVal = new Vec3(x, y, z);
             var ray = new Ray(-rayVal, rayVal);
@@ -40,16 +40,6 @@ namespace UnitTests.Collide
             Assert.IsTrue(hitInfo != null);
             Assert.AreEqual(pointOnSphere, hitInfo.Point);
             Assert.AreEqual(sphereNormal, hitInfo.Normal);
-        }
-
-        private Transform SimpleTransform(Vec3 pos, float scale)
-        {
-            return new Transform(pos, Quat.Identity, new Vec3(scale, scale, scale));
-        }
-
-        private Material SimpleMaterial(Vec3 color)
-        {
-            return new Material(color);
         }
     }
 }
