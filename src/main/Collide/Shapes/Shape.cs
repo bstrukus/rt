@@ -12,7 +12,10 @@ namespace rt.Collide
     /// </summary>
     public abstract class Shape : IHittable
     {
+        // #note I'm not sure if this is necessary to expose publicly, I would like for shapes to be interacted with through
+        // functions rather than properties.
         public Transform Transform { get; private set; }
+
         public Material Material { get; private set; }
 
         public Shape(Transform transform, Material material)
@@ -22,5 +25,8 @@ namespace rt.Collide
         }
 
         public abstract HitInfo TryIntersect(Ray ray);
+
+        // #todo Support function stubbed out for future AABB calculations
+        //public abstract Vec3 Support(Vec3 direction);
     }
 }
