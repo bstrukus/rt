@@ -79,9 +79,9 @@ namespace rt.Collide
 
             foreach (var plane in this.planes)
             {
-                if (tValues[0] > tValues[1])
+                if (this.InvalidOverlap(tValues[0], tValues[1]))
                 {
-                    return null;
+                    break;  // No intersection
                 }
 
                 float planeRayOrientation = Vec3.Dot(ray.Direction, plane.Normal);
@@ -90,22 +90,33 @@ namespace rt.Collide
                 if (planeRayOrientation < 0.0f)
                 {
                     float tIntersection = plane.CalcIntervalValue(ray);
-                    tValues[0] = Numbers.Max(tValues[0], tIntersection);
-                    surfaceNormals[0] = plane.Normal;
+                    if (tValues[0] < tIntersection)
+                    {
+                        tValues[0] = tIntersection;
+                        surfaceNormals[0] = plane.Normal;
+                    }
                 }
                 // Ray is pointing towards the front of the half-plane
                 else if (planeRayOrientation > 0.0f)
                 {
                     float tIntersection = plane.CalcIntervalValue(ray);
-                    tValues[1] = Numbers.Min(tValues[1], tIntersection);
-                    surfaceNormals[1] = plane.Normal;
+                    if (tValues[1] > tIntersection)
+                    {
+                        tValues[1] = tIntersection;
+                        surfaceNormals[1] = plane.Normal;
+                    }
                 }
                 // Ray is pointing parallel to the plane face and lies in front of the half-plane
                 else if (Vec3.Dot(ray.Origin - plane.Point, plane.Normal) > 0.0f)
                 {
-                    // Ray totally misses the box, create an invalid intersection interval
-                    tValues[0] = tValues[1] + 1.0f;
+                    // Ray totally misses the box.
+                    break;
                 }
+            }
+
+            if (this.InvalidOverlap(tValues[0], tValues[1]))
+            {
+                return null;
             }
 
             // #todo See if need to replace this with Numbers.AreEqual
@@ -117,6 +128,11 @@ namespace rt.Collide
             Vec3 hitPoint = ray.GetPointAlong(hitDistance);
 
             return new HitInfo(hitPoint, surfaceNormal, hitDistance, base.Material);
+        }
+
+        private bool InvalidOverlap(float min, float max)
+        {
+            return min > max;
         }
 
         private static Transform ParallelepipedTransform(Vec3 cornerPoint, Vec3 lengthVector, Vec3 widthVector, Vec3 heightVector)
