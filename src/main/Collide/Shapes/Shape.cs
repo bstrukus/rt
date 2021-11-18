@@ -14,7 +14,7 @@ namespace rt.Collide
     {
         // #note I'm not sure if this is necessary to expose publicly, I would like for shapes to be interacted with through
         // functions rather than properties.
-        public Transform Transform { get; private set; }
+        protected Transform Transform { get; private set; }
 
         public Material Material { get; private set; }
 
