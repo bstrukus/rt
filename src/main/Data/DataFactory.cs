@@ -167,14 +167,14 @@ namespace rt.Data
 
         private static Math.Vec3 CreateVec3(List<double> vec3)
         {
-            Debug.Assert(ValidateList(vec3, 3));
+            Debug.Assert(vec3.Count == 3);
 
             return new Math.Vec3((float)vec3[0], (float)vec3[1], (float)vec3[2]);
         }
 
         private static Math.Quat CreateQuat(List<double> quat)
         {
-            Debug.Assert(ValidateList(quat, 4));
+            Debug.Assert(quat.Count == 4);
 
             return new Math.Quat((float)quat[0], (float)quat[1], (float)quat[2], (float)quat[3]);
         }
