@@ -5,6 +5,7 @@
 namespace rt.Present
 {
     using rt.Collide;
+    using rt.Execute;
     using rt.Math;
     using rt.Render;
     using System.Collections.Generic;
@@ -14,14 +15,6 @@ namespace rt.Present
     /// </summary>
     public class Scene
     {
-        #region Debug Levers
-
-        private const bool BooleanTest = true;
-        private const bool RenderNormals = false;
-        private const bool ViewVectorLighting = false;
-
-        #endregion Debug Levers
-
         public Vec3 AmbientColor { get; private set; }
 
         private readonly List<IHittable> hittables;
@@ -57,15 +50,15 @@ namespace rt.Present
             Vec3 objectColor = hitInfo.Material.Color;
             Vec3 finalColor = Vec3.Zero;
 
-            if (BooleanTest)
+            if (Levers.GetOption(Levers.Option.BooleanTest))
             {
                 finalColor = objectColor;
             }
-            else if (RenderNormals)
+            else if (Levers.GetOption(Levers.Option.RenderNormals))
             {
                 finalColor = hitInfo.Normal.Clamped(0.0f, 1.0f);
             }
-            else if (ViewVectorLighting)
+            else if (Levers.GetOption(Levers.Option.ViewVectorLighting))
             {
                 Vec3 pointToEye = (ray.Origin - hitInfo.Point).Normalized();
                 float diffuseCoefficient = Calc.DiffuseCoefficient(hitInfo.Normal, pointToEye);

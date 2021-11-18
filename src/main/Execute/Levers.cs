@@ -1,0 +1,48 @@
+﻿/*
+ * #copyright_placeholder Copyright Ben Strukus
+ */
+
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace rt.Execute
+{
+    internal class Levers
+    {
+        private const bool DebuggingEnabled = true;
+
+        public enum Option
+        {
+            BooleanTest,
+            RenderNormals,
+            ViewVectorLighting,
+        }
+
+        private static Levers Instance;
+
+        public static bool GetOption(Option option)
+        {
+            if (!DebuggingEnabled)
+                return false;
+
+            if (Instance == null)
+            {
+                Instance = new Levers();
+            }
+            return Instance.options.Contains(option);
+        }
+
+        private HashSet<Option> options;
+
+        private Levers()
+        {
+            this.options = new HashSet<Option>
+            {
+                //Option.BooleanTest,
+                //Option.RenderNormals,
+                Option.ViewVectorLighting,
+            };
+        }
+    }
+}
