@@ -8,7 +8,6 @@ namespace UnitTests.Collide
 {
     using rt.Collide;
     using rt.Math;
-    using rt.Present;
 
     [TestClass]
     public class SphereTests
@@ -31,15 +30,15 @@ namespace UnitTests.Collide
             var ray = new Ray(-rayVal, rayVal);
 
             // Act
-            var hitInfo = sphere.TryIntersect(ray);
+            var result = sphere.TryIntersect(ray);
             // Since we're doing simple tests along major axes, the expected hit point result is easily calculated
             var pointOnSphere = -ray.Direction * sphere.Radius;
             var sphereNormal = -ray.Direction;
 
             // Assert
-            Assert.IsTrue(hitInfo != null);
-            Assert.AreEqual(pointOnSphere, hitInfo.Point);
-            Assert.AreEqual(sphereNormal, hitInfo.Normal);
+            Assert.IsTrue(result != null);
+            Assert.AreEqual(pointOnSphere, result.Point);
+            Assert.AreEqual(sphereNormal, result.Normal);
         }
     }
 }

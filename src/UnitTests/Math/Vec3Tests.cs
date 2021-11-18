@@ -32,13 +32,13 @@ namespace UnitTests.Math
         public void AccessXValueAsFive()
         {
             // Arrange
-            Vec3 fiveX = new Vec3(5.0f, 0.0f, 0.0f);
+            Vec3 result = new Vec3(5.0f, 0.0f, 0.0f);
 
             // Act
             // no-op
 
             // Assert
-            Assert.AreEqual(5.0f, fiveX.X, Epsilon);
+            Assert.AreEqual(5.0f, result.X, Epsilon);
         }
 
         #region Cross Product
@@ -51,13 +51,10 @@ namespace UnitTests.Math
             Vec3 yAxis = new Vec3(0.0f, 1.0f, 0.0f);
 
             // Act
-            Vec3 zAxis = Vec3.Cross(xAxis, yAxis);
+            Vec3 result = Vec3.Cross(xAxis, yAxis);
 
             // Assert
-            bool result = zAxis.X == 0.0f &&
-                          zAxis.Y == 0.0f &&
-                          zAxis.Z == 1.0f;
-            Assert.AreEqual(Vec3.AxisZ, zAxis);
+            Assert.AreEqual(Vec3.AxisZ, result);
         }
 
         [TestMethod]
@@ -68,10 +65,10 @@ namespace UnitTests.Math
             Vec3 zAxis = new Vec3(0.0f, 0.0f, 1.0f);
 
             // Act
-            Vec3 yAxis = Vec3.Cross(zAxis, xAxis);
+            Vec3 result = Vec3.Cross(zAxis, xAxis);
 
             // Assert
-            Assert.AreEqual(Vec3.AxisY, yAxis);
+            Assert.AreEqual(Vec3.AxisY, result);
         }
 
         [TestMethod]
@@ -82,10 +79,10 @@ namespace UnitTests.Math
             Vec3 zAxis = new Vec3(0.0f, 0.0f, 1.0f);
 
             // Act
-            Vec3 xAxis = Vec3.Cross(yAxis, zAxis);
+            Vec3 result = Vec3.Cross(yAxis, zAxis);
 
             // Assert
-            Assert.AreEqual(xAxis, Vec3.AxisX);
+            Assert.AreEqual(result, Vec3.AxisX);
         }
 
         #endregion Cross Product
