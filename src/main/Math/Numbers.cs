@@ -40,5 +40,15 @@ namespace rt.Math
         {
             return (lhs - rhs) < Epsilon;
         }
+
+        public static float Min(float lhs, float rhs)
+        {
+            return lhs < rhs ? lhs : rhs;
+        }
+
+        public static float Max(float lhs, float rhs)
+        {
+            return lhs > rhs ? lhs : rhs;
+        }
     }
 }
