@@ -14,6 +14,14 @@ namespace rt.Present
     /// </summary>
     public class Scene
     {
+        #region Debug Levers
+
+        private const bool BooleanTest = true;
+        private const bool RenderNormals = false;
+        private const bool ViewVectorLighting = false;
+
+        #endregion Debug Levers
+
         public Vec3 AmbientColor { get; private set; }
 
         private readonly List<IHittable> hittables;
@@ -41,19 +49,40 @@ namespace rt.Present
                 return new ColorReport(hitInfo.Material.Color);
             }
 
+            return CalculateLighting(hitInfo, ray);
+        }
+
+        private ColorReport CalculateLighting(HitInfo hitInfo, Ray ray)
+        {
             Vec3 objectColor = hitInfo.Material.Color;
             Vec3 finalColor = Vec3.Zero;
 
-            // Light contribution, no shadow tests yet
-            foreach (var light in this.lights)
+            if (BooleanTest)
             {
-                Vec3 pointToLight = (light.Transform.Position - hitInfo.Point).Normalized();
-                float diffuseCoefficient = Calc.DiffuseCoefficient(hitInfo.Normal, pointToLight);
-                finalColor += objectColor * diffuseCoefficient * light.Color.X;
+                finalColor = objectColor;
             }
+            else if (RenderNormals)
+            {
+                finalColor = hitInfo.Normal.Clamped(0.0f, 1.0f);
+            }
+            else if (ViewVectorLighting)
+            {
+                Vec3 pointToEye = (ray.Origin - hitInfo.Point).Normalized();
+                float diffuseCoefficient = Calc.DiffuseCoefficient(hitInfo.Normal, pointToEye);
 
-            // #todo #debug-lever Create flag to draw normals as a debugging option
-            //color = hitInfo.Normal.Clamped(0.0f, 1.0f);
+                finalColor += objectColor * diffuseCoefficient;
+            }
+            // Current best lighting calculation
+            else
+            {
+                // Light contribution, no shadow tests yet
+                foreach (var light in this.lights)
+                {
+                    Vec3 pointToLight = (light.Transform.Position - hitInfo.Point).Normalized();
+                    float diffuseCoefficient = Calc.DiffuseCoefficient(hitInfo.Normal, pointToLight);
+                    finalColor += objectColor * diffuseCoefficient * light.Color.X;
+                }
+            }
 
             return new ColorReport(finalColor);
         }
