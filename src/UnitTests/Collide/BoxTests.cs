@@ -39,11 +39,10 @@ namespace UnitTests.Collide
         }
 
         [TestMethod]
-        public void TestParallelOutsideRayMissingBox()
+        public void TestRayPointingParallelOutsideFace()
         {
             // Arrange
             Box box = this.OriginCube(1.0f);
-
             var ray = new Ray(Vec3.AxisX, Vec3.AxisZ);
 
             // Act
@@ -54,7 +53,7 @@ namespace UnitTests.Collide
         }
 
         [TestMethod]
-        public void TestRayOutsideBoxWithinAllFacesButOne()
+        public void TestRayPointingAwayOutsideBoxWithinAllFacesButOne()
         {
             // Arrange
             var box = OriginCube(1.0f);
