@@ -1,4 +1,6 @@
-﻿/*
+﻿using rt.Present;
+
+/*
  * #copyright_placeholder Copyright Ben Strukus
  */
 
@@ -154,14 +156,17 @@ namespace rt.Utility
 
             var tokens = boxLine.Split(' ');
 
-            //             var sphereData = new SphereData
-            //             {
-            //                 Radius = double.Parse(tokens[2]),
-            //                 Transform = ReadSimpleTransform(tokens[1]),
-            //                 Material = ReadMaterial(materialLine)
-            //             };
+            var boxData = new BoxData
+            {
+                Transform = null,
+                Corner = ReadVector(tokens[1]),
+                LengthVector = ReadVector(tokens[2]),
+                WidthVector = ReadVector(tokens[3]),
+                HeightVector = ReadVector(tokens[4]),
+                Material = ReadMaterial(materialLine)
+            };
 
-            return null;
+            return boxData;
         }
 
         private static PolygonData ReadPolygon(string polygonLine, string materialLine)

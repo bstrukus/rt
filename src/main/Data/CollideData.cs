@@ -97,20 +97,59 @@ namespace rt.Data
         [JsonProperty("transform")]
         public TransformData Transform { get; set; }
 
+        [JsonProperty("corner")]
+        public List<double> Corner { get; set; }
+
+        [JsonProperty("lengthVector")]
+        public List<double> LengthVector { get; set; }
+
+        [JsonProperty("widthVector")]
+        public List<double> WidthVector { get; set; }
+
+        [JsonProperty("heightVector")]
+        public List<double> HeightVector { get; set; }
+
         [JsonProperty("material")]
         public MaterialData Material { get; set; }
 
         public override bool IsValid()
         {
-            return this.Transform.IsValid() && this.Material.IsValid();
+            return (this.HasTransform() || this.HasCornerAndDirectionVectors()) && this.Material.IsValid();
         }
 
         public new void PrintData(int spaceCount)
         {
             base.PrintData(spaceCount);
 
-            this.Transform.PrintData(spaceCount + 3);
+            if (this.HasTransform())
+            {
+                this.Transform.PrintData(spaceCount + 3);
+            }
+            else if (this.HasCornerAndDirectionVectors())
+            {
+                base.Print("Corner", this.Corner);
+                base.Print("Length", this.LengthVector);
+                base.Print("Width", this.WidthVector);
+                base.Print("Height", this.HeightVector);
+            }
+            else
+            {
+                System.Diagnostics.Debug.Assert(false);
+            }
             this.Material.PrintData(spaceCount + 3);
+        }
+
+        public bool HasTransform()
+        {
+            return this.Transform != null && this.Transform.IsValid();
+        }
+
+        public bool HasCornerAndDirectionVectors()
+        {
+            return DataFactory.ValidateList(this.Corner, 3, shouldBeNormalizedValues: false) &&
+                DataFactory.ValidateList(this.LengthVector, 3, shouldBeNormalizedValues: false) &&
+                DataFactory.ValidateList(this.WidthVector, 3, shouldBeNormalizedValues: false) &&
+                DataFactory.ValidateList(this.HeightVector, 3, shouldBeNormalizedValues: false);
         }
     }
 
