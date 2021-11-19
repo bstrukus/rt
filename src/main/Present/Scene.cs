@@ -2,13 +2,14 @@
  * #copyright_placeholder Copyright Ben Strukus
  */
 
+using System.Collections.Generic;
+
 namespace rt.Present
 {
     using rt.Collide;
     using rt.Execute;
     using rt.Math;
     using rt.Render;
-    using System.Collections.Generic;
 
     /// <summary>
     /// Holds information about hittable objects, lights, and other data.

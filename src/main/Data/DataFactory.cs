@@ -2,6 +2,10 @@
  * #copyright_placeholder Copyright Ben Strukus
  */
 
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+
 namespace rt.Data
 {
     using rt.Collide;
@@ -11,9 +15,6 @@ namespace rt.Data
     using rt.Present;
     using rt.Render;
     using rt.Utility;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
 
     /// <summary>
     /// Consumes a data file, outputs components of the ray tracer
