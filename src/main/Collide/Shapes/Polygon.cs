@@ -2,13 +2,35 @@
  * #copyright_placeholder Copyright Ben Strukus
  */
 
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace rt.Collide.Shapes
 {
-    internal class Polygon
+    using rt.Math;
+    using rt.Present;
+
+    internal class Polygon : Shape
     {
+        private readonly List<Vec3> vertices;
+        private readonly Plane plane;
+
+        public Polygon(List<Vec3> vertices, Material material)
+            : base(null, material)
+        {
+            this.vertices = vertices;
+            this.plane = this.CalculatePlane();
+        }
+
+        public override HitInfo TryIntersect(Ray ray)
+        {
+            // Test to see if ray intersects plane in a non-negative way
+            // Test to see if ray/plane collision point exists within polygon
+            return null;
+        }
+
+        private Plane CalculatePlane()
+        {
+            return null;
+        }
     }
 }

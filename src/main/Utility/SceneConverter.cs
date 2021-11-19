@@ -171,19 +171,24 @@ namespace rt.Utility
 
         private static PolygonData ReadPolygon(string polygonLine, string materialLine)
         {
-            // #todo Read in Polygon shape
             Debug.Assert(!string.IsNullOrEmpty(polygonLine));
 
             var tokens = polygonLine.Split(' ');
 
-            //             var sphereData = new SphereData
-            //             {
-            //                 Radius = double.Parse(tokens[2]),
-            //                 Transform = ReadSimpleTransform(tokens[1]),
-            //                 Material = ReadMaterial(materialLine)
-            //             };
+            int pointCount = int.Parse(tokens[1]);
+            List<List<double>> vertices = new List<List<double>>(pointCount);
+            for (int i = 2; i < tokens.Length; ++i)
+            {
+                vertices.Add(ReadVector(tokens[i]));
+            }
 
-            return null;
+            var polygonData = new PolygonData
+            {
+                Vertices = vertices,
+                Material = ReadMaterial(materialLine)
+            };
+
+            return polygonData;
         }
 
         private static EllipsoidData ReadEllipsoid(string ellipsoidLine, string materialLine)

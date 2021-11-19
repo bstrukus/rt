@@ -35,20 +35,22 @@ namespace rt.Data
         public void AddShape(SphereData sphereData)
         {
             Debug.Assert(this.Shapes != null && this.Shapes.Spheres != null);
+
             this.Shapes.Spheres.Add(sphereData);
         }
 
         public void AddShape(BoxData boxData)
         {
             Debug.Assert(this.Shapes != null && this.Shapes.Boxes != null);
+
             this.Shapes.Boxes.Add(boxData);
         }
 
         public void AddShape(PolygonData polygonData)
         {
-            // #todo Implement adding Polygons
-            //             Debug.Assert(this.Shapes != null && this.Shapes.Boxes != null);
-            //             this.Shapes.Boxes.Add(polygonData);
+            Debug.Assert(this.Shapes != null && this.Shapes.Polygons != null);
+
+            this.Shapes.Polygons.Add(polygonData);
         }
 
         public void AddShape(EllipsoidData ellipsoidData)

@@ -15,19 +15,25 @@ namespace rt.Data
         [JsonProperty("boxes")]
         public List<BoxData> Boxes { get; set; }
 
+        [JsonProperty("polygons")]
+        public List<PolygonData> Polygons { get; set; }
+
         public bool HasSpheres() => this.Spheres != null && this.Spheres.Count > 0;
 
         public bool HasBoxes() => this.Boxes != null && this.Boxes.Count > 0;
+
+        public bool HasPolygons() => this.Polygons != null && this.Polygons.Count > 0;
 
         public ShapeData()
         {
             this.Spheres = new List<SphereData>();
             this.Boxes = new List<BoxData>();
+            this.Polygons = new List<PolygonData>();
         }
 
         public override bool IsValid()
         {
-            bool hasShapes = this.HasSpheres() || this.HasBoxes();
+            bool hasShapes = this.HasSpheres() || this.HasBoxes() || this.HasPolygons();
             return hasShapes;
         }
 
@@ -38,12 +44,12 @@ namespace rt.Data
             int indentation = 3 + spaceCount;
             this.PrintSpheres(indentation);
             this.PrintBoxes(indentation);
+            this.PrintPolygons(indentation);
         }
 
         private void PrintSpheres(int indentation)
         {
-            // Print out spheres
-            if (this.Spheres != null)
+            if (this.HasSpheres())
             {
                 foreach (var sphere in this.Spheres)
                 {
@@ -54,11 +60,22 @@ namespace rt.Data
 
         private void PrintBoxes(int indentation)
         {
-            if (this.Boxes != null)
+            if (this.HasBoxes())
             {
                 foreach (var box in this.Boxes)
                 {
                     box.PrintData(indentation);
+                }
+            }
+        }
+
+        private void PrintPolygons(int indentation)
+        {
+            if (this.HasPolygons())
+            {
+                foreach (var polygon in this.Polygons)
+                {
+                    polygon.PrintData(indentation);
                 }
             }
         }
@@ -162,17 +179,30 @@ namespace rt.Data
         [JsonProperty("material")]
         public MaterialData Material { get; set; }
 
+        [JsonProperty("vertices")]
+        public List<List<double>> Vertices { get; set; }
+
         public override bool IsValid()
         {
-            return this.Transform.IsValid() && this.Material.IsValid();
+            return this.Transform.IsValid() && this.Material.IsValid() && this.HasVertices();
         }
 
         public new void PrintData(int spaceCount)
         {
             base.PrintData(spaceCount);
 
+            int i = 0;
+            foreach (var vertex in this.Vertices)
+            {
+                base.Print($"Vertex {i++}", vertex);
+            }
             this.Transform.PrintData(spaceCount + 3);
             this.Material.PrintData(spaceCount + 3);
+        }
+
+        private bool HasVertices()
+        {
+            return this.Vertices != null && this.Vertices.Count > 2;
         }
     }
 
