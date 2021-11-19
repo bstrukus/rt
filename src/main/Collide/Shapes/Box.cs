@@ -9,25 +9,7 @@ namespace rt.Collide.Shapes
 
     public class Box : Shape
     {
-        // #todo Need to store planes, regardless of input
-        internal class Plane
-        {
-            public Vec3 Point { get; private set; }
-            public Vec3 Normal { get; private set; }
-
-            public Plane(Vec3 point, Vec3 normal)
-            {
-                this.Point = point;
-                this.Normal = normal;
-            }
-
-            public float CalcIntervalValue(Ray ray)
-            {
-                return -Vec3.Dot((ray.Origin - this.Point), this.Normal) / Vec3.Dot(ray.Direction, this.Normal);
-            }
-        }
-
-        private Plane[] planes;
+        private readonly Plane[] planes;
 
         /// <summary>
         /// Box with orthogonal axes.
@@ -109,8 +91,7 @@ namespace rt.Collide.Shapes
                 // Ray is pointing parallel to the plane face and lies in front of the half-plane
                 else if (Vec3.Dot(ray.Origin - plane.Point, plane.Normal) > 0.0f)
                 {
-                    // Ray totally misses the box.
-                    break;
+                    break;  // Ray totally misses the box.
                 }
             }
 
@@ -123,9 +104,8 @@ namespace rt.Collide.Shapes
             int minOrMax = tValues[0] == 0.0f ? 1 : 0;
 
             float hitDistance = tValues[minOrMax];
-            Vec3 surfaceNormal = surfaceNormals[minOrMax];
-
             Vec3 hitPoint = ray.GetPointAlong(hitDistance);
+            Vec3 surfaceNormal = surfaceNormals[minOrMax];
 
             return new HitInfo(hitPoint, surfaceNormal, hitDistance, base.Material);
         }

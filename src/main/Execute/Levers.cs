@@ -2,12 +2,10 @@
  * #copyright_placeholder Copyright Ben Strukus
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace rt.Execute
 {
+    using System.Collections.Generic;
+
     internal class Levers
     {
         private const bool DebuggingEnabled = true;
