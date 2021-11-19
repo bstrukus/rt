@@ -2,7 +2,7 @@
  * #copyright_placeholder Copyright Ben Strukus
  */
 
-namespace rt.Collide
+namespace rt.Collide.Shapes
 {
     using rt.Math;
     using rt.Present;
@@ -119,7 +119,7 @@ namespace rt.Collide
                 return null;
             }
 
-            // #todo See if need to replace this with Numbers.AreEqual
+            // We can get exactly 0.0f here, if so then we're inside the box!
             int minOrMax = tValues[0] == 0.0f ? 1 : 0;
 
             float hitDistance = tValues[minOrMax];

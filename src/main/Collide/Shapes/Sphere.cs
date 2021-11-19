@@ -2,7 +2,7 @@
  * #copyright_placeholder Copyright Ben Strukus
  */
 
-namespace rt.Collide
+namespace rt.Collide.Shapes
 {
     using rt.Math;
     using rt.Present;

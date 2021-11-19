@@ -5,6 +5,8 @@
 namespace rt.Data
 {
     using rt.Collide;
+    using rt.Collide.Shapes;
+    using rt.Execute;
     using rt.Math;
     using rt.Present;
     using rt.Render;
@@ -33,8 +35,10 @@ namespace rt.Data
                 return false;
             }
 
-            // #todo Make this togglable, debug option
-            this.sceneData.PrintData(0);
+            if (Levers.GetOption(Levers.Option.PrintSceneLoading))
+            {
+                this.sceneData.PrintData(0);
+            }
             return true;
         }
 

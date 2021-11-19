@@ -17,6 +17,7 @@ namespace rt.Execute
             BooleanTest,
             RenderNormals,
             ViewVectorLighting,
+            PrintSceneLoading,
         }
 
         private static Levers Instance;
@@ -39,9 +40,13 @@ namespace rt.Execute
         {
             this.options = new HashSet<Option>
             {
+                // #levers Lighting Calculation
                 //Option.BooleanTest,
                 //Option.RenderNormals,
                 Option.ViewVectorLighting,
+
+                // #levers Scene Loading
+                Option.PrintSceneLoading,
             };
         }
     }
