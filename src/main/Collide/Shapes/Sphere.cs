@@ -13,6 +13,7 @@ namespace rt.Collide.Shapes
     /// </summary>
     public class Sphere : Shape
     {
+        // #todo Make every property private, keep these Shape classes locked down
         // A unit sphere has a diameter of 1, so a radius of 1/2
         public float Radius { get; private set; }
 
