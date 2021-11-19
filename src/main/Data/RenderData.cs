@@ -75,9 +75,9 @@ namespace rt.Data
 
         public override bool IsValid()
         {
-            return DataFactory.ValidateList(this.Center, 3) &&
-                DataFactory.ValidateList(this.UAxis, 3) &&
-                DataFactory.ValidateList(this.VAxis, 3);
+            return DataFactory.ValidateList(this.Center, 3, false) &&
+                DataFactory.ValidateList(this.UAxis, 3, false) &&
+                DataFactory.ValidateList(this.VAxis, 3, false);
         }
 
         public new void PrintData(int spaceCount)
