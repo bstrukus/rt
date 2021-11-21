@@ -50,9 +50,32 @@ namespace rt.Data
 
             // Go through the list of Spheres & Boxes to create a list of IHittables
             List<IHittable> hittables = new List<IHittable>();
-            if (shapeCollection.HasSpheres() && false)
+            this.LoadSpheres(ref hittables);
+            this.LoadBoxes(ref hittables);
+            this.LoadPolygons(ref hittables);
+
+            //////////////////////////////////////////////////////////////////////////
+            var lightCollection = this.sceneData.Lights;
+            List<Light> lights = new List<Light>();
+            if (lightCollection.IsValid())
             {
-                foreach (var sphereData in shapeCollection.Spheres)
+                foreach (var pointLightData in lightCollection.PointLights)
+                {
+                    lights.Add(new PointLight(
+                        CreateTransform(pointLightData.Transform),
+                        CreateVec3(pointLightData.Color)
+                        ));
+                }
+            }
+
+            return new Scene(hittables, lights);
+        }
+
+        private int LoadSpheres(ref List<IHittable> hittables)
+        {
+            if (this.sceneData.Shapes.HasSpheres())
+            {
+                foreach (var sphereData in this.sceneData.Shapes.Spheres)
                 {
                     hittables.Add(new Sphere(
                         CreateTransform(sphereData.Transform),
@@ -60,11 +83,16 @@ namespace rt.Data
                         (float)sphereData.Radius
                         ));
                 }
+                return this.sceneData.Shapes.Spheres.Count;
             }
+            return 0;
+        }
 
-            if (shapeCollection.HasBoxes())
+        private int LoadBoxes(ref List<IHittable> hittables)
+        {
+            if (this.sceneData.Shapes.HasBoxes())
             {
-                foreach (var boxData in shapeCollection.Boxes)
+                foreach (var boxData in this.sceneData.Shapes.Boxes)
                 {
                     if (boxData.HasTransform())
                     {
@@ -84,23 +112,25 @@ namespace rt.Data
                             ));
                     }
                 }
+                return this.sceneData.Shapes.Boxes.Count;
             }
+            return 0;
+        }
 
-            //////////////////////////////////////////////////////////////////////////
-            var lightCollection = this.sceneData.Lights;
-            List<Light> lights = new List<Light>();
-            if (lightCollection.IsValid())
+        private int LoadPolygons(ref List<IHittable> hittables)
+        {
+            if (this.sceneData.Shapes.HasPolygons())
             {
-                foreach (var pointLightData in lightCollection.PointLights)
+                foreach (var polygonData in this.sceneData.Shapes.Polygons)
                 {
-                    lights.Add(new PointLight(
-                        CreateTransform(pointLightData.Transform),
-                        CreateVec3(pointLightData.Color)
+                    hittables.Add(new Polygon(
+                        CreateVertexList(polygonData.Vertices),
+                        CreateMaterial(polygonData.Material)
                         ));
                 }
+                return this.sceneData.Shapes.Polygons.Count;
             }
-
-            return new Scene(hittables, lights);
+            return 0;
         }
 
         public Camera CreateCamera()
@@ -182,6 +212,16 @@ namespace rt.Data
             Debug.Assert(quat.Count == 4);
 
             return new Math.Quat((float)quat[0], (float)quat[1], (float)quat[2], (float)quat[3]);
+        }
+
+        private static List<Vec3> CreateVertexList(List<List<double>> vertexData)
+        {
+            List<Vec3> vertexList = new List<Vec3>(vertexData.Count);
+            foreach (var vertex in vertexData)
+            {
+                vertexList.Add(CreateVec3(vertex));
+            }
+            return vertexList;
         }
     }
 }

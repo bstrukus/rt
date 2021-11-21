@@ -196,7 +196,7 @@ namespace rt.Data
             {
                 base.Print($"Vertex {i++}", vertex);
             }
-            this.Transform.PrintData(spaceCount + 3);
+            //this.Transform.PrintData(spaceCount + 3);
             this.Material.PrintData(spaceCount + 3);
         }
 

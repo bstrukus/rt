@@ -18,6 +18,11 @@ namespace rt.Math
             return min <= val && val <= max;
         }
 
+        public static bool InRange(Vec2 val, float min, float max)
+        {
+            return InRange(val.X, min, max) && InRange(val.Y, min, max);
+        }
+
         public static bool InRange(int val, int min, int max)
         {
             return min <= val && val <= max;

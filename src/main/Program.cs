@@ -9,7 +9,7 @@ namespace rt
     internal class Program
     {
         // #todo Read this in as a command line parameter
-        private const string SceneFile = "btest1.json";
+        private const string SceneFile = "ptest1.json";
 
         private static void Main(string[] args)
         {

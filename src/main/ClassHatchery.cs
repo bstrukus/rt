@@ -21,6 +21,14 @@ namespace rt
     /// </summary>
     namespace Math
     {
+        public static class Vec
+        {
+            public static float Dot(Vec2 lhs, Vec2 rhs)
+            {
+                return lhs.X * rhs.X + lhs.Y * rhs.Y;
+            }
+        }
+
         public class Vec2
         {
             public float X => val[0];
@@ -30,6 +38,11 @@ namespace rt
             {
                 this.val[0] = x;
                 this.val[1] = y;
+            }
+
+            public static Vec2 operator *(Vec2 vec, float scalar)
+            {
+                return new Vec2(vec.X * scalar, vec.Y * scalar);
             }
 
             private readonly float[] val = new float[2];
@@ -48,6 +61,20 @@ namespace rt
             }
 
             private readonly float[] val = new float[4];
+        }
+
+        public class Mat2
+        {
+            private readonly float[] m2;
+
+            public Mat2(float a, float b, float c, float d)
+            {
+                m2 = new float[]
+                {
+                    a, b,
+                    c, d
+                };
+            }
         }
     }
 
