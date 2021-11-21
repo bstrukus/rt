@@ -249,7 +249,8 @@ namespace rt.Data
                 DataFactory.ValidateList(this.Center, 3, shouldBeNormalizedValues: false) &&
                 DataFactory.ValidateList(this.AxisU, 3, shouldBeNormalizedValues: false) &&
                 DataFactory.ValidateList(this.AxisV, 3, shouldBeNormalizedValues: false) &&
-                DataFactory.ValidateList(this.AxisW, 3, shouldBeNormalizedValues: false);
+                DataFactory.ValidateList(this.AxisW, 3, shouldBeNormalizedValues: false) &&
+                this.AreSemiAxesOrthogonal();
         }
 
         public new void PrintData(int spaceCount)
@@ -263,6 +264,12 @@ namespace rt.Data
 
             //this.Transform.PrintData(spaceCount + 3);
             this.Material.PrintData(spaceCount + 3);
+        }
+
+        private bool AreSemiAxesOrthogonal()
+        {
+            // #todo Create an orthogonal axis test using List<double> vectors
+            return true;
         }
     }
 }
