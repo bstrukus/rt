@@ -22,8 +22,10 @@ namespace rt.Execute
 
         public static bool GetOption(Option option)
         {
+#pragma warning disable 0162
             if (!DebuggingEnabled)
                 return false;
+#pragma warning restore 0162
 
             if (Instance == null)
             {
