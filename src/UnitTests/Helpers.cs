@@ -9,6 +9,8 @@ namespace UnitTests
 
     internal static class Helpers
     {
+        public static Material DefaultMaterial = new Material(Vec3.One);
+
         public static Transform SimpleTransform(Vec3 pos, float scale)
         {
             return new Transform(pos, Quat.Identity, new Vec3(scale, scale, scale));

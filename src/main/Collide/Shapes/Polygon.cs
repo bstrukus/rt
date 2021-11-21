@@ -32,8 +32,8 @@ namespace rt.Collide.Shapes
 
             public Vec2 CalcAffineCoordinates(Vec3 point)
             {
-                float A = this.axes[0].Length();
-                float B = this.axes[1].Length();
+                float A = Vec3.Dot(this.axes[0], this.axes[0]);
+                float B = Vec3.Dot(this.axes[1], this.axes[1]);
                 float C = Vec3.Dot(this.axes[0], this.axes[1]);
                 float det = 1.0f / (A * B - C * C);
 

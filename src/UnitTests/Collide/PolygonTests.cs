@@ -60,13 +60,26 @@ namespace UnitTests.Collide
         }
 
         [TestMethod]
+        [DataRow(0)]    // Normal == x-axis
+        [DataRow(1)]    // Normal == y-axis
+        [DataRow(2)]    // Normal == z-axis
         public void TestRayAgainstOriginAlignedQuad(int axis)
         {
             // Arrange
+            Vec3 planeNormal = this.IntToAxis(axis);
+            var axisAlignedQuad = this.CreateAxisAlignedQuad(planeNormal);
+            var ray = new Ray(planeNormal, -planeNormal);
 
             // Act
+            var result = axisAlignedQuad.TryIntersect(ray);
 
             // Assert
+            Vec3 expectedPoint = Vec3.Zero;
+            Vec3 expectedNormal = planeNormal;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(expectedPoint, result.Point);
+            Assert.AreEqual(expectedNormal, result.Normal);
         }
 
         private Polygon CreateOriginTriangle(float size)
@@ -88,6 +101,57 @@ namespace UnitTests.Collide
             vertices[2] -= triangleCenter;
 
             return new Polygon(vertices, Helpers.SimpleMaterial(Vec3.One));
+        }
+
+        private Polygon CreateAxisAlignedQuad(Vec3 axisNormal)
+        {
+            // #todo Handle inverted plane normal
+            // Default value is the positive z-axis as the plane normal
+            Vec3 uAxis = Vec3.AxisY;
+            Vec3 vAxis = Vec3.AxisX;
+            if (axisNormal == Vec3.AxisX)
+            {
+                uAxis = Vec3.AxisZ;
+                vAxis = Vec3.AxisY;
+            }
+            else if (axisNormal == Vec3.AxisY)
+            {
+                uAxis = Vec3.AxisX;
+                vAxis = Vec3.AxisZ;
+            }
+
+            const float Size = 0.5f;
+            uAxis *= Size;
+            vAxis *= Size;
+
+            List<Vec3> vertices = new List<Vec3>
+            {
+                // ++ +- -- -+
+                uAxis + vAxis,
+                uAxis - vAxis,
+                -uAxis - vAxis,
+                -uAxis + vAxis
+            };
+
+            return new Polygon(vertices, Helpers.DefaultMaterial);
+        }
+
+        private Vec3 IntToAxis(int axis)
+        {
+            Assert.IsTrue(Numbers.InRange(axis, 0, 2));
+            if (axis == 0)
+            {
+                return Vec3.AxisX;
+            }
+            else if (axis == 1)
+            {
+                return Vec3.AxisY;
+            }
+            else if (axis == 2)
+            {
+                return Vec3.AxisZ;
+            }
+            return Vec3.Zero;
         }
     }
 }
