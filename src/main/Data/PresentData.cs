@@ -55,9 +55,8 @@ namespace rt.Data
 
         public void AddShape(EllipsoidData ellipsoidData)
         {
-            // #todo Implement adding Ellipsoids
-            //             Debug.Assert(this.Shapes != null && this.Shapes.Boxes != null);
-            //             this.Shapes.Boxes.Add(EllipsoidData);
+            Debug.Assert(this.Shapes != null && this.Shapes.Ellipsoids != null);
+            this.Shapes.Ellipsoids.Add(ellipsoidData);
         }
 
         public void AddLight(PointLightData pointLightData)

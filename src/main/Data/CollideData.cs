@@ -18,22 +18,28 @@ namespace rt.Data
         [JsonProperty("polygons")]
         public List<PolygonData> Polygons { get; set; }
 
+        [JsonProperty("ellipsoids")]
+        public List<EllipsoidData> Ellipsoids { get; set; }
+
         public bool HasSpheres() => this.Spheres != null && this.Spheres.Count > 0;
 
         public bool HasBoxes() => this.Boxes != null && this.Boxes.Count > 0;
 
         public bool HasPolygons() => this.Polygons != null && this.Polygons.Count > 0;
 
+        public bool HasEllipsoids() => this.Ellipsoids != null && this.Ellipsoids.Count > 0;
+
         public ShapeData()
         {
             this.Spheres = new List<SphereData>();
             this.Boxes = new List<BoxData>();
             this.Polygons = new List<PolygonData>();
+            this.Ellipsoids = new List<EllipsoidData>();
         }
 
         public override bool IsValid()
         {
-            bool hasShapes = this.HasSpheres() || this.HasBoxes() || this.HasPolygons();
+            bool hasShapes = this.HasSpheres() || this.HasBoxes() || this.HasPolygons() || this.HasEllipsoids();
             return hasShapes;
         }
 
@@ -45,6 +51,7 @@ namespace rt.Data
             this.PrintSpheres(indentation);
             this.PrintBoxes(indentation);
             this.PrintPolygons(indentation);
+            this.PrintEllipsoids(indentation);
         }
 
         private void PrintSpheres(int indentation)
@@ -76,6 +83,17 @@ namespace rt.Data
                 foreach (var polygon in this.Polygons)
                 {
                     polygon.PrintData(indentation);
+                }
+            }
+        }
+
+        private void PrintEllipsoids(int indentation)
+        {
+            if (this.HasEllipsoids())
+            {
+                foreach (var ellipsoid in this.Ellipsoids)
+                {
+                    ellipsoid.PrintData(indentation);
                 }
             }
         }
@@ -170,7 +188,6 @@ namespace rt.Data
         }
     }
 
-    // #todo Support Polygons
     public class PolygonData : DataBase
     {
         [JsonProperty("transform")]
@@ -206,7 +223,6 @@ namespace rt.Data
         }
     }
 
-    // #todo Support Ellipsoids
     public class EllipsoidData : DataBase
     {
         [JsonProperty("transform")]
@@ -215,16 +231,37 @@ namespace rt.Data
         [JsonProperty("material")]
         public MaterialData Material { get; set; }
 
+        [JsonProperty("center")]
+        public List<double> Center { get; set; }
+
+        [JsonProperty("uAxis")]
+        public List<double> AxisU { get; set; }
+
+        [JsonProperty("vAxis")]
+        public List<double> AxisV { get; set; }
+
+        [JsonProperty("wAxis")]
+        public List<double> AxisW { get; set; }
+
         public override bool IsValid()
         {
-            return this.Transform.IsValid() && this.Material.IsValid();
+            return /*this.Transform.IsValid() && */this.Material.IsValid() &&
+                DataFactory.ValidateList(this.Center, 3, shouldBeNormalizedValues: false) &&
+                DataFactory.ValidateList(this.AxisU, 3, shouldBeNormalizedValues: false) &&
+                DataFactory.ValidateList(this.AxisV, 3, shouldBeNormalizedValues: false) &&
+                DataFactory.ValidateList(this.AxisW, 3, shouldBeNormalizedValues: false);
         }
 
         public new void PrintData(int spaceCount)
         {
             base.PrintData(spaceCount);
 
-            this.Transform.PrintData(spaceCount + 3);
+            base.Print("Center", this.Center);
+            base.Print("U-Axis", this.AxisU);
+            base.Print("V-Axis", this.AxisV);
+            base.Print("W-Axis", this.AxisW);
+
+            //this.Transform.PrintData(spaceCount + 3);
             this.Material.PrintData(spaceCount + 3);
         }
     }

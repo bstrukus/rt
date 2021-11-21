@@ -193,19 +193,20 @@ namespace rt.Utility
 
         private static EllipsoidData ReadEllipsoid(string ellipsoidLine, string materialLine)
         {
-            // #todo Read in Ellipsoid shape
             Debug.Assert(!string.IsNullOrEmpty(ellipsoidLine));
 
             var tokens = ellipsoidLine.Split(' ');
 
-            //             var sphereData = new SphereData
-            //             {
-            //                 Radius = double.Parse(tokens[2]),
-            //                 Transform = ReadSimpleTransform(tokens[1]),
-            //                 Material = ReadMaterial(materialLine)
-            //             };
+            var ellipsoidData = new EllipsoidData
+            {
+                Center = ReadVector(tokens[1]),
+                AxisU = ReadVector(tokens[2]),
+                AxisV = ReadVector(tokens[3]),
+                AxisW = ReadVector(tokens[4]),
+                Material = ReadMaterial(materialLine)
+            };
 
-            return null;
+            return ellipsoidData;
         }
 
         #endregion Read Objects
