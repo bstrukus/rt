@@ -12,7 +12,7 @@ namespace rt.Collide.Shapes
     /// </summary>
     public abstract class Shape : IHittable
     {
-        // #note I'm not sure if this is necessary to expose publicly, I would like for shapes to be interacted with through
+        // #idea I'm not sure if this is necessary to expose publicly, I would like for shapes to be interacted with through
         // functions rather than properties.
         protected Transform Transform { get; private set; }
 

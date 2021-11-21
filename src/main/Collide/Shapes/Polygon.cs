@@ -14,7 +14,9 @@ namespace rt.Collide.Shapes
     {
         internal class Triangle
         {
+            // #idea the polygon is going to use triangles like this, having a plane per triangle seems overkill
             public Plane Plane { get; private set; }
+
             private readonly Vec3 anchorPoint;
             private readonly Vec3[] axes;
 
@@ -70,18 +72,16 @@ namespace rt.Collide.Shapes
         {
             Debug.Assert(triangles.Count != 0);
 
-            // This will be the same for all triangles as they are all coplanar.
+            // Test to see if ray intersects plane in a non-negative way.  This will be the same for all triangles as they are
+            // all coplanar.
+            float hitVal = this.triangles[0].Plane.CalcHitValue(ray);
+            if (hitVal < 0.0f)
+            {
+                return null;
+            }
 
-            // Test to see if ray intersects plane in a non-negative way
             foreach (var triangle in this.triangles)
             {
-                float hitVal = triangle.Plane.CalcHitValue(ray);
-
-                if (hitVal < 0.0f)
-                {
-                    return null;
-                }
-
                 // Test to see if ray/plane collision point exists within polygon
                 Vec2 affineCoords = triangle.CalcAffineCoordinates(ray.GetPointAlong(hitVal));
                 if (affineCoords.X >= 0.0f && affineCoords.Y >= 0.0f && (affineCoords.X + affineCoords.Y) <= 1.0f)
