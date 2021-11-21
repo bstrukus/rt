@@ -2,8 +2,7 @@
  * #copyright_placeholder Copyright Ben Strukus
  */
 
-using rt.Math;
-using System.Collections.Generic;
+using System.Diagnostics;
 
 /* TODO LIST
  * [ ] Lighting
@@ -21,18 +20,19 @@ namespace rt
     /// </summary>
     namespace Math
     {
-        public static class Vec
-        {
-            public static float Dot(Vec2 lhs, Vec2 rhs)
-            {
-                return lhs.X * rhs.X + lhs.Y * rhs.Y;
-            }
-        }
-
         public class Vec2
         {
-            public float X => val[0];
-            public float Y => val[1];
+            public float X => this.val[0];
+            public float Y => this.val[1];
+
+            private float this[int i]
+            {
+                get
+                {
+                    Debug.Assert(Numbers.InRange(i, 0, 1));
+                    return this.val[i];
+                }
+            }
 
             public Vec2(float x, float y)
             {
@@ -42,10 +42,81 @@ namespace rt
 
             public static Vec2 operator *(Vec2 vec, float scalar)
             {
-                return new Vec2(vec.X * scalar, vec.Y * scalar);
+                return new Vec2(vec[0] * scalar, vec[1] * scalar);
+            }
+
+            public static float Dot(Vec2 lhs, Vec2 rhs)
+            {
+                return lhs[0] * rhs[0] + lhs[1] * rhs[1];
             }
 
             private readonly float[] val = new float[2];
+        }
+
+        public class Mat2
+        {
+            private float this[int i, int j]
+            {
+                get
+                {
+                    Debug.Assert(Numbers.InRange(i, 0, 1) && Numbers.InRange(j, 0, 1));
+                    return this.val[i + j * 2];
+                }
+            }
+
+            public Mat2(float a00, float a01, float a10, float a11)
+            {
+                this.val[0] = a00;
+                this.val[1] = a01;
+                this.val[2] = a10;
+                this.val[3] = a11;
+            }
+
+            public Vec2 Multiply(Vec2 vec)
+            {
+                return new Vec2(
+                    this.val[0] * vec.X + this.val[1] * vec.Y,
+                    this.val[2] * vec.X + this.val[3] * vec.Y
+                    );
+            }
+
+            public static Mat2 FromRows(Vec2 topRow, Vec2 bottomRow)
+            {
+                return new Mat2(
+                    topRow.X, topRow.Y,
+                    bottomRow.X, bottomRow.Y);
+            }
+
+            public static Mat2 FromColumns(Vec2 leftColumn, Vec2 rightColumn)
+            {
+                return new Mat2(
+                    leftColumn.X, rightColumn.X,
+                    leftColumn.Y, rightColumn.Y);
+            }
+
+            private readonly float[] val = new float[4];
+        }
+
+        public class Mat3
+        {
+            private float this[int i, int j]
+            {
+                get
+                {
+                    Debug.Assert(Numbers.InRange(i, 0, 2) && Numbers.InRange(j, 0, 2));
+                    return this.val[i + j * 3];
+                }
+            }
+
+            public Vec3 Multiply(Vec3 vec)
+            {
+                Vec3 top = new Vec3(val[0], val[1], val[2]);
+                Vec3 mid = new Vec3(val[3], val[4], val[5]);
+                Vec3 bot = new Vec3(val[6], val[7], val[8]);
+                return new Vec3(Vec3.Dot(top, vec), Vec3.Dot(mid, vec), Vec3.Dot(bot, vec));
+            }
+
+            private readonly float[] val = new float[9];
         }
 
         public class Quat
@@ -61,20 +132,6 @@ namespace rt
             }
 
             private readonly float[] val = new float[4];
-        }
-
-        public class Mat2
-        {
-            private readonly float[] m2;
-
-            public Mat2(float a, float b, float c, float d)
-            {
-                m2 = new float[]
-                {
-                    a, b,
-                    c, d
-                };
-            }
         }
     }
 

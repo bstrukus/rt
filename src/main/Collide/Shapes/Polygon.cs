@@ -47,8 +47,8 @@ namespace rt.Collide.Shapes
                 Vec2 pointValues = new Vec2(
                     Vec3.Dot(anchorToPoint, this.axes[0]),
                     Vec3.Dot(anchorToPoint, this.axes[1]));
-                float alpha = Vec.Dot(topRow, pointValues);
-                float beta = Vec.Dot(botRow, pointValues);
+                float alpha = Vec2.Dot(topRow, pointValues);
+                float beta = Vec2.Dot(botRow, pointValues);
 
                 return new Vec2(alpha, beta);
             }
