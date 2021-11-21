@@ -5,6 +5,7 @@
 namespace rt.Collide
 {
     using rt.Math;
+    using System.Diagnostics;
 
     /// <summary>
     /// Basic unit for several intersection tests. Not quite a <see cref="Shape"/> but close enough.
@@ -16,11 +17,13 @@ namespace rt.Collide
 
         public Plane(Vec3 point, Vec3 normal)
         {
+            Debug.Assert(normal.IsNormalized());
+
             this.Point = point;
             this.Normal = normal;
         }
 
-        public float CalcIntervalValue(Ray ray)
+        public float CalcHitValue(Ray ray)
         {
             return -Vec3.Dot((ray.Origin - this.Point), this.Normal) / Vec3.Dot(ray.Direction, this.Normal);
         }

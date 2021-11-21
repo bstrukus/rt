@@ -71,7 +71,7 @@ namespace rt.Collide.Shapes
                 // Ray is pointing towards the back of the half-plane
                 if (planeRayOrientation < 0.0f)
                 {
-                    float tIntersection = plane.CalcIntervalValue(ray);
+                    float tIntersection = plane.CalcHitValue(ray);
                     if (tValues[0] < tIntersection)
                     {
                         tValues[0] = tIntersection;
@@ -81,7 +81,7 @@ namespace rt.Collide.Shapes
                 // Ray is pointing towards the front of the half-plane
                 else if (planeRayOrientation > 0.0f)
                 {
-                    float tIntersection = plane.CalcIntervalValue(ray);
+                    float tIntersection = plane.CalcHitValue(ray);
                     if (tValues[1] > tIntersection)
                     {
                         tValues[1] = tIntersection;
