@@ -9,6 +9,7 @@ namespace rt
     internal class Program
     {
         // #todo Read this in as a command line parameter
+        // #todo Read in config file specifying width, output file name, scene file
         private const string SceneFile = "ptest1.json";
 
         private static void Main(string[] args)
