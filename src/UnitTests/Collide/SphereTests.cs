@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace UnitTests.Collide
 {
     using rt.Collide;
+    using rt.Collide.Shapes;
     using rt.Math;
 
     [TestClass]
@@ -36,7 +37,7 @@ namespace UnitTests.Collide
             var sphereNormal = -ray.Direction;
 
             // Assert
-            Assert.IsTrue(result != null);
+            Assert.IsNotNull(result);
             Assert.AreEqual(pointOnSphere, result.Point);
             Assert.AreEqual(sphereNormal, result.Normal);
         }

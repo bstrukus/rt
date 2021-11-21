@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace UnitTests.Collide
 {
     using rt.Collide;
+    using rt.Collide.Shapes;
     using rt.Math;
 
     [TestClass]
@@ -49,7 +50,7 @@ namespace UnitTests.Collide
             var result = box.TryIntersect(ray);
 
             // Assert
-            Assert.AreEqual(null, result);
+            Assert.IsNull(result);
         }
 
         [TestMethod]
@@ -63,7 +64,7 @@ namespace UnitTests.Collide
             var result = box.TryIntersect(ray);
 
             // Assert
-            Assert.AreEqual(null, result);
+            Assert.IsNull(result);
         }
 
         private Box OriginCube(float size)
