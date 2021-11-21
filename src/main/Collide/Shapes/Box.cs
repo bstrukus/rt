@@ -91,7 +91,8 @@ namespace rt.Collide.Shapes
                 // Ray is pointing parallel to the plane face and lies in front of the half-plane
                 else if (Vec3.Dot(ray.Origin - plane.Point, plane.Normal) > 0.0f)
                 {
-                    break;  // Ray totally misses the box.
+                    // Ray totally misses the box, create an invalid intersection.
+                    tValues[0] = tValues[1] + 1.0f;
                 }
             }
 
