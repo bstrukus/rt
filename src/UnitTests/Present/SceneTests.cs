@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace UnitTests.Present
 {
     using rt.Collide;
+    using rt.Collide.Shapes;
     using rt.Math;
     using rt.Present;
     using System.Collections.Generic;
