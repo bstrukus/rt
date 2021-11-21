@@ -155,6 +155,20 @@ namespace rt.Math
                 lhs.X * rhs.Y - lhs.Y * rhs.X);
         }
 
+        /// <summary>
+        /// Component-wise multiplication of two 3D vectors.
+        /// </summary>
+        /// <param name="lhs">Input vector</param>
+        /// <param name="rhs">Input vector</param>
+        /// <returns>Vector whose values are the component-wise products of the two input vectors.</returns>
+        public static Vec3 Multiply(Vec3 lhs, Vec3 rhs)
+        {
+            return new Vec3(
+                lhs.X * rhs.X,
+                lhs.Y * rhs.Y,
+                lhs.Z * rhs.Z);
+        }
+
         private readonly float[] val = new float[3];
     }
 }

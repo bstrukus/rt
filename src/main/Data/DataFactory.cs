@@ -53,6 +53,7 @@ namespace rt.Data
             this.LoadSpheres(ref hittables);
             this.LoadBoxes(ref hittables);
             this.LoadPolygons(ref hittables);
+            this.LoadEllipsoids(ref hittables);
 
             //////////////////////////////////////////////////////////////////////////
             var lightCollection = this.sceneData.Lights;
@@ -129,6 +130,25 @@ namespace rt.Data
                         ));
                 }
                 return this.sceneData.Shapes.Polygons.Count;
+            }
+            return 0;
+        }
+
+        private int LoadEllipsoids(ref List<IHittable> hittables)
+        {
+            if (this.sceneData.Shapes.HasEllipsoids())
+            {
+                foreach (var ellipsoidData in this.sceneData.Shapes.Ellipsoids)
+                {
+                    hittables.Add(new Ellipsoid(
+                        CreateVec3(ellipsoidData.Center),
+                        CreateVec3(ellipsoidData.AxisU),
+                        CreateVec3(ellipsoidData.AxisV),
+                        CreateVec3(ellipsoidData.AxisW),
+                        CreateMaterial(ellipsoidData.Material)
+                        ));
+                }
+                return this.sceneData.Shapes.Ellipsoids.Count;
             }
             return 0;
         }

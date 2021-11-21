@@ -41,9 +41,9 @@ namespace rt.Execute
             this.options = new HashSet<Option>
             {
                 // #levers Lighting Calculation
-                //Option.BooleanTest,
+                Option.BooleanTest,
                 //Option.RenderNormals,
-                Option.ViewVectorLighting,
+                //Option.ViewVectorLighting,
 
                 // #levers Scene Loading
                 Option.PrintSceneLoading,
