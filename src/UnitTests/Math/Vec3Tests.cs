@@ -11,8 +11,6 @@ namespace UnitTests.Math
     [TestClass]
     public class Vec3Tests
     {
-        private const float Epsilon = 0.00001f;
-
         [TestMethod]
         public void AllZeroConstructorContainsZeroses()
         {
@@ -38,7 +36,7 @@ namespace UnitTests.Math
             // no-op
 
             // Assert
-            Assert.AreEqual(5.0f, result.X, Epsilon);
+            Assert.AreEqual(5.0f, result.X, Helpers.Epsilon);
         }
 
         #region Cross Product

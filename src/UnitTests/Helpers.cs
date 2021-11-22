@@ -9,6 +9,8 @@ namespace UnitTests
 
     internal static class Helpers
     {
+        public const float Epsilon = 0.00001f;
+
         public static Material DefaultMaterial = new Material(Vec3.One);
 
         public static Transform SimpleTransform(Vec3 pos, float scale)
