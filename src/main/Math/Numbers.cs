@@ -43,7 +43,12 @@ namespace rt.Math
 
         public static bool AreEqual(float lhs, float rhs)
         {
-            return (lhs - rhs) < Epsilon;
+            return Abs(lhs - rhs) < Epsilon;
+        }
+
+        public static float Abs(float val)
+        {
+            return val < 0.0f ? -val : val;
         }
 
         public static float Min(float lhs, float rhs)
@@ -54,6 +59,11 @@ namespace rt.Math
         public static float Max(float lhs, float rhs)
         {
             return lhs > rhs ? lhs : rhs;
+        }
+
+        public static float Determinant(float a, float b, float c, float d)
+        {
+            return a * d - b * c;
         }
     }
 }
