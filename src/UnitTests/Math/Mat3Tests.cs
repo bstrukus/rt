@@ -66,15 +66,19 @@ namespace UnitTests.Math
         }
 
         [TestMethod]
-        [DataRow(9.0f, 3.0f, 5.0f,  // Input matrix
+        // Input matrix
+        [DataRow(9.0f, 3.0f, 5.0f,
                  -6.0f, -9.0f, 7.0f,
                  -1.0f, -8.0f, 1.0f,
-                 47.0f / 615.0f, -43.0f / 615.0f, 66.0f / 615.0f,  // Expected matrix
+                 // Expected matrix
+                 47.0f / 615.0f, -43.0f / 615.0f, 66.0f / 615.0f,
                  -1.0f / 615.0f, 14.0f / 615.0f, -93.0f / 615.0f,
                  39.0f / 615.0f, 69.0f / 615.0f, -63.0f / 615.0f)]
+        // Input matrix
         [DataRow(3.0f, -2.0f, 5.0f,
                  7.0f, 4.0f, -8.0f,
                  5.0f, -3.0f, -4.0f,
+                 // Expected matrix
                  40.0f / 301.0f, 23.0f / 301.0f, 4.0f / 301.0f,
                  12.0f / 301.0f, 37.0f / 301.0f, -59.0f / 301.0f,
                  41.0f / 301.0f, 1.0f / 301.0f, -26.0f / 301.0f)]
@@ -122,6 +126,93 @@ namespace UnitTests.Math
             Assert.AreEqual(result[6], result[2, 0]);
             Assert.AreEqual(result[7], result[2, 1]);
             Assert.AreEqual(result[8], result[2, 2]);
+        }
+
+        [TestMethod]
+        [DataRow(1, 2, 3)]
+        public void MultiplyVectorByIdentityMatrix(float vecX, float vecY, float vecZ)
+        {
+            // Arrange
+            var vec = new Vec3(vecX, vecY, vecZ);
+            var matrix = Mat3.Identity;
+
+            // Act
+            var result = matrix.Multiply(vec);
+
+            // Assert
+            var expected = new Vec3(vecX, vecY, vecZ);
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        // Input matrix
+        [DataRow(3, -2, 5,
+                 7, 4, -8,
+                 5, -3, -4,
+                 // Input vector
+                 1, 2, 3,
+                 // Expected vector
+                 14, -9, -13)]
+        // Input matrix
+        [DataRow(9, 3, 5,
+                 -6, -9, 7,
+                 -1, -8, 1,
+                 // Input vector
+                 1, 2, 3,
+                 // Expected vector
+                 30, -3, -14)]
+        public void MultiplyVectorByInvertibleMatrix(float m00, float m01, float m02,
+                                                     float m10, float m11, float m12,
+                                                     float m20, float m21, float m22,
+                                                     float vecX, float vecY, float vecZ,
+                                                     float expectedX, float expectedY, float expectedZ)
+        {
+            // Arrange
+            var vec = new Vec3(vecX, vecY, vecZ);
+            var matrix = new Mat3(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+
+            // Act
+            var result = matrix.Multiply(vec);
+
+            // Assert
+            var expected = new Vec3(expectedX, expectedY, expectedZ);
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        // Input matrix
+        [DataRow(3, -2, 5,
+                 7, 4, -8,
+                 5, -3, -4,
+                 // Input vector
+                 1, 2, 3,
+                 // Expected vector
+                 14.0f / 43.0f, -13.0f / 43.0f, -5.0f / 43.0f)]
+        // Input matrix
+        [DataRow(9, 3, 5,
+                 -6, -9, 7,
+                 -1, -8, 1,
+                 // Input vector
+                 1, 2, 3,
+                 // Expected vector
+                 53.0f / 205.0f, -84.0f / 205.0f, -4.0f / 205.0f)]
+        public void MultiplyVectorByInvertedeMatrix(float m00, float m01, float m02,
+                                                    float m10, float m11, float m12,
+                                                    float m20, float m21, float m22,
+                                                    float vecX, float vecY, float vecZ,
+                                                    float expectedX, float expectedY, float expectedZ)
+        {
+            // Arrange
+            var vec = new Vec3(vecX, vecY, vecZ);
+            var matrix = new Mat3(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+
+            // Act
+            matrix = matrix.Inverted();
+            var result = matrix.Multiply(vec);
+
+            // Assert
+            var expected = new Vec3(expectedX, expectedY, expectedZ);
+            Assert.AreEqual(expected, result);
         }
     }
 }
