@@ -41,11 +41,16 @@ namespace rt.Math
 
         public float Length()
         {
-            float squaredLength = Dot(this, this);
+            float squaredLength = this.LengthSq();
 
             Debug.Assert(squaredLength > Numbers.Epsilon, "Vec3 - Can't get length of zero vector");
 
             return (float)System.Math.Sqrt(squaredLength);
+        }
+
+        public float LengthSq()
+        {
+            return Dot(this, this);
         }
 
         public Vec3 Normalized()
