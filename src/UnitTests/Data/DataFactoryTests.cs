@@ -41,16 +41,5 @@ namespace UnitTests.Data
             // Assert
             Assert.IsFalse(result);
         }
-
-        [TestMethod]
-        public void LoadInSpheresAndBoxes()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-            Assert.IsTrue(false);
-        }
     }
 }

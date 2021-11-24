@@ -2,6 +2,8 @@
  * #copyright_placeholder Copyright Ben Strukus
  */
 
+using System.Diagnostics;
+
 namespace rt.Math
 {
     public class Numbers
@@ -64,6 +66,18 @@ namespace rt.Math
         public static float Determinant(float a, float b, float c, float d)
         {
             return a * d - b * c;
+        }
+
+        public static float Sqrt(float value)
+        {
+            if (value == 0.0f)
+            {
+                return 0.0f;
+            }
+
+            Debug.Assert(value > 0.0f);
+
+            return System.MathF.Sqrt(value);
         }
     }
 }
