@@ -9,7 +9,7 @@ namespace rt.Execute
     internal class Levers
     {
         private const bool DebuggingEnabled = true;
-        public const int ObjectLimit = 11;
+        public const int ObjectLimit = 1;
 
         public enum Option
         {
