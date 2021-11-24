@@ -33,7 +33,6 @@ namespace rt.Execute
                 {
                     var scaledPixel = this.image.InterpolatedPixel(x, y);
                     var ray = this.camera.GenerateRay(scaledPixel);
-                    //var hitInfo = this.scene.Project(ray);
 
                     var colorReport = this.scene.Trace(ray);
                     image.SetPixel(x, y, color: colorReport.Color);
