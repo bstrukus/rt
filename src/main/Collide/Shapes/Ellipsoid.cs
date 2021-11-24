@@ -25,7 +25,51 @@ namespace rt.Collide.Shapes
 
         public override HitInfo TryIntersect(Ray ray)
         {
-            return null;
+            // #todo Figure out why I'm getting artifacts on near misses/hits
+            // #precalc Matrix can be saved off as inverted
+            var matrix = Mat3.FromColumns(this.uAxis, this.vAxis, this.wAxis);
+            matrix = matrix.Inverted();
+
+            // a = |M^-1 d|^2
+            float a = matrix.Multiply(ray.Direction).LengthSq();
+
+            // b = 2[M^-1(P - C)]*[M^-1 d]
+            float b = 2.0f * Vec3.Dot(matrix.Multiply(ray.Origin - this.center), matrix.Multiply(ray.Direction));
+
+            // c = |M^-1 (P - C)|^2 - 1
+            float c = matrix.Multiply(ray.Origin - this.center).LengthSq() - 1.0f;
+
+            float discriminant = b * b - 4 * a * c;
+            if (discriminant < 0.0f)
+            {
+                return null;
+            }
+
+            float sqrtDiscriminant = Numbers.Sqrt(discriminant);
+
+            float hitValue = -1.0f;
+
+            float posHitValue = (-b + sqrtDiscriminant) / (2.0f * a);
+            if (posHitValue < 0.0f)
+            {
+                return null;
+            }
+
+            float negHitValue = (-b - sqrtDiscriminant) / (2.0f * a);
+            if (negHitValue < 0.0f)
+            {
+                hitValue = posHitValue;
+            }
+            else
+            {
+                hitValue = negHitValue;
+            }
+
+            Vec3 hitPoint = ray.GetPointAlong(hitValue);
+            Vec3 hitNormal = hitPoint - this.center;
+            hitNormal = matrix.Multiply(hitNormal);
+            hitNormal = matrix.Transposed().Multiply(hitNormal).Normalized();
+            return new HitInfo(hitPoint, hitNormal, hitValue, this.Material);
         }
     }
 }
