@@ -9,13 +9,21 @@ namespace rt.Execute
     internal class Levers
     {
         private const bool DebuggingEnabled = true;
+        public const int ObjectLimit = 11;
 
         public enum Option
         {
+            // Lighting Calculation
             BooleanTest,
+
             RenderNormals,
             ViewVectorLighting,
+
+            // Scene Loading
             PrintSceneLoading,
+
+            // Object Control
+            LimitObjects,
         }
 
         private static Levers Instance;
@@ -46,7 +54,10 @@ namespace rt.Execute
                 //Option.ViewVectorLighting,
 
                 // #levers Scene Loading
-                Option.PrintSceneLoading,
+                //Option.PrintSceneLoading,
+
+                // #levers Object Control
+                //Option.LimitObjects,
             };
         }
     }

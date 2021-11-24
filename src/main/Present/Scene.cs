@@ -83,11 +83,22 @@ namespace rt.Present
 
         public HitInfo Project(Ray ray)
         {
+            int i = 0;
+
             HitInfo result = null;
             float hitDistance = float.MaxValue;
 
             foreach (var hittable in this.hittables)
             {
+                if (Levers.GetOption(Levers.Option.LimitObjects))
+                {
+                    if (i == Levers.ObjectLimit)
+                    {
+                        break;
+                    }
+                    ++i;
+                }
+
                 var hitInfo = hittable.TryIntersect(ray);
                 if (hitInfo != null && hitInfo.Distance < hitDistance)
                 {
