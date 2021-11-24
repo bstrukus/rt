@@ -79,5 +79,17 @@ namespace rt.Math
 
             return System.MathF.Sqrt(value);
         }
+
+        public static double Sqrt(double value)
+        {
+            if (value == 0.0)
+            {
+                return 0.0;
+            }
+
+            Debug.Assert(value > 0.0);
+
+            return System.Math.Sqrt(value);
+        }
     }
 }
