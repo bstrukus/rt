@@ -9,6 +9,7 @@ namespace rt.Execute
     internal class Levers
     {
         private const bool DebuggingEnabled = true;
+        public const int ObjectStart = 9;
         public const int ObjectLimit = 1;
 
         public enum Option
@@ -49,15 +50,15 @@ namespace rt.Execute
             this.options = new HashSet<Option>
             {
                 // #levers Lighting Calculation
-                Option.BooleanTest,
+                //Option.BooleanTest,
                 //Option.RenderNormals,
-                //Option.ViewVectorLighting,
+                Option.ViewVectorLighting,
 
                 // #levers Scene Loading
                 //Option.PrintSceneLoading,
 
                 // #levers Object Control
-                //Option.LimitObjects,
+                Option.LimitObjects,
             };
         }
     }

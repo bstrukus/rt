@@ -25,7 +25,7 @@ namespace rt.Present
         {
             if (Levers.GetOption(Levers.Option.LimitObjects))
             {
-                this.hittables = hittables.GetRange(0, Levers.ObjectLimit);
+                this.hittables = hittables.GetRange(Levers.ObjectStart, Levers.ObjectLimit);
             }
             else
             {
