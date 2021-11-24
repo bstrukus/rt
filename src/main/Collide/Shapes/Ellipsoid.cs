@@ -34,13 +34,13 @@ namespace rt.Collide.Shapes
             Vec3 localRelativePoint = this.affineTransform.Multiply(ray.Origin - this.center);
 
             // a = |M^-1 d|^2
-            double a = localDirection.LengthSq();
+            float a = localDirection.LengthSq();
 
             // b = 2[M^-1(P - C)]*[M^-1 d]
-            double b = 2.0 * Vec3.Dot(localRelativePoint, localDirection);
+            float b = 2.0f * Vec3.Dot(localRelativePoint, localDirection);
 
             // c = |M^-1 (P - C)|^2 - 1
-            double c = localRelativePoint.LengthSq() - 1.0f;
+            float c = localRelativePoint.LengthSq() - 1.0f;
 
             // Exit if ray's origin is outside sphere (c > 0) and
             // ray is pointing away from sphere (b > 0)
@@ -49,23 +49,23 @@ namespace rt.Collide.Shapes
                 return null;
             }
 
-            double discriminant = (b * b) - (4.0f * a * c);
-            if (discriminant < 0.0)
+            float discriminant = (b * b) - (4.0f * a * c);
+            if (discriminant < 0.0f)
             {
                 return null;
             }
 
-            double sqrtDiscriminant = Numbers.Sqrt(discriminant);
+            float sqrtDiscriminant = Numbers.Sqrt(discriminant);
 
-            double hitValue;
+            float hitValue;
 
-            double posHitValue = (-b + sqrtDiscriminant) / (2.0 * a);
+            float posHitValue = (-b + sqrtDiscriminant) / (2.0f * a);
             if (posHitValue < 0.0f)
             {
                 return null;
             }
 
-            double negHitValue = (-b - sqrtDiscriminant) / (2.0f * a);
+            float negHitValue = (-b - sqrtDiscriminant) / (2.0f * a);
             if (negHitValue < 0.0f)
             {
                 hitValue = posHitValue;

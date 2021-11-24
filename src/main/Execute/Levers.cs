@@ -58,7 +58,7 @@ namespace rt.Execute
                 //Option.PrintSceneLoading,
 
                 // #levers Object Control
-                Option.LimitObjects,
+                //Option.LimitObjects,
             };
         }
     }
