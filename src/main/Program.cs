@@ -30,13 +30,16 @@ namespace rt
 
         private static void LoadScene(string sceneFile)
         {
+            Log.Info("LOADING STARTED");
             rt.Data.DataFactory dataFactory = new rt.Data.DataFactory();
             dataFactory.Load(sceneFile);
+            Log.Info("LOADING DONE");
 
             var scene = dataFactory.CreateScene();
             var camera = dataFactory.CreateCamera();
             var image = dataFactory.CreateImage();
 
+            Log.Info("RENDERING STARTED");
             var runner = new rt.Execute.Runner(scene, camera, image);
             runner.Execute();
         }
