@@ -39,27 +39,27 @@ namespace rt.Data
             this.PrintTitle(title.Substring(0, title.Length - 4));
         }
 
-        public virtual void Print(string label, string value)
+        protected virtual void Print(string label, string value)
         {
             Log.Info($"{this.indentation}{label}: {value}");
         }
 
-        public virtual void Print(string label, int value)
+        protected virtual void Print(string label, int value)
         {
             Print(label, value.ToString());
         }
 
-        public virtual void Print(string label, double value)
+        protected virtual void Print(string label, double value)
         {
             Print(label, value.ToString());
         }
 
-        public virtual void Print(string label, List<double> list)
+        protected virtual void Print(string label, List<double> list)
         {
             Log.Info($"{this.indentation}{label}: [{Format(list)}]");
         }
 
-        public void PrintTitle(string label)
+        protected void PrintTitle(string label)
         {
             string spaces = this.spaceCount > 0 ? new string(' ', this.spaceCount - 2) : string.Empty;
             Log.Info($"{spaces}- {label}");
