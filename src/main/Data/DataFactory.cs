@@ -23,6 +23,14 @@ namespace rt.Data
     {
         private SceneData sceneData;
 
+        public ProgramData LoadConfig(string filename)
+        {
+            using StreamReader file = File.OpenText(filename);
+            string fileContents = file.ReadToEnd();
+
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<ProgramData>(fileContents);
+        }
+
         public bool Load(string filename)
         {
             using StreamReader file = File.OpenText(filename);

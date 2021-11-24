@@ -10,7 +10,7 @@ namespace rt
     {
         // #todo Read this in as a command line parameter
         // #todo Read in config file specifying width, output file name, scene file
-        private const string SceneFile = "etest1.json";
+        private const string SceneFile = "ctest1.json";
 
         private static void Main(string[] args)
         {
@@ -22,7 +22,7 @@ namespace rt
             }
             else if (args.Length == 1)
             {
-                ConvertFile(args[0]);
+                LoadConfig(args[0]);
             }
 
             Log.Info("PROGRAM END");
@@ -47,6 +47,18 @@ namespace rt
         private static void ConvertFile(string filename)
         {
             rt.Utility.SceneConverter.Convert(filename);
+        }
+
+        private static void LoadConfig(string configFile)
+        {
+            rt.Data.DataFactory dataFactory = new rt.Data.DataFactory();
+            var config = dataFactory.LoadConfig(configFile);
+            Log.Info("JSON DATA");
+            Log.Info($"Width: {config.Width}");
+            Log.Info($"Output: {config.Output}");
+            Log.Info($"Scene File: {config.SceneFile}");
+            Log.Info("PROCESSED DATA");
+            Log.Info($"Output: {config.GetOutputFilename()}");
         }
     }
 }
