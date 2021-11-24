@@ -176,6 +176,13 @@ namespace rt
                 return new Vec3(Vec3.Dot(top, vec), Vec3.Dot(mid, vec), Vec3.Dot(bot, vec));
             }
 
+            public Mat3 Transposed()
+            {
+                return new Mat3(this[0, 0], this[1, 0], this[2, 0],
+                                this[0, 1], this[1, 1], this[2, 1],
+                                this[0, 2], this[1, 2], this[2, 2]);
+            }
+
             public static bool operator ==(Mat3 lhs, Mat3 rhs)
             {
                 for (int i = 0; i < 9; ++i)

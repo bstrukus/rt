@@ -214,5 +214,25 @@ namespace UnitTests.Math
             var expected = new Vec3(expectedX, expectedY, expectedZ);
             Assert.AreEqual(expected, result);
         }
+
+        [TestMethod]
+        [DataRow(9.0f, 3.0f, 5.0f,  // Input matrix
+                -6.0f, -9.0f, 7.0f,
+                -1.0f, -8.0f, 1.0f)]
+        public void TransposeMatrix(float m00, float m01, float m02,
+                                    float m10, float m11, float m12,
+                                    float m20, float m21, float m22)
+        {
+            // Arrange
+            var matrix = new Mat3(m00, m01, m02, m10, m11, m12, m20, m21, m22);
+
+            // Act
+            var result = matrix.Transposed();
+
+            // Assert
+            var expected = new Mat3(m00, m10, m20, m01, m11, m21, m02, m12, m22);
+
+            Assert.AreEqual(expected, result);
+        }
     }
 }
