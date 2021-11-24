@@ -30,16 +30,19 @@ namespace rt.Collide.Shapes
             var matrix = Mat3.FromColumns(this.uAxis, this.vAxis, this.wAxis);
             matrix = matrix.Inverted();
 
+            Vec3 localDirection = matrix.Multiply(ray.Direction);
+            Vec3 localRelativePoint = matrix.Multiply(ray.Origin - this.center);
+
             // a = |M^-1 d|^2
-            float a = matrix.Multiply(ray.Direction).LengthSq();
+            float a = localDirection.LengthSq();
 
             // b = 2[M^-1(P - C)]*[M^-1 d]
-            float b = 2.0f * Vec3.Dot(matrix.Multiply(ray.Origin - this.center), matrix.Multiply(ray.Direction));
+            float b = 2.0f * Vec3.Dot(localRelativePoint, localDirection);
 
             // c = |M^-1 (P - C)|^2 - 1
-            float c = matrix.Multiply(ray.Origin - this.center).LengthSq() - 1.0f;
+            float c = localRelativePoint.LengthSq() - 1.0f;
 
-            float discriminant = b * b - 4 * a * c;
+            float discriminant = (b * b) - (4.0f * a * c);
             if (discriminant < 0.0f)
             {
                 return null;
@@ -47,7 +50,7 @@ namespace rt.Collide.Shapes
 
             float sqrtDiscriminant = Numbers.Sqrt(discriminant);
 
-            float hitValue = -1.0f;
+            float hitValue;
 
             float posHitValue = (-b + sqrtDiscriminant) / (2.0f * a);
             if (posHitValue < 0.0f)
