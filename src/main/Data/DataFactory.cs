@@ -23,19 +23,24 @@ namespace rt.Data
     {
         private SceneData sceneData;
 
-        public ProgramData LoadConfig(string filename)
+        public ConfigData CreateConfig(string filename)
         {
             using StreamReader file = File.OpenText(filename);
             string fileContents = file.ReadToEnd();
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<ProgramData>(fileContents);
+            var configData = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigData>(fileContents);
+            if (configData == null || !configData.IsValid())
+            {
+                Log.Error("Error loading config");
+                return null;
+            }
+            return configData;
         }
 
-        public bool Load(string filename)
+        public bool LoadScene(string filename)
         {
             using StreamReader file = File.OpenText(filename);
             string fileContents = file.ReadToEnd();
-            //Log.Info($"FILE", fileContents}\r\n");
 
             this.sceneData = Newtonsoft.Json.JsonConvert.DeserializeObject<SceneData>(fileContents);
             if (this.sceneData == null || !this.sceneData.IsValid())

@@ -21,7 +21,7 @@ namespace UnitTests.Data
             string sceneFilePath = Dir.GetTestSceneFilePath(sceneFile);
 
             // Act
-            bool result = dataFactory.Load(sceneFilePath);
+            bool result = dataFactory.LoadScene(sceneFilePath);
 
             // Assert
             Assert.IsTrue(result);
@@ -36,7 +36,7 @@ namespace UnitTests.Data
             string sceneFilePath = Dir.GetTestSceneFilePath(sceneFile);
 
             // Act
-            bool result = dataFactory.Load(sceneFilePath);
+            bool result = dataFactory.LoadScene(sceneFilePath);
 
             // Assert
             Assert.IsFalse(result);

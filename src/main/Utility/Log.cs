@@ -11,6 +11,8 @@ namespace rt.Utility
     /// </summary>
     internal static class Log
     {
+        // #todo Create functions that log START when called and END at end of scope, possibly using "using" functionality
+
         public static void Info(string info)
         {
             Console.WriteLine($"INFO: {info}");

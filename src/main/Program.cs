@@ -5,60 +5,81 @@
 namespace rt
 {
     using Utility;
+    using Execute;
 
     internal class Program
     {
-        // #todo Read this in as a command line parameter
-        // #todo Read in config file specifying width, output file name, scene file
-        private const string SceneFile = "ctest1.json";
-
         private static void Main(string[] args)
         {
-            Log.Info("PROGRAM START");
+            LogStart("PROGRAM");
 
-            if (args.Length == 0)
+            if (args.Length != 1)
             {
-                LoadScene(Utility.Dir.GetSceneFilePath(SceneFile));
-            }
-            else if (args.Length == 1)
-            {
-                LoadConfig(args[0]);
+                Log.Error("INCORRECT PARAMETERS");
             }
 
-            Log.Info("PROGRAM END");
-        }
+            LogStart("LOAD");
+            var runner = Load(args[0]);
+            LogEnd("LOAD");
 
-        private static void LoadScene(string sceneFile)
-        {
-            Log.Info("LOADING STARTED");
-            rt.Data.DataFactory dataFactory = new rt.Data.DataFactory();
-            dataFactory.Load(sceneFile);
-            Log.Info("LOADING DONE");
+            if (runner == null)
+            {
+                return;
+            }
 
-            var scene = dataFactory.CreateScene();
-            var camera = dataFactory.CreateCamera();
-            var image = dataFactory.CreateImage();
-
-            Log.Info("RENDERING STARTED");
-            var runner = new rt.Execute.Runner(scene, camera, image);
+            LogStart("RENDERING");
             runner.Execute();
+            LogEnd("RENDERING");
+
+            LogEnd("PROGRAM");
         }
 
-        private static void ConvertFile(string filename)
+        private static Runner Load(string configFile)
         {
-            rt.Utility.SceneConverter.Convert(filename);
+            LogStart("CONFIG");
+            Data.DataFactory dataFactory = new Data.DataFactory();
+            var configData = dataFactory.CreateConfig(configFile);
+            if (configData == null)
+            {
+                Log.Error("Failure when loading config file");
+            }
+            LogEnd("CONFIG");
+
+            if (configData.IsSceneConversion)
+            {
+                LogStart("CONVERSION");
+                // #todo Use the ConfigData to get this file information in the SceneConverter, maybe pass in the ConfigData?
+                SceneConverter.Convert(configData.SceneFile);
+                LogEnd("CONVERSION");
+                return null;
+            }
+            else if (configData.IsSceneRenderable)
+            {
+                LogStart("LOAD SCENE");
+                dataFactory.LoadScene(configData.GetSceneFullFilePath());
+
+                var scene = dataFactory.CreateScene();
+                var camera = dataFactory.CreateCamera();
+                var image = dataFactory.CreateImage();
+                LogEnd("LOAD SCENE");
+
+                return new Runner(scene, camera, image);
+            }
+            else
+            {
+                Log.Error("Scene was neither converted nor rendered, unknown error");
+                return null;
+            }
         }
 
-        private static void LoadConfig(string configFile)
+        private static void LogStart(string state)
         {
-            rt.Data.DataFactory dataFactory = new rt.Data.DataFactory();
-            var config = dataFactory.LoadConfig(configFile);
-            Log.Info("JSON DATA");
-            Log.Info($"Width: {config.Width}");
-            Log.Info($"Output: {config.Output}");
-            Log.Info($"Scene File: {config.SceneFile}");
-            Log.Info("PROCESSED DATA");
-            Log.Info($"Output: {config.GetOutputFilename()}");
+            Log.Info($"{state} START");
+        }
+
+        private static void LogEnd(string state)
+        {
+            Log.Info($"{state} END");
         }
     }
 }
