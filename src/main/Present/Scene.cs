@@ -92,6 +92,7 @@ namespace rt.Present
             HitInfo result = null;
             float hitDistance = float.MaxValue;
 
+            // #todo Replace basic foreach loop with a bounding-volume hierarchy
             foreach (var hittable in this.hittables)
             {
                 var hitInfo = hittable.TryIntersect(ray);
