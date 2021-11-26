@@ -27,6 +27,10 @@ namespace rt.Collide.Shapes
 
         public override HitInfo TryIntersect(Ray ray)
         {
+            // #todo Revisit this, might need to be altered to support refractions
+            // This implementation is from the Real-Time Collision Detection book and may not be suitable for all my ray tracing
+            // needs!
+
             // Vector from sphere origin to ray origin
             Vec3 m = ray.Origin - this.Center;
 
@@ -53,7 +57,6 @@ namespace rt.Collide.Shapes
             float t = -b - sqrt;
 
             // If t is negative, ray started inside sphere so clamp t to zero
-            // #todo Revisit this, might need to be altered to support refractions
             if (t < 0.0f)
             {
                 t = 0.0f;
