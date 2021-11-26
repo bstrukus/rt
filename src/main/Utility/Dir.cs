@@ -13,15 +13,22 @@ namespace rt.Utility
     {
         private static string OutputDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}";
 
+        private static string ConfigDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}..\\..\\..\\..\\";
+
         // App dir: "rt\OUTPUT\rt\<target_config>\<netcoreapp_ver>\"
-        // Need to go up 2 levels to get to rt\
+        // Need to go up 4 levels to get to rt\
         private static string SceneDirectory => $"{AppDomain.CurrentDomain.BaseDirectory}..\\..\\..\\..\\scenes\\";
 
         // Test dir: "rt\OUTPUT\unit_tests\<target_config>\<netcoreapp_ver>\"
-        // Need to go up 5 levels to get to rt\
+        // Need to go up 4 levels to get to rt\
         private static string TestSceneDirectory => $"{AppDomain.CurrentDomain.BaseDirectory}..\\..\\..\\..\\scenes\\unit_tests\\";
 
         private static string OldSceneDirectory => $"{AppDomain.CurrentDomain.BaseDirectory}..\\..\\..\\..\\scenes\\unconverted\\";
+
+        public static string GetConfigFilePath(string configFile)
+        {
+            return $"{ConfigDirectory}{configFile}";
+        }
 
         public static string GetSceneFilePath(string sceneFile)
         {
