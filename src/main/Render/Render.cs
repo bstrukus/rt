@@ -118,10 +118,12 @@ namespace rt.Render
         {
             string outputFile = Dir.GetOutputFilePath(this.fileName);
 
-            var p = new Process();
-            p.StartInfo = new ProcessStartInfo(outputFile)
+            var p = new Process
             {
-                UseShellExecute = true
+                StartInfo = new ProcessStartInfo(outputFile)
+                {
+                    UseShellExecute = true
+                }
             };
             p.Start();
         }
