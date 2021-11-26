@@ -1,8 +1,4 @@
 {
-  "image": {
-    "width": 500,
-    "filename": "simple-scene.bmp"
-  },
   "camera": {
     "eyeDirection": [
       0.0,

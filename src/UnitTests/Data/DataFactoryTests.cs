@@ -26,20 +26,5 @@ namespace UnitTests.Data
             // Assert
             Assert.IsTrue(result);
         }
-
-        [TestMethod]
-        [DataRow("missingImage.json")]
-        public void LoadInSceneWithMissingDataAndRegisterIt(string sceneFile)
-        {
-            // Arrange
-            var dataFactory = new DataFactory();
-            string sceneFilePath = Dir.GetTestSceneFilePath(sceneFile);
-
-            // Act
-            bool result = dataFactory.LoadScene(sceneFilePath);
-
-            // Assert
-            Assert.IsFalse(result);
-        }
     }
 }
