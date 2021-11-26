@@ -1,19 +1,20 @@
-﻿using rt.Present;
-
-/*
+﻿/*
  * #copyright_placeholder Copyright Ben Strukus
  */
+
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 
 namespace rt.Utility
 {
     using rt.Data;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using Newtonsoft.Json;
 
     internal class SceneConverter
     {
+        private const char Delimiter = ' ';
+
         public static void Convert(string filename)
         {
             // Find the actual file
@@ -36,7 +37,16 @@ namespace rt.Utility
                         continue;
                     }
 
-                    var tag = line.Split(' ')[0];
+                    // Process Line
+                    line = line.Replace(", ", ",");
+                    while (line.Contains("  "))
+                    {
+                        line = line.Replace("  ", " ");
+                    }
+
+                    var tag = line.Split(Delimiter)[0];
+
+                    Log.Info(tag);
 
                     if (string.Compare(tag, "SPHERE", true) == 0)
                     {
@@ -64,13 +74,11 @@ namespace rt.Utility
                     }
                     else if (string.Compare(tag, "AIR", true) == 0)
                     {
-                        // #todo Store Air data somewhere
-                        ReadAir(line);
+                        sceneData.Air = ReadAir(line);
                     }
                     else if (string.Compare(tag, "AMBIENT", true) == 0)
                     {
-                        // #todo Store Ambient data somewhere
-                        ReadAmbient(line);
+                        sceneData.Ambient = ReadAmbient(line);
                     }
 
                     line = sr.ReadLine();
@@ -136,7 +144,7 @@ namespace rt.Utility
         {
             Debug.Assert(!string.IsNullOrEmpty(sphereLine));
 
-            var tokens = sphereLine.Split(' ');
+            var tokens = sphereLine.Split(Delimiter);
 
             var sphereData = new SphereData
             {
@@ -150,10 +158,9 @@ namespace rt.Utility
 
         private static BoxData ReadBox(string boxLine, string materialLine)
         {
-            // #todo Read in Box shape
             Debug.Assert(!string.IsNullOrEmpty(boxLine));
 
-            var tokens = boxLine.Split(' ');
+            var tokens = boxLine.Split(Delimiter);
 
             var boxData = new BoxData
             {
@@ -172,7 +179,7 @@ namespace rt.Utility
         {
             Debug.Assert(!string.IsNullOrEmpty(polygonLine));
 
-            var tokens = polygonLine.Split(' ');
+            var tokens = polygonLine.Split(Delimiter);
 
             int pointCount = int.Parse(tokens[1]);
             List<List<double>> vertices = new List<List<double>>(pointCount);
@@ -194,7 +201,7 @@ namespace rt.Utility
         {
             Debug.Assert(!string.IsNullOrEmpty(ellipsoidLine));
 
-            var tokens = ellipsoidLine.Split(' ');
+            var tokens = ellipsoidLine.Split(Delimiter);
 
             var ellipsoidData = new EllipsoidData
             {
@@ -214,7 +221,7 @@ namespace rt.Utility
         {
             Debug.Assert(!string.IsNullOrEmpty(data));
 
-            var tokens = data.Trim().Split(' ');
+            var tokens = data.Trim().Split(Delimiter);
 
             return new MaterialData
             {
@@ -231,7 +238,7 @@ namespace rt.Utility
         {
             Debug.Assert(!string.IsNullOrEmpty(data));
 
-            var tokens = data.Split(' ');
+            var tokens = data.Split(Delimiter);
 
             return new PointLightData
             {
@@ -245,7 +252,7 @@ namespace rt.Utility
         {
             Debug.Assert(!string.IsNullOrEmpty(data));
 
-            var eyeDirectionData = data.Split(' ')[4];
+            var eyeDirectionData = data.Split(Delimiter)[4];
 
             return new CameraData
             {
@@ -258,7 +265,7 @@ namespace rt.Utility
         {
             Debug.Assert(!string.IsNullOrEmpty(data));
 
-            var tokens = data.Split(' ');
+            var tokens = data.Split(Delimiter);
 
             return new ProjectionPlaneData
             {
@@ -270,16 +277,28 @@ namespace rt.Utility
 
         private static AmbientData ReadAmbient(string data)
         {
-            // #todo Read in Ambient data
             Debug.Assert(!string.IsNullOrEmpty(data));
-            return null;
+
+            var tokens = data.Split(Delimiter);
+
+            return new AmbientData
+            {
+                Color = ReadVector(tokens[1])
+            };
         }
 
         private static AirData ReadAir(string data)
         {
-            // #todo Read in Air data
             Debug.Assert(!string.IsNullOrEmpty(data));
-            return null;
+
+            var tokens = data.Split(Delimiter);
+
+            return new AirData
+            {
+                ElectricPermittivity = double.Parse(tokens[1]),
+                MagneticPermeability = double.Parse(tokens[2]),
+                AttenuationFactors = ReadVector(tokens[3])
+            };
         }
 
         private static TransformData ReadSimpleTransform(string position)

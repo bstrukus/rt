@@ -21,6 +21,12 @@ namespace rt.Data
         [JsonProperty("lights")]
         public LightData Lights { get; set; }
 
+        [JsonProperty("ambient")]
+        public AmbientData Ambient { get; set; }
+
+        [JsonProperty("air")]
+        public AirData Air { get; set; }
+
         public SceneData()
         {
             // Initialize those data containers that are glorified Lists
@@ -81,7 +87,37 @@ namespace rt.Data
                 return false;
             }
 
+            if (!this.IsValid(this.Ambient))
+            {
+                Log.Error("Ambient data could not be loaded");
+                return false;
+            }
+
+            if (!this.IsValid(this.Air))
+            {
+                Log.Error("Air data could not be loaded");
+                return false;
+            }
+
             return true;
+        }
+
+        public bool EnsureGlobalQuantitiesExist()
+        {
+            bool neededToChange = false;
+            if (this.Air == null)
+            {
+                this.Air = AirData.GetDefault();
+                neededToChange = true;
+            }
+
+            if (this.Ambient == null)
+            {
+                this.Ambient = AmbientData.GetDefault();
+                neededToChange = true;
+            }
+
+            return neededToChange;
         }
 
         private bool IsValid(DataBase data)
@@ -192,7 +228,6 @@ namespace rt.Data
         public List<PointLightData> PointLights { get; set; }
 
         // #todo Spot/Shaped lights
-        // #todo Ambient light
 
         public LightData()
         {
@@ -250,31 +285,68 @@ namespace rt.Data
         }
     }
 
-    // #todo Store AirData somewhere in the SceneData
     public class AirData : DataBase
     {
+        // Index of refraction
+        [JsonProperty("electricPermittivity")]
+        public double ElectricPermittivity { get; set; } // Relative
+
+        [JsonProperty("magneticPermeability")]
+        public double MagneticPermeability { get; set; } // Relative
+
+        [JsonProperty("attenuation")]
+        public List<double> AttenuationFactors { get; set; }
+
         public override bool IsValid()
         {
-            return false;
+            return DataFactory.ValidateList(this.AttenuationFactors, 3) &&
+                this.ElectricPermittivity >= 0.0f &&
+                this.MagneticPermeability >= 0.0f;
         }
 
-        public new void PrintData(int spaces)
+        public new void PrintData(int spaceCount)
         {
-            //
+            base.PrintData(spaceCount);
+
+            base.Print("Attenuation", this.AttenuationFactors);
+            base.Print("Electric Permittivity", this.ElectricPermittivity);
+            base.Print("Magnetic Permeability", this.MagneticPermeability);
+        }
+
+        public static AirData GetDefault()
+        {
+            return new AirData
+            {
+                ElectricPermittivity = 1.0f,
+                MagneticPermeability = 1.0f,
+                AttenuationFactors = new List<double>() { 1.0f, 1.0f, 1.0f }
+            };
         }
     }
 
-    // #todo Store AmbientData somewhere in the SceneData
     public class AmbientData : DataBase
     {
+        [JsonProperty("color")]
+        public List<double> Color { get; set; }
+
         public override bool IsValid()
         {
-            return false;
+            return DataFactory.ValidateList(this.Color, 3);
         }
 
-        public new void PrintData(int spaces)
+        public new void PrintData(int spaceCount)
         {
-            //
+            base.PrintData(spaceCount);
+
+            base.Print("Color", this.Color);
+        }
+
+        public static AmbientData GetDefault()
+        {
+            return new AmbientData
+            {
+                Color = new List<double>() { 1.0f, 1.0f, 1.0f }
+            };
         }
     }
 }

@@ -21,7 +21,7 @@ namespace rt.Present
         private readonly List<IHittable> hittables;
         private readonly List<Light> lights;
 
-        public Scene(List<IHittable> hittables, List<Light> lights)
+        public Scene(List<IHittable> hittables, List<Light> lights, Vec3 ambientColor)
         {
             if (Levers.GetOption(Levers.Option.LimitObjects))
             {
@@ -33,8 +33,7 @@ namespace rt.Present
             }
             this.lights = lights;
 
-            // #todo Read Scene.AmbientColor in from data, assume zero for now!
-            this.AmbientColor = Vec3.Zero;
+            this.AmbientColor = ambientColor;
         }
 
         public ColorReport Trace(Ray ray)

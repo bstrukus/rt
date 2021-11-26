@@ -44,6 +44,12 @@ namespace rt.Data
             string fileContents = file.ReadToEnd();
 
             this.sceneData = Newtonsoft.Json.JsonConvert.DeserializeObject<SceneData>(fileContents);
+            if (this.sceneData != null)
+            {
+                // We have defaults here if they weren't provided
+                this.sceneData.EnsureGlobalQuantitiesExist();
+            }
+
             if (this.sceneData == null || !this.sceneData.IsValid())
             {
                 Log.Error("Error loading Scene");
@@ -60,9 +66,6 @@ namespace rt.Data
         public Scene CreateScene()
         {
             //////////////////////////////////////////////////////////////////////////
-            var shapeCollection = this.sceneData.Shapes;
-
-            // Go through the list of Spheres & Boxes to create a list of IHittables
             List<IHittable> hittables = new List<IHittable>();
             this.LoadSpheres(ref hittables);
             this.LoadBoxes(ref hittables);
@@ -83,7 +86,10 @@ namespace rt.Data
                 }
             }
 
-            return new Scene(hittables, lights);
+            //////////////////////////////////////////////////////////////////////////
+            var ambientColor = CreateVec3(this.sceneData.Ambient.Color);
+
+            return new Scene(hittables, lights, ambientColor);
         }
 
         private int LoadSpheres(ref List<IHittable> hittables)

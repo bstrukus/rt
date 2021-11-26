@@ -1802,5 +1802,21 @@
         "radius": 0.1
       }
     ]
+  },
+  "ambient": {
+    "color": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "air": {
+    "electricPermittivity": 1.0,
+    "magneticPermeability": 1.0,
+    "attenuation": [
+      1.0,
+      1.0,
+      1.0
+    ]
   }
 }
