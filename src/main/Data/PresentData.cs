@@ -345,7 +345,7 @@ namespace rt.Data
         {
             return new AmbientData
             {
-                Color = new List<double>() { 1.0f, 1.0f, 1.0f }
+                Color = new List<double>() { 0.0f, 0.0f, 0.0f }
             };
         }
     }
