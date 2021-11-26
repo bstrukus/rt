@@ -52,7 +52,7 @@ namespace rt.Execute
                 // #levers Lighting Calculation
                 //Option.BooleanTest,
                 //Option.RenderNormals,
-                Option.ViewVectorLighting,
+                //Option.ViewVectorLighting,
 
                 // #levers Scene Loading
                 //Option.PrintSceneLoading,
