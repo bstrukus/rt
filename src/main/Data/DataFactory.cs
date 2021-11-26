@@ -34,6 +34,7 @@ namespace rt.Data
                 Log.Error("Error loading config");
                 return null;
             }
+
             return configData;
         }
 
@@ -175,9 +176,13 @@ namespace rt.Data
                 plane: this.CreateProjectionPlane());
         }
 
-        public Image CreateImage()
+        public Image CreateImage(ConfigData configData)
         {
-            var imageData = this.sceneData.Image;
+            var imageData = new ImageData
+            {
+                Width = configData.Width,
+                FileName = configData.GetOutputFilename()
+            };
             var camera = this.CreateCamera();
 
             Debug.Assert(imageData != null);

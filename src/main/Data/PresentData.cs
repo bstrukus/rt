@@ -12,10 +12,6 @@ namespace rt.Data
     public class SceneData : DataBase
     {
         // #idea Considering these are all of type IData, could store them in a list and do a lookup to "get" them. Would make it simpler to process all data at once (error checking, printing, etc)
-        // #todo Get rid of the ImageData from the SceneData, load it in another way, maybe read in a standard config file that contains image data & scene filename
-        [JsonProperty("image")]
-        public ImageData Image { get; set; }
-
         [JsonProperty("camera")]
         public CameraData Camera { get; set; }
 
@@ -67,12 +63,6 @@ namespace rt.Data
 
         public override bool IsValid()
         {
-            if (!this.IsValid(this.Image))
-            {
-                Log.Error("Image data could not be loaded");
-                return false;
-            }
-
             if (!this.IsValid(this.Camera))
             {
                 Log.Error("Camera data could not be loaded");
@@ -104,7 +94,6 @@ namespace rt.Data
             base.PrintData(spaceCount);
 
             int indentation = spaceCount + 5;
-            this.Image.PrintData(indentation);
             this.Camera.PrintData(indentation);
             this.Shapes.PrintData(indentation);
             this.Lights.PrintData(indentation);

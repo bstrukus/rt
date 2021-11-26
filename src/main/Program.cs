@@ -60,7 +60,7 @@ namespace rt
 
                 var scene = dataFactory.CreateScene();
                 var camera = dataFactory.CreateCamera();
-                var image = dataFactory.CreateImage();
+                var image = dataFactory.CreateImage(configData);
                 LogEnd("LOAD SCENE");
 
                 return new Runner(scene, camera, image);

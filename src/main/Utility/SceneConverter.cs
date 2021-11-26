@@ -20,10 +20,7 @@ namespace rt.Utility
             string fullFilePath = Dir.GetOldSceneFilePath(filename);
             Log.Info(fullFilePath);
 
-            var sceneData = new SceneData
-            {
-                Image = CreateImageData(500, filename)
-            };
+            var sceneData = new SceneData();
 
             try
             {
