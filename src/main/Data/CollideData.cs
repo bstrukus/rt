@@ -47,11 +47,35 @@ namespace rt.Data
         {
             base.PrintData(spaceCount);
 
+            base.Print("Shape Count", this.ShapeCount());
             int indentation = 3 + spaceCount;
+
             this.PrintSpheres(indentation);
             this.PrintBoxes(indentation);
             this.PrintPolygons(indentation);
             this.PrintEllipsoids(indentation);
+        }
+
+        private int ShapeCount()
+        {
+            int shapeCount = 0;
+            if (this.HasSpheres())
+            {
+                shapeCount += this.Spheres.Count;
+            }
+            if (this.HasBoxes())
+            {
+                shapeCount += this.Boxes.Count;
+            }
+            if (this.HasPolygons())
+            {
+                shapeCount += this.Polygons.Count;
+            }
+            if (this.HasEllipsoids())
+            {
+                shapeCount += this.Ellipsoids.Count;
+            }
+            return shapeCount;
         }
 
         private void PrintSpheres(int indentation)
