@@ -79,7 +79,7 @@ namespace rt.Present
                     Vec3 reflectionVector = Calc.Reflect(pointToLight, hitInfo.Normal).Normalized();
                     Vec3 pointToEye = (ray.Origin - hitInfo.Point).Normalized();
                     float specularCoefficient = Calc.SpecularCoefficient(reflectionVector, pointToEye,
-                                                                         hitInfo.Material.SpecularBase, hitInfo.Material.SpecularExponent);
+                                                                         hitInfo.Material.SpecularCoefficient, hitInfo.Material.SpecularExponent);
                     Vec3 specularReflectionTerm = specularCoefficient * light.Color;
 
                     finalColor += diffuseReflectionTerm + specularReflectionTerm;

@@ -242,7 +242,7 @@ namespace rt.Data
         {
             return new Material(
                 color: CreateVec3(data.Diffuse),
-                specularBase: (float)data.SpecularExponent,
+                specularCoefficient: (float)data.SpecularCoefficient,
                 specularExponent: (float)data.SpecularExponent);
         }
 
