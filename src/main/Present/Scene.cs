@@ -92,18 +92,18 @@ namespace rt.Present
 
         private bool IsPathwayToLightClear(HitInfo hitInfo, Light light)
         {
+            // #todo Move this somewhere centralized?
+            const float ShadowFeelerEpsilon = 0.001f;
+            if (Levers.GetOption(Levers.Option.DisableShadows))
+            {
+                return true;
+            }
+
             Vec3 origin = hitInfo.Point;
             Vec3 surfaceNormal = hitInfo.Normal;
             Vec3 direction = (light.Transform.Position - hitInfo.Point);
             float distance = direction.Length();
             direction = direction.Normalized();
-
-            // #bug The problem here is that we aren't checking to see if the hit distance is beyond the light
-            const float ShadowFeelerEpsilon = 0.0001f;
-            if (Levers.GetOption(Levers.Option.DisableShadows))
-            {
-                return true;
-            }
 
             var ray = new Ray(origin + surfaceNormal * ShadowFeelerEpsilon, direction);
             HitInfo lightTrace = this.Project(ray);
