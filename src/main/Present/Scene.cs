@@ -69,7 +69,7 @@ namespace rt.Present
                 Vec3 pointToLight = (light.Transform.Position - hitInfo.Point).Normalized();
                 // Detect shadows along the pointToLight vector
                 // If pathway not obstructed, calculate diffuse
-                if (this.IsPathwayToLightClear(hitInfo.Point, pointToLight))
+                if (this.IsPathwayToLightClear(hitInfo.Point, hitInfo.Normal, pointToLight))
                 {
                     float diffuseCoefficient = Calc.DiffuseCoefficient(hitInfo.Normal, pointToLight);
                     finalColor += Vec3.Multiply(objectColor, light.Color) * diffuseCoefficient;
@@ -83,10 +83,10 @@ namespace rt.Present
             return new ColorReport(finalColor);
         }
 
-        private bool IsPathwayToLightClear(Vec3 origin, Vec3 direction)
+        private bool IsPathwayToLightClear(Vec3 origin, Vec3 surfaceNormal, Vec3 direction)
         {
-            const float ShadowFeelerEpsilon = 0.001f;
-            var ray = new Ray(origin + direction * ShadowFeelerEpsilon, direction);
+            const float ShadowFeelerEpsilon = 0.0001f;
+            var ray = new Ray(origin + surfaceNormal * ShadowFeelerEpsilon, direction);
             return this.Project(ray) == null;
         }
 
