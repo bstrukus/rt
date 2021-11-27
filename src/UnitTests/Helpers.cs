@@ -11,7 +11,7 @@ namespace UnitTests
     {
         public const float Epsilon = 0.00001f;
 
-        public static Material DefaultMaterial = new Material(Vec3.One);
+        public static Material DefaultMaterial = new Material(Vec3.One, 1.0f, 1.0f);
 
         public static Transform SimpleTransform(Vec3 pos, float scale)
         {
@@ -20,7 +20,7 @@ namespace UnitTests
 
         public static Material SimpleMaterial(Vec3 color)
         {
-            return new Material(color);
+            return new Material(color, 1.0f, 1.0f);
         }
     }
 }

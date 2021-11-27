@@ -71,15 +71,21 @@ namespace rt.Present
                 // If pathway not obstructed, calculate diffuse
                 if (this.IsPathwayToLightClear(hitInfo.Point, hitInfo.Normal, pointToLight))
                 {
+                    // Diffuse
                     float diffuseCoefficient = Calc.DiffuseCoefficient(hitInfo.Normal, pointToLight);
-                    finalColor += Vec3.Multiply(objectColor, light.Color) * diffuseCoefficient;
-                }
-                else
-                {
-                    // Just ambient?
-                    finalColor += Vec3.Zero;
+                    Vec3 diffuseReflectionTerm = diffuseCoefficient * Vec3.Multiply(objectColor, light.Color);
+
+                    // Specular
+                    Vec3 reflectionVector = Calc.Reflect(pointToLight, hitInfo.Normal).Normalized();
+                    Vec3 pointToEye = (ray.Origin - hitInfo.Point).Normalized();
+                    float specularCoefficient = Calc.SpecularCoefficient(reflectionVector, pointToEye,
+                                                                         hitInfo.Material.SpecularBase, hitInfo.Material.SpecularExponent);
+                    Vec3 specularReflectionTerm = specularCoefficient * light.Color;
+
+                    finalColor += diffuseReflectionTerm + specularReflectionTerm;
                 }
             }
+            finalColor += Vec3.Multiply(objectColor, this.AmbientColor);
             return new ColorReport(finalColor);
         }
 

@@ -241,7 +241,9 @@ namespace rt.Data
         private static Material CreateMaterial(MaterialData data)
         {
             return new Material(
-                color: CreateVec3(data.Diffuse));
+                color: CreateVec3(data.Diffuse),
+                specularBase: (float)data.SpecularExponent,
+                specularExponent: (float)data.SpecularExponent);
         }
 
         private static Math.Vec3 CreateVec3(List<double> vec3)

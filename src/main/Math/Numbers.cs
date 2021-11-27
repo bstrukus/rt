@@ -91,5 +91,10 @@ namespace rt.Math
 
             return System.Math.Sqrt(value);
         }
+
+        public static float Pow(float baseValue, float exponent)
+        {
+            return System.MathF.Pow(baseValue, exponent);
+        }
     }
 }

@@ -163,14 +163,16 @@ namespace rt.Render
             return Numbers.Clamp(Vec3.Dot(normal, lightVector), 0.0f, 1.0f);
         }
 
-        public static float SpecularCoefficient()
+        public static float SpecularCoefficient(Vec3 reflectionVector, Vec3 viewVector, float specBase, float specExponent)
         {
-            return 0.0f;
+            float relativeViewFactor = Numbers.Clamp(Vec3.Dot(reflectionVector, viewVector), 0.0f, 1.0f);
+            return specBase * Numbers.Pow(relativeViewFactor, specExponent);
         }
 
-        public static Vec3 Reflect()
+        public static Vec3 Reflect(Vec3 incidentVector, Vec3 normal)
         {
-            return Vec3.Zero;
+            // #qué Should this be normalized?
+            return 2.0f * Vec3.Dot(incidentVector, normal) * normal - incidentVector;
         }
 
         public static Vec3 Refract()
