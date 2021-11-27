@@ -54,37 +54,68 @@ namespace rt.Present
 
         private ColorReport CalculateLighting(HitInfo hitInfo, Ray ray)
         {
-            Vec3 objectColor = hitInfo.Material.Color;
             Vec3 finalColor = Vec3.Zero;
+            if (this.DebugLightCalc(hitInfo, ray, ref finalColor))
+            {
+                return new ColorReport(finalColor);
+            }
+
+            Vec3 objectColor = hitInfo.Material.Color;
+
+            // Current best lighting calculation
+            // Light contribution, no shadow tests yet
+            foreach (var light in this.lights)
+            {
+                Vec3 pointToLight = (light.Transform.Position - hitInfo.Point).Normalized();
+                // Detect shadows along the pointToLight vector
+                // If pathway not obstructed, calculate diffuse
+                if (this.IsPathwayToLightClear(hitInfo.Point, pointToLight))
+                {
+                    float diffuseCoefficient = Calc.DiffuseCoefficient(hitInfo.Normal, pointToLight);
+                    finalColor += Vec3.Multiply(objectColor, light.Color) * diffuseCoefficient;
+                }
+                else
+                {
+                    // Just ambient?
+                    finalColor += Vec3.Zero;
+                }
+            }
+            return new ColorReport(finalColor);
+        }
+
+        private bool IsPathwayToLightClear(Vec3 origin, Vec3 direction)
+        {
+            const float ShadowFeelerEpsilon = 0.001f;
+            var ray = new Ray(origin + direction * ShadowFeelerEpsilon, direction);
+            return this.Project(ray) == null;
+        }
+
+        private bool DebugLightCalc(HitInfo hitInfo, Ray ray, ref Vec3 outputColor)
+        {
+            // #todo This can be written more clearly, switch statement?
+            Vec3 objectColor = hitInfo.Material.Color;
 
             if (Levers.GetOption(Levers.Option.BooleanTest))
             {
-                finalColor = objectColor;
+                outputColor = objectColor;
             }
             else if (Levers.GetOption(Levers.Option.RenderNormals))
             {
-                finalColor = hitInfo.Normal.Clamped(0.0f, 1.0f);
+                outputColor = hitInfo.Normal.Clamped(0.0f, 1.0f);
             }
             else if (Levers.GetOption(Levers.Option.ViewVectorLighting))
             {
                 Vec3 pointToEye = (ray.Origin - hitInfo.Point).Normalized();
                 float diffuseCoefficient = Calc.DiffuseCoefficient(hitInfo.Normal, pointToEye);
 
-                finalColor += objectColor * diffuseCoefficient;
+                outputColor += objectColor * diffuseCoefficient;
             }
-            // Current best lighting calculation
             else
             {
-                // Light contribution, no shadow tests yet
-                foreach (var light in this.lights)
-                {
-                    Vec3 pointToLight = (light.Transform.Position - hitInfo.Point).Normalized();
-                    float diffuseCoefficient = Calc.DiffuseCoefficient(hitInfo.Normal, pointToLight);
-                    finalColor += objectColor * diffuseCoefficient * light.Color.X;
-                }
+                outputColor = Vec3.Zero;
+                return false;
             }
-
-            return new ColorReport(finalColor);
+            return true;
         }
 
         public HitInfo Project(Ray ray)
