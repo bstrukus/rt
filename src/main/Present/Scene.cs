@@ -66,11 +66,12 @@ namespace rt.Present
             // Light contribution, no shadow tests yet
             foreach (var light in this.lights)
             {
-                Vec3 pointToLight = (light.Transform.Position - hitInfo.Point).Normalized();
-                // Detect shadows along the pointToLight vector
-                // If pathway not obstructed, calculate diffuse
-                if (this.IsPathwayToLightClear(hitInfo.Point, hitInfo.Normal, pointToLight))
+                // Shadow check
+                if (this.IsPathwayToLightClear(hitInfo, light))
                 {
+                    // #optimize Can reuse the PointToLight vector from the shadow test
+                    Vec3 pointToLight = (light.Transform.Position - hitInfo.Point).Normalized();
+
                     // Diffuse
                     float diffuseCoefficient = Calc.DiffuseCoefficient(hitInfo.Normal, pointToLight);
                     Vec3 diffuseReflectionTerm = diffuseCoefficient * Vec3.Multiply(objectColor, light.Color);
@@ -89,11 +90,25 @@ namespace rt.Present
             return new ColorReport(finalColor);
         }
 
-        private bool IsPathwayToLightClear(Vec3 origin, Vec3 surfaceNormal, Vec3 direction)
+        private bool IsPathwayToLightClear(HitInfo hitInfo, Light light)
         {
+            Vec3 origin = hitInfo.Point;
+            Vec3 surfaceNormal = hitInfo.Normal;
+            Vec3 direction = (light.Transform.Position - hitInfo.Point);
+            float distance = direction.Length();
+            direction = direction.Normalized();
+
+            // #bug The problem here is that we aren't checking to see if the hit distance is beyond the light
             const float ShadowFeelerEpsilon = 0.0001f;
+            if (Levers.GetOption(Levers.Option.DisableShadows))
+            {
+                return true;
+            }
+
             var ray = new Ray(origin + surfaceNormal * ShadowFeelerEpsilon, direction);
-            return this.Project(ray) == null;
+            HitInfo lightTrace = this.Project(ray);
+            // #optimize Can test a segment against shapes, might be faster?
+            return lightTrace == null || distance < lightTrace.Distance;
         }
 
         private bool DebugLightCalc(HitInfo hitInfo, Ray ray, ref Vec3 outputColor)

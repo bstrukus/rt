@@ -8,17 +8,21 @@ namespace rt.Execute
 
     internal class Levers
     {
+        // #todo Read all of these values in from the config
         private const bool DebuggingEnabled = true;
-        public const int ObjectStart = 9;
-        public const int ObjectLimit = 1;
+
+        public const int ObjectStart = 43;
+        public const int ObjectLimit = 2;
 
         public enum Option
         {
             // Lighting Calculation
-            BooleanTest,
 
+            BooleanTest,
             RenderNormals,
             ViewVectorLighting,
+
+            DisableShadows,
 
             // Scene Loading
             PrintSceneLoading,
@@ -53,6 +57,7 @@ namespace rt.Execute
                 //Option.BooleanTest,
                 //Option.RenderNormals,
                 //Option.ViewVectorLighting,
+                //Option.DisableShadows,
 
                 // #levers Scene Loading
                 //Option.PrintSceneLoading,
