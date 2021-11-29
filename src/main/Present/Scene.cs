@@ -36,17 +36,17 @@ namespace rt.Present
             this.AmbientColor = ambientColor;
         }
 
-        public ColorReport Trace(Ray ray)
+        public ColorReport Trace(Ray ray, int depth = 1)
         {
+            if (depth == 0)
+            {
+                return new ColorReport(Vec3.Zero);
+            }
+
             HitInfo hitInfo = this.Project(ray);
             if (hitInfo == null)
             {
-                return new ColorReport(this.AmbientColor);
-            }
-
-            if (!this.HasLights())
-            {
-                return new ColorReport(hitInfo.Material.Color);
+                return new ColorReport(Vec3.Zero);
             }
 
             return CalculateLighting(hitInfo, ray);
@@ -54,6 +54,11 @@ namespace rt.Present
 
         private ColorReport CalculateLighting(HitInfo hitInfo, Ray ray)
         {
+            if (!this.HasLights())
+            {
+                return new ColorReport(hitInfo.Material.Color);
+            }
+
             Vec3 finalColor = Vec3.Zero;
             if (this.DebugLightCalc(hitInfo, ray, ref finalColor))
             {

@@ -4,6 +4,8 @@
 
 namespace rt.Execute
 {
+    using rt.Utility;
+
     public class Runner
     {
         private Render.Camera camera;
@@ -26,18 +28,25 @@ namespace rt.Execute
 
         public void Execute()
         {
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+
+            const int depth = 1;
+
             // Generate rays from the camera's eye through the projection plane
             for (int y = 0; y < this.image.Height; ++y)
             {
                 for (int x = 0; x < this.image.Width; ++x)
                 {
-                    var scaledPixel = this.image.InterpolatedPixel(x, y);
-                    var ray = this.camera.GenerateRay(scaledPixel);
+                    var interpolatedPixel = this.image.InterpolatedPixel(x, y);
+                    var ray = this.camera.GenerateRay(interpolatedPixel);
 
-                    var colorReport = this.scene.Trace(ray);
+                    var colorReport = this.scene.Trace(ray, depth);
                     image.SetPixel(x, y, color: colorReport.Color);
                 }
             }
+
+            stopwatch.Stop();
+            Log.Info($"RUN TIME: " + string.Format("{0:0.00}", stopwatch.Elapsed.TotalSeconds) + " seconds");
 
             image.Save();
 
