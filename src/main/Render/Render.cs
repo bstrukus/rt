@@ -151,6 +151,21 @@ namespace rt.Render
         {
             this.Color = color.Clamped(0.0f, 1.0f);
         }
+
+        public static ColorReport operator *(float scalar, ColorReport colorReport)
+        {
+            return new ColorReport(colorReport.Color * scalar);
+        }
+
+        public static ColorReport operator *(ColorReport colorReport, float scalar)
+        {
+            return new ColorReport(colorReport.Color * scalar);
+        }
+
+        public static ColorReport operator +(ColorReport lhs, ColorReport rhs)
+        {
+            return new ColorReport(lhs.Color + rhs.Color);
+        }
     }
 
     public static class Calc

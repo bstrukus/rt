@@ -30,7 +30,8 @@ namespace rt.Execute
         {
             var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 
-            const int depth = 1;
+            // #todo Read this in from the config file
+            const int depth = 10;
 
             // Generate rays from the camera's eye through the projection plane
             for (int y = 0; y < this.image.Height; ++y)

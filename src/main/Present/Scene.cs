@@ -16,6 +16,9 @@ namespace rt.Present
     /// </summary>
     public class Scene
     {
+        private const float ShadowFeelerEpsilon = 0.001f;
+        private const float ReflectionNudgeEpsilon = 0.001f;
+
         public Vec3 AmbientColor { get; private set; }
 
         private readonly List<IHittable> hittables;
@@ -36,9 +39,9 @@ namespace rt.Present
             this.AmbientColor = ambientColor;
         }
 
-        public ColorReport Trace(Ray ray, int depth = 1)
+        public ColorReport Trace(Ray ray, int depth)
         {
-            if (depth == 0)
+            if (depth < 0)
             {
                 return new ColorReport(Vec3.Zero);
             }
@@ -49,7 +52,23 @@ namespace rt.Present
                 return new ColorReport(Vec3.Zero);
             }
 
-            return CalculateLighting(hitInfo, ray);
+            var color = CalculateLighting(hitInfo, ray);
+
+            if (hitInfo.Material.SpecularCoefficient == 0.0f)
+            {
+                return color;
+            }
+
+            var reflectedRay = this.CalculateReflectedRay(ray, hitInfo);
+
+            return color + hitInfo.Material.SpecularCoefficient * this.Trace(reflectedRay, depth - 1);
+        }
+
+        private Ray CalculateReflectedRay(Ray ray, HitInfo hitInfo)
+        {
+            Vec3 newOrigin = hitInfo.Point + hitInfo.Normal * ReflectionNudgeEpsilon;
+            Vec3 newDirection = Calc.Reflect(-ray.Direction, hitInfo.Normal).Normalized();
+            return new Ray(newOrigin, newDirection);
         }
 
         private ColorReport CalculateLighting(HitInfo hitInfo, Ray ray)
@@ -97,8 +116,6 @@ namespace rt.Present
 
         private bool IsPathwayToLightClear(HitInfo hitInfo, Light light)
         {
-            // #todo Move this somewhere centralized?
-            const float ShadowFeelerEpsilon = 0.001f;
             if (Levers.GetOption(Levers.Option.DisableShadows))
             {
                 return true;
