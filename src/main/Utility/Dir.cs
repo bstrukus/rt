@@ -11,6 +11,17 @@ namespace rt.Utility
     /// </summary>
     public static class Dir
     {
+        /* #todo Need to have this class handle all file path resolution in the following ways
+         * 1. Check to see if a directory was provided for the location of the scenes, if so use that
+         * 2. Else, check to see if the config/scene files are adjacent to the EXE, if so use that
+         * 3. Else, hardcode the dev paths as they currently exist and use that
+         * - The idea is to check to see if a file exists at the location in the specific step instead of just assuming so
+         * - Need to move all path-building logic here, remove that logic from ConfigData
+         * - For ConfigData, there's only 2 options
+         *   1. Check to see if that file is adjacent to the EXE
+         *   2. Check to see if that file is in the dev path
+         */
+
         private static string OutputDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}";
 
         private static string ConfigDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}..\\..\\..\\..\\";
