@@ -42,9 +42,6 @@ namespace rt.Math
         public float Length()
         {
             float squaredLength = this.LengthSq();
-
-            Debug.Assert(squaredLength > Numbers.Epsilon, "Vec3 - Can't get length of zero vector");
-
             return (float)System.Math.Sqrt(squaredLength);
         }
 
