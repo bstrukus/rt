@@ -18,6 +18,7 @@ namespace rt.Present
     {
         private const float ShadowFeelerEpsilon = 0.001f;
         private const float ReflectionNudgeEpsilon = 0.001f;
+        private const float AirTransmissionFactor = 1.0f;
 
         public Vec3 AmbientColor { get; private set; }
 
@@ -41,27 +42,51 @@ namespace rt.Present
 
         public ColorReport Trace(Ray ray, int depth)
         {
+            return Trace(ray, AirTransmissionFactor, depth);
+        }
+
+        private ColorReport Trace(Ray ray, float currRefractionIndex, int depth)
+        {
             if (depth < 0)
             {
+                // Max depth reached
                 return new ColorReport(Vec3.Zero);
             }
 
             HitInfo hitInfo = this.Project(ray);
-            if (hitInfo == null)
+            if (hitInfo == null || Numbers.AreEqual(hitInfo.Distance, 0.0f))
             {
+                // No collision occurred
                 return new ColorReport(Vec3.Zero);
             }
 
-            var color = CalculateLighting(hitInfo, ray);
+            // Calculate index of refraction
+            float nextRefractionIndex = currRefractionIndex == AirTransmissionFactor ?
+                hitInfo.Material.IndexOfRefraction :
+                AirTransmissionFactor;
 
-            if (hitInfo.Material.SpecularCoefficient == 0.0f)
+            float specularCoefficient = hitInfo.Material.SpecularCoefficient;
+
+            // Calculate lighting at current point
+            var color = CalculateLighting(ray, hitInfo);
+
+            // Calculate reflected lighting at current point
+            float relectionCoefficient = specularCoefficient * this.CalculateReflectionCoefficient(ray, hitInfo, currRefractionIndex, nextRefractionIndex);
+            if (Numbers.AreNotEqual(relectionCoefficient, 0.0f))
             {
-                return color;
+                var reflectedRay = this.CalculateReflectedRay(ray, hitInfo);
+                color += relectionCoefficient * this.Trace(reflectedRay, currRefractionIndex, depth - 1);
             }
 
-            var reflectedRay = this.CalculateReflectedRay(ray, hitInfo);
+            // Calculate transmitted lighting at current point
+            float transmissionCoefficient = specularCoefficient * this.CalculateTransmissionCoefficient(hitInfo);
+            if (Numbers.AreNotEqual(transmissionCoefficient, 0.0f))
+            {
+                var transmittedRay = this.CalculateTransmittedRay(ray, hitInfo, currRefractionIndex, nextRefractionIndex);
+                color += specularCoefficient * transmissionCoefficient * this.Trace(transmittedRay, nextRefractionIndex, depth - 1);
+            }
 
-            return color + hitInfo.Material.SpecularCoefficient * this.Trace(reflectedRay, depth - 1);
+            return color;
         }
 
         private Ray CalculateReflectedRay(Ray ray, HitInfo hitInfo)
@@ -71,7 +96,22 @@ namespace rt.Present
             return new Ray(newOrigin, newDirection);
         }
 
-        private ColorReport CalculateLighting(HitInfo hitInfo, Ray ray)
+        private Ray CalculateTransmittedRay(Ray ray, HitInfo hitInfo, float currentRefractionIndex, float nextRefractionIndex)
+        {
+            return null;
+        }
+
+        private float CalculateReflectionCoefficient(Ray ray, HitInfo hitInfo, float currentRefractionIndex, float nextRefractionIndex)
+        {
+            return 1.0f;
+        }
+
+        private float CalculateTransmissionCoefficient(HitInfo hitInfo)
+        {
+            return 0.0f;
+        }
+
+        private ColorReport CalculateLighting(Ray ray, HitInfo hitInfo)
         {
             if (!this.HasLights())
             {

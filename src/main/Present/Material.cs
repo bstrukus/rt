@@ -17,6 +17,8 @@ namespace rt.Present
         public float SpecularCoefficient { get; private set; }
         public float SpecularExponent { get; private set; }
 
+        public float IndexOfRefraction { get; private set; }
+
         public Material(Vec3 color, float specularCoefficient, float specularExponent)
         {
             this.Color = color;

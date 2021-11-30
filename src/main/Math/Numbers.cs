@@ -48,6 +48,11 @@ namespace rt.Math
             return Abs(lhs - rhs) < Epsilon;
         }
 
+        public static bool AreNotEqual(float lhs, float rhs)
+        {
+            return Abs(lhs - rhs) > Epsilon;
+        }
+
         public static float Abs(float val)
         {
             return val < 0.0f ? -val : val;
