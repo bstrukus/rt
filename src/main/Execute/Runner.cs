@@ -8,15 +8,11 @@ namespace rt.Execute
 
     public class Runner
     {
-        private Render.Camera camera;
-        private Render.Image image;
-        private Present.Scene scene;
+        private readonly Render.Camera camera;
+        private readonly Render.Image image;
+        private readonly Present.Scene scene;
 
-        // Jobs
-        public Runner(Workload workload)
-        {
-            //
-        }
+        private System.Diagnostics.Stopwatch stopwatch;
 
         public Runner(Present.Scene scene, Render.Camera camera, Render.Image image)
         {
@@ -28,10 +24,7 @@ namespace rt.Execute
 
         public void Execute()
         {
-            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-
-            // #todo Read this in from the config file
-            const int depth = 10;
+            this.StartTimer();
 
             // Generate rays from the camera's eye through the projection plane
             for (int y = 0; y < this.image.Height; ++y)
@@ -41,17 +34,31 @@ namespace rt.Execute
                     var interpolatedPixel = this.image.InterpolatedPixel(x, y);
                     var ray = this.camera.GenerateRay(interpolatedPixel);
 
-                    var colorReport = this.scene.Trace(ray, depth);
-                    image.SetPixel(x, y, color: colorReport.Color);
+                    var colorReport = this.scene.Trace(ray, this.image.RenderDepth);
+                    this.image.SetPixel(x, y, color: colorReport.Color);
                 }
             }
 
-            stopwatch.Stop();
-            Log.Info($"RUN TIME: " + string.Format("{0:0.00}", stopwatch.Elapsed.TotalSeconds) + " seconds");
+            this.EndTimer();
+            this.FinalizeImage();
+        }
 
-            image.Save();
+        private void FinalizeImage()
+        {
+            this.image.Save();
 
-            image.Open();
+            this.image.Open();
+        }
+
+        private void StartTimer()
+        {
+            this.stopwatch = System.Diagnostics.Stopwatch.StartNew();
+        }
+
+        private void EndTimer()
+        {
+            this.stopwatch.Stop();
+            Log.Info($"RUN TIME: " + string.Format("{0:0.00}", this.stopwatch.Elapsed.TotalSeconds) + " Mississippis");
         }
     }
 }

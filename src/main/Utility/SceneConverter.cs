@@ -104,15 +104,6 @@ namespace rt.Utility
             }
         }
 
-        private static ImageData CreateImageData(int width, string filename)
-        {
-            return new ImageData
-            {
-                Width = width,
-                FileName = ReplaceFileExtension(filename, ".bmp")
-            };
-        }
-
         private static bool Save(SceneData sceneData, string outputFilename)
         {
             string newFilename = ReplaceFileExtension(outputFilename, ".json");

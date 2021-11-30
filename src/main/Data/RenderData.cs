@@ -2,32 +2,11 @@
  * Copyright Ben Strukus
  */
 
+using Newtonsoft.Json;
+using System.Collections.Generic;
+
 namespace rt.Data
 {
-    using Newtonsoft.Json;
-    using System.Collections.Generic;
-
-    public class ImageData : DataBase
-    {
-        [JsonProperty("width")]
-        public int Width { get; set; }
-
-        [JsonProperty("filename")]
-        public string FileName { get; set; }
-
-        public override bool IsValid()
-        {
-            return this.Width > 0 && !string.IsNullOrEmpty(this.FileName);
-        }
-
-        public new void PrintData(int spaceCount)
-        {
-            base.PrintData(spaceCount);
-            base.Print("Width", this.Width);
-            base.Print("FileName", this.FileName);
-        }
-    }
-
     public class CameraData : DataBase
     {
         [JsonProperty("eyeDirection")]

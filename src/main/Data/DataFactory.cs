@@ -184,21 +184,16 @@ namespace rt.Data
 
         public Image CreateImage(ConfigData configData)
         {
-            var imageData = new ImageData
-            {
-                Width = configData.Width,
-                FileName = configData.GetOutputFilename()
-            };
+            Debug.Assert(configData != null);
             var camera = this.CreateCamera();
 
-            Debug.Assert(imageData != null);
             Debug.Assert(camera != null);
 
             float aspectRatio = camera.AspectRatio;
-            int width = imageData.Width;
+            int width = configData.Width;
             int height = (int)((float)width / aspectRatio);
 
-            return new Image(width, height, imageData.FileName);
+            return new Image(width, height, configData.GetOutputFilename(), configData.RenderDepth);
         }
 
         public static bool ValidateList(List<double> vector, int expectedCount, bool shouldBeNormalizedValues = true)

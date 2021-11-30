@@ -89,14 +89,20 @@ namespace rt.Render
         /// </summary>
         public int Height { get; private set; }
 
+        /// <summary>
+        /// Value specifying the number of recursive ray casts allowed during scene tracing.
+        /// </summary>
+        public int RenderDepth { get; private set; }
+
         private readonly string fileName;
         private PixelBuffer buffer;
 
-        public Image(int width, int height, string fileName)
+        public Image(int width, int height, string fileName, int renderDepth)
         {
             this.Width = width;
             this.Height = height;
             this.fileName = fileName;
+            this.RenderDepth = renderDepth;
 
             this.buffer = new PixelBuffer(this.Width, this.Height);
         }

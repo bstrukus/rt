@@ -27,9 +27,13 @@ namespace rt.Data
         [JsonProperty("sceneDir")]
         public string SceneDir { get; set; }
 
+        [JsonProperty("renderDepth")]
+        public int RenderDepth { get; set; }
+
         public override bool IsValid()
         {
-            return this.Width > 0 && !string.IsNullOrEmpty(this.SceneFile) &&
+            return this.Width > 0 && this.RenderDepth >= 0 &&
+                !string.IsNullOrEmpty(this.SceneFile) &&
                 (this.IsSceneConversion || this.IsSceneRenderable);
         }
 
@@ -38,6 +42,7 @@ namespace rt.Data
             base.PrintData(spaceCount);
 
             base.Print("Width", this.Width);
+            base.Print("Render Depth", this.RenderDepth);
             base.Print("Output", this.GetOutputFilename());
             base.Print("Scene", this.SceneFile);
             base.Print("Scene Directory", this.SceneDir);
@@ -54,6 +59,7 @@ namespace rt.Data
 
         public string GetSceneFullFilePath()
         {
+            // #todo Move this to Dir
             if (string.IsNullOrEmpty(this.SceneDir))
             {
                 // Use hardcoded file info
@@ -69,6 +75,7 @@ namespace rt.Data
 
         public string GetOutputFilename()
         {
+            // #todo Move this to Dir
             var tokens = this.SceneFile.Split('.');
             Debug.Assert(tokens.Length == 2);
 
