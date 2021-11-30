@@ -1,0 +1,866 @@
+{
+  "camera": {
+    "eyeDirection": [
+      0.0,
+      0.0,
+      0.5
+    ],
+    "projectionPlane": {
+      "center": [
+        0.0,
+        0.3,
+        -0.5
+      ],
+      "uAxis": [
+        0.4,
+        0.0,
+        0.0
+      ],
+      "vAxis": [
+        0.0,
+        0.3,
+        0.0
+      ]
+    }
+  },
+  "shapes": {
+    "spheres": [
+      {
+        "transform": {
+          "position": [
+            0.023,
+            0.125,
+            -0.857
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.7,
+            0.4,
+            0.7
+          ],
+          "specularCoefficient ": 0.3,
+          "specularExponent": 30.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.112,
+            0.125,
+            -1.091
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.7,
+            0.4,
+            0.7
+          ],
+          "specularCoefficient ": 0.3,
+          "specularExponent": 30.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            -0.135,
+            0.125,
+            -1.052
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.7,
+            0.4,
+            0.7
+          ],
+          "specularCoefficient ": 0.3,
+          "specularExponent": 30.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.329,
+            -1.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.125,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.7,
+            0.4,
+            0.7
+          ],
+          "specularCoefficient ": 0.3,
+          "specularExponent": 30.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        }
+      }
+    ],
+    "boxes": [],
+    "polygons": [
+      {
+        "transform": null,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "specularCoefficient ": 0.2,
+          "specularExponent": 10.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        },
+        "vertices": [
+          [
+            0.156,
+            0.0,
+            -1.988
+          ],
+          [
+            -0.891,
+            0.0,
+            -1.454
+          ],
+          [
+            -0.707,
+            0.0,
+            -0.293
+          ],
+          [
+            0.454,
+            0.0,
+            -0.109
+          ],
+          [
+            0.988,
+            0.0,
+            -1.156
+          ]
+        ]
+      },
+      {
+        "transform": null,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "specularCoefficient ": 0.2,
+          "specularExponent": 10.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        },
+        "vertices": [
+          [
+            0.988,
+            1.0,
+            -1.156
+          ],
+          [
+            0.454,
+            1.0,
+            -0.109
+          ],
+          [
+            -0.707,
+            1.0,
+            -0.293
+          ],
+          [
+            -0.891,
+            1.0,
+            -1.454
+          ],
+          [
+            0.156,
+            1.0,
+            -1.988
+          ]
+        ]
+      }
+    ],
+    "ellipsoids": [
+      {
+        "transform": null,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4,
+            0.4,
+            0.5
+          ],
+          "specularCoefficient ": 0.2,
+          "specularExponent": 10.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        },
+        "center": [
+          0.117,
+          0.0,
+          -1.741
+        ],
+        "uAxis": [
+          0.125,
+          0.0,
+          0.0
+        ],
+        "vAxis": [
+          0.0,
+          100000.0,
+          0.0
+        ],
+        "wAxis": [
+          0.0,
+          0.0,
+          0.125
+        ]
+      },
+      {
+        "transform": null,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4,
+            0.4,
+            0.5
+          ],
+          "specularCoefficient ": 0.2,
+          "specularExponent": 10.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        },
+        "center": [
+          -0.668,
+          0.0,
+          -1.34
+        ],
+        "uAxis": [
+          0.125,
+          0.0,
+          0.0
+        ],
+        "vAxis": [
+          0.0,
+          100000.0,
+          0.0
+        ],
+        "wAxis": [
+          0.0,
+          0.0,
+          0.125
+        ]
+      },
+      {
+        "transform": null,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4,
+            0.4,
+            0.5
+          ],
+          "specularCoefficient ": 0.2,
+          "specularExponent": 10.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        },
+        "center": [
+          -0.53,
+          0.0,
+          -0.47
+        ],
+        "uAxis": [
+          0.125,
+          0.0,
+          0.0
+        ],
+        "vAxis": [
+          0.0,
+          100000.0,
+          0.0
+        ],
+        "wAxis": [
+          0.0,
+          0.0,
+          0.125
+        ]
+      },
+      {
+        "transform": null,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4,
+            0.4,
+            0.5
+          ],
+          "specularCoefficient ": 0.2,
+          "specularExponent": 10.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        },
+        "center": [
+          0.34,
+          0.0,
+          -0.332
+        ],
+        "uAxis": [
+          0.125,
+          0.0,
+          0.0
+        ],
+        "vAxis": [
+          0.0,
+          100000.0,
+          0.0
+        ],
+        "wAxis": [
+          0.0,
+          0.0,
+          0.125
+        ]
+      },
+      {
+        "transform": null,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.4,
+            0.4,
+            0.5
+          ],
+          "specularCoefficient ": 0.2,
+          "specularExponent": 10.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        },
+        "center": [
+          0.741,
+          0.0,
+          -1.117
+        ],
+        "uAxis": [
+          0.125,
+          0.0,
+          0.0
+        ],
+        "vAxis": [
+          0.0,
+          100000.0,
+          0.0
+        ],
+        "wAxis": [
+          0.0,
+          0.0,
+          0.125
+        ]
+      }
+    ]
+  },
+  "lights": {
+    "points": [
+      {
+        "transform": {
+          "position": [
+            -0.011,
+            0.995,
+            -1.761
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            0.246,
+            0.995,
+            -1.72
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            0.097,
+            0.005,
+            -1.612
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            -0.727,
+            0.995,
+            -1.225
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            -0.609,
+            0.995,
+            -1.456
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            -0.552,
+            0.005,
+            -1.281
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            -0.438,
+            0.995,
+            -0.378
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            -0.622,
+            0.995,
+            -0.562
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            -0.438,
+            0.005,
+            -0.562
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            0.456,
+            0.995,
+            -0.391
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            0.225,
+            0.995,
+            -0.273
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            0.281,
+            0.005,
+            -0.448
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            0.72,
+            0.995,
+            -1.246
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            0.761,
+            0.995,
+            -0.989
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            0.612,
+            0.005,
+            -1.097
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.4,
+          0.4,
+          0.4
+        ],
+        "radius": 0.1
+      }
+    ]
+  },
+  "ambient": null,
+  "air": null
+}

@@ -1,0 +1,347 @@
+{
+  "camera": {
+    "eyeDirection": [
+      0.0,
+      0.34,
+      0.94
+    ],
+    "projectionPlane": {
+      "center": [
+        0.02,
+        0.6,
+        0.0
+      ],
+      "uAxis": [
+        0.67,
+        0.0,
+        0.0
+      ],
+      "vAxis": [
+        0.0,
+        0.47,
+        -0.17
+      ]
+    }
+  },
+  "shapes": {
+    "spheres": [
+      {
+        "transform": {
+          "position": [
+            -0.3,
+            0.6,
+            -1.25
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.1,
+        "material": {
+          "transmissionAttenuation": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "diffuse": [
+            0.1,
+            0.1,
+            0.1
+          ],
+          "specularCoefficient ": 1.0,
+          "specularExponent": 99.0,
+          "electricPermittivity": 2.3716,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.3,
+            0.6,
+            -0.75
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.1,
+        "material": {
+          "transmissionAttenuation": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "diffuse": [
+            0.1,
+            0.1,
+            0.1
+          ],
+          "specularCoefficient ": 1.0,
+          "specularExponent": 99.0,
+          "electricPermittivity": 2.3716,
+          "magneticPermeability": 1.0
+        }
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.6,
+            -0.2
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.1,
+        "material": {
+          "transmissionAttenuation": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "diffuse": [
+            0.1,
+            0.1,
+            0.1
+          ],
+          "specularCoefficient ": 1.0,
+          "specularExponent": 99.0,
+          "electricPermittivity": 2.3716,
+          "magneticPermeability": 1.0
+        }
+      }
+    ],
+    "boxes": [
+      {
+        "transform": null,
+        "corner": [
+          -0.4,
+          0.4,
+          0.05
+        ],
+        "lengthVector": [
+          0.8,
+          0.0,
+          0.0
+        ],
+        "widthVector": [
+          0.0,
+          0.0,
+          -1.5
+        ],
+        "heightVector": [
+          0.0,
+          0.1,
+          0.0
+        ],
+        "material": {
+          "transmissionAttenuation": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "diffuse": [
+            0.1,
+            0.1,
+            0.1
+          ],
+          "specularCoefficient ": 1.0,
+          "specularExponent": 99.0,
+          "electricPermittivity": 2.3716,
+          "magneticPermeability": 1.0
+        }
+      }
+    ],
+    "polygons": [],
+    "ellipsoids": [
+      {
+        "transform": null,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            1.0,
+            1.0,
+            0.0
+          ],
+          "specularCoefficient ": 0.0,
+          "specularExponent": 0.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        },
+        "center": [
+          0.0,
+          1.0,
+          -2.0
+        ],
+        "uAxis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "vAxis": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "wAxis": [
+          0.0,
+          0.0,
+          0.1
+        ]
+      },
+      {
+        "transform": null,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            1.0,
+            1.0,
+            1.0
+          ],
+          "specularCoefficient ": 0.0,
+          "specularExponent": 0.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        },
+        "center": [
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "uAxis": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "vAxis": [
+          0.0,
+          0.1,
+          0.0
+        ],
+        "wAxis": [
+          0.0,
+          0.0,
+          1.0
+        ]
+      }
+    ]
+  },
+  "lights": {
+    "points": [
+      {
+        "transform": {
+          "position": [
+            0.5,
+            0.25,
+            -1.5
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          1.0,
+          0.5,
+          0.5
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            -0.5,
+            0.25,
+            -1.5
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.5,
+          0.5,
+          1.0
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            0.0,
+            0.25,
+            -1.5
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.2,
+          0.2,
+          0.2
+        ],
+        "radius": 0.1
+      }
+    ]
+  },
+  "ambient": null,
+  "air": null
+}
