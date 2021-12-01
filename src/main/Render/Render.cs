@@ -192,13 +192,22 @@ namespace rt.Render
 
         public static Vec3 Reflect(Vec3 incidentVector, Vec3 normal)
         {
-            // #qué Should this be normalized?
+            // This simply reflects a vector about a normal, any normalization needs should be handled by the calling function
             return 2.0f * Vec3.Dot(incidentVector, normal) * normal - incidentVector;
         }
 
-        public static Vec3 Refract()
+        public static Vec3 Refract(Vec3 incidentVector, Vec3 normal, float currRefractionIndex, float nextRefractionIndex)
         {
-            return Vec3.Zero;
+            float relativeRefractionIndex = currRefractionIndex / nextRefractionIndex;
+            float iDotN = Vec3.Dot(incidentVector, normal);
+
+            float cosThetaT = Numbers.Sqrt(1.0f - (relativeRefractionIndex * relativeRefractionIndex) * (1.0f - (iDotN * iDotN)));
+            if (iDotN >= 0.0f)
+            {
+                cosThetaT *= -1.0f;
+            }
+
+            return (cosThetaT + relativeRefractionIndex * iDotN) * normal - relativeRefractionIndex * incidentVector;
         }
     }
 }

@@ -18,6 +18,7 @@ namespace rt.Present
     {
         private const float ShadowFeelerEpsilon = 0.001f;
         private const float ReflectionNudgeEpsilon = 0.001f;
+        private const float TransmissionNudgeEpsilon = 0.001f;
         private const float AirTransmissionFactor = 1.0f;
 
         public Vec3 AmbientColor { get; private set; }
@@ -62,8 +63,8 @@ namespace rt.Present
 
             // Calculate index of refraction
             float nextRefractionIndex = currRefractionIndex == AirTransmissionFactor ?
-                hitInfo.Material.IndexOfRefraction :
-                AirTransmissionFactor;
+                                        hitInfo.Material.IndexOfRefraction :
+                                        AirTransmissionFactor;
 
             float specularCoefficient = hitInfo.Material.SpecularCoefficient;
 
@@ -71,7 +72,9 @@ namespace rt.Present
             var color = CalculateLighting(ray, hitInfo);
 
             // Calculate reflected lighting at current point
-            float relectionCoefficient = specularCoefficient * this.CalculateReflectionCoefficient(ray, hitInfo, currRefractionIndex, nextRefractionIndex);
+            float relectionCoefficient = specularCoefficient * this.CalculateReflectionCoefficient(ray, hitInfo,
+                                                                                                   currRefractionIndex,
+                                                                                                   nextRefractionIndex);
             if (Numbers.AreNotEqual(relectionCoefficient, 0.0f))
             {
                 var reflectedRay = this.CalculateReflectedRay(ray, hitInfo);
@@ -82,7 +85,7 @@ namespace rt.Present
             float transmissionCoefficient = specularCoefficient * this.CalculateTransmissionCoefficient(hitInfo);
             if (Numbers.AreNotEqual(transmissionCoefficient, 0.0f))
             {
-                var transmittedRay = this.CalculateTransmittedRay(ray, hitInfo, currRefractionIndex, nextRefractionIndex);
+                var transmittedRay = this.CalculateRefractedRay(ray, hitInfo, currRefractionIndex, nextRefractionIndex);
                 color += specularCoefficient * transmissionCoefficient * this.Trace(transmittedRay, nextRefractionIndex, depth - 1);
             }
 
@@ -96,18 +99,31 @@ namespace rt.Present
             return new Ray(newOrigin, newDirection);
         }
 
-        private Ray CalculateTransmittedRay(Ray ray, HitInfo hitInfo, float currentRefractionIndex, float nextRefractionIndex)
+        /* #todo There might be a lot to do here to support transmission, a few thoughts
+         * - I'm not sure how my collision tests support rays that originate inside of the shape, I think ellipsoid is fine but
+         *   I don't think sphere supports getting any useful information
+         * - I'm not sure what to do with the surface normal if the collision originates inside of the shape, invert it?
+         */
+
+        private Ray CalculateRefractedRay(Ray ray, HitInfo hitInfo, float currentRefractionIndex, float nextRefractionIndex)
         {
-            return null;
+            Vec3 normal = hitInfo.Normal;   // Might need to invert if we're going from object -> air
+
+            // Snell's Law of Refraction
+            Vec3 newOrigin = hitInfo.Point + normal * TransmissionNudgeEpsilon;
+            Vec3 newDirection = Calc.Refract(-ray.Direction, normal, currentRefractionIndex, nextRefractionIndex).Normalized();
+            return new Ray(newOrigin, newDirection);
         }
 
         private float CalculateReflectionCoefficient(Ray ray, HitInfo hitInfo, float currentRefractionIndex, float nextRefractionIndex)
         {
+            // #todo #transmission Fresnel Equations
             return 1.0f;
         }
 
         private float CalculateTransmissionCoefficient(HitInfo hitInfo)
         {
+            // #todo #transmission
             return 0.0f;
         }
 
@@ -144,7 +160,8 @@ namespace rt.Present
                     Vec3 reflectionVector = Calc.Reflect(pointToLight, hitInfo.Normal).Normalized();
                     Vec3 pointToEye = (ray.Origin - hitInfo.Point).Normalized();
                     float specularCoefficient = Calc.SpecularCoefficient(reflectionVector, pointToEye,
-                                                                         hitInfo.Material.SpecularCoefficient, hitInfo.Material.SpecularExponent);
+                                                                         hitInfo.Material.SpecularCoefficient,
+                                                                         hitInfo.Material.SpecularExponent);
                     Vec3 specularReflectionTerm = specularCoefficient * light.Color;
 
                     finalColor += diffuseReflectionTerm + specularReflectionTerm;
