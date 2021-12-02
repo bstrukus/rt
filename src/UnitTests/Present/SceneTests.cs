@@ -28,7 +28,7 @@ namespace UnitTests.Present
                 Helpers.SimpleMaterial(Vec3.AxisX),
                 0.5f);
             var hittables = new List<IHittable> { closeSphere, farSphere };
-            var scene = new Scene(hittables, null);
+            var scene = new Scene(hittables, null, Vec3.Zero);
             var ray = new Ray(Vec3.Zero, Vec3.AxisX);
 
             // Act

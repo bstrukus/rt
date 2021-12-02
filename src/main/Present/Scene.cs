@@ -48,6 +48,7 @@ namespace rt.Present
 
         private ColorReport Trace(Ray ray, float currRefractionIndex, int depth)
         {
+            //////////////////////////////////////////////////////////////////////////
             if (depth < 0)
             {
                 // Max depth reached
@@ -61,34 +62,45 @@ namespace rt.Present
                 return new ColorReport(Vec3.Zero);
             }
 
+            //////////////////////////////////////////////////////////////////////////
+            // Calculate lighting at current point
+            var color = CalculateLighting(ray, hitInfo);
+
+            //////////////////////////////////////////////////////////////////////////
             // Calculate index of refraction
             float nextRefractionIndex = currRefractionIndex == AirTransmissionFactor ?
                                         hitInfo.Material.IndexOfRefraction :
                                         AirTransmissionFactor;
+            // #optimize Equations within this part of the tracing process all utilize the relative refraction index, so might
+            // be worth calculating it here and passing it to the Calc functions
 
-            float specularCoefficient = hitInfo.Material.SpecularCoefficient;
+            //////////////////////////////////////////////////////////////////////////
+            // Calculate reflection & transmission coefficients
+            float reflectionCoefficient = this.CalculateReflectionCoefficient(ray, hitInfo, currRefractionIndex,
+                                                                                            nextRefractionIndex);
+            float transmissionCoefficient = 1.0f - reflectionCoefficient;
 
-            // Calculate lighting at current point
-            var color = CalculateLighting(ray, hitInfo);
+            // Factor in energy lost to the surface
+            reflectionCoefficient *= hitInfo.Material.SpecularCoefficient;
+            transmissionCoefficient *= hitInfo.Material.SpecularCoefficient;
 
+            //////////////////////////////////////////////////////////////////////////
             // Calculate reflected lighting at current point
-            float relectionCoefficient = specularCoefficient * this.CalculateReflectionCoefficient(ray, hitInfo,
-                                                                                                   currRefractionIndex,
-                                                                                                   nextRefractionIndex);
-            if (Numbers.AreNotEqual(relectionCoefficient, 0.0f))
+            if (Numbers.AreNotEqual(reflectionCoefficient, 0.0f))
             {
                 var reflectedRay = this.CalculateReflectedRay(ray, hitInfo);
-                color += relectionCoefficient * this.Trace(reflectedRay, currRefractionIndex, depth - 1);
+                color += reflectionCoefficient * this.Trace(reflectedRay, currRefractionIndex, depth - 1);
             }
 
+            //////////////////////////////////////////////////////////////////////////
             // Calculate transmitted lighting at current point
-            float transmissionCoefficient = specularCoefficient * this.CalculateTransmissionCoefficient(hitInfo);
             if (Numbers.AreNotEqual(transmissionCoefficient, 0.0f))
             {
                 var transmittedRay = this.CalculateRefractedRay(ray, hitInfo, currRefractionIndex, nextRefractionIndex);
-                color += specularCoefficient * transmissionCoefficient * this.Trace(transmittedRay, nextRefractionIndex, depth - 1);
+                color += transmissionCoefficient * this.Trace(transmittedRay, nextRefractionIndex, depth - 1);
             }
 
+            //////////////////////////////////////////////////////////////////////////
             return color;
         }
 
@@ -107,18 +119,42 @@ namespace rt.Present
 
         private Ray CalculateRefractedRay(Ray ray, HitInfo hitInfo, float currentRefractionIndex, float nextRefractionIndex)
         {
-            Vec3 normal = hitInfo.Normal;   // Might need to invert if we're going from object -> air
-
             // Snell's Law of Refraction
-            Vec3 newOrigin = hitInfo.Point + normal * TransmissionNudgeEpsilon;
-            Vec3 newDirection = Calc.Refract(-ray.Direction, normal, currentRefractionIndex, nextRefractionIndex).Normalized();
+            Vec3 newOrigin = hitInfo.Point + hitInfo.Normal * TransmissionNudgeEpsilon; // #todo Might need to invert the normal
+            Vec3 newDirection = Calc.Refract(-ray.Direction, hitInfo.Normal, currentRefractionIndex, nextRefractionIndex).Normalized();
             return new Ray(newOrigin, newDirection);
         }
 
         private float CalculateReflectionCoefficient(Ray ray, HitInfo hitInfo, float currentRefractionIndex, float nextRefractionIndex)
         {
-            // #todo #transmission Fresnel Equations
-            return 1.0f;
+            // Fresnel Equations
+            Vec3 incidentVector = -ray.Direction;
+            Vec3 normal = hitInfo.Normal;
+
+            const float relativeMagneticPermeability = 1.0f;  // Assumption
+            float relativeRefractionIndex = currentRefractionIndex / nextRefractionIndex;
+            float cosThetaI = Vec3.Dot(incidentVector, normal);
+
+            // #optimize This is the same term calculated in the refracted ray equation
+            float radicand = 1.0f - (relativeRefractionIndex * relativeRefractionIndex) * (1.0f - (cosThetaI * cosThetaI));
+            if (radicand >= 0.0f)
+            {
+                // Handle total internal reflection
+                return 1.0f;
+            }
+            float cosThetaT = Numbers.Sqrt(radicand);
+
+            // Perpendicular ratio
+            float commonPerpendicularTerm = relativeRefractionIndex * cosThetaI;
+            float perpendicularCoefficient = (commonPerpendicularTerm - relativeMagneticPermeability * cosThetaT) /
+                                             (commonPerpendicularTerm + relativeMagneticPermeability * cosThetaT);
+
+            // Parallel ratio
+            float commonParallelTerm = relativeRefractionIndex * cosThetaT; ;
+            float parallelCoefficient = (relativeMagneticPermeability * cosThetaI - commonParallelTerm) /
+                                        (relativeMagneticPermeability * cosThetaI + commonParallelTerm);
+
+            return 0.5f * ((perpendicularCoefficient * perpendicularCoefficient) + (parallelCoefficient * parallelCoefficient);
         }
 
         private float CalculateTransmissionCoefficient(HitInfo hitInfo)

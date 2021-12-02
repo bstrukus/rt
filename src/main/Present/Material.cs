@@ -19,12 +19,22 @@ namespace rt.Present
 
         public float IndexOfRefraction { get; private set; }
 
-        public Material(Vec3 color, float specularCoefficient, float specularExponent)
+        public Vec3 TransmissionAttenuation;
+
+        private float electricPermittivity;
+        private float magneticPermeability;
+
+        public Material(Vec3 color, float specularCoefficient, float specularExponent, float electricPermittivity, float magneticPermeability)
         {
             this.Color = color;
 
             this.SpecularCoefficient = specularCoefficient;
             this.SpecularExponent = specularExponent;
+
+            this.electricPermittivity = electricPermittivity;
+            this.magneticPermeability = magneticPermeability;
+
+            this.IndexOfRefraction = Numbers.Sqrt(this.electricPermittivity * this.magneticPermeability);
         }
     }
 }

@@ -39,5 +39,39 @@ namespace UnitTests.Render
             // Assert
             Assert.IsTrue(result == 0.0f);
         }
+
+        [TestMethod]
+        public void PerpendicularIncidentVectorProducesSimilarRefractedVecttor()
+        {
+            // Arrange
+            Vec3 incidentVector = Vec3.AxisY;
+            Vec3 normal = Vec3.AxisY;
+            float currRefractIndex = 1.0f;  // air
+            float nextRefractIndex = 1.0f;  // made-up value
+
+            // Act
+            Vec3 result = Calc.Refract(incidentVector, normal, currRefractIndex, nextRefractIndex);
+            Vec3 expected = -Vec3.AxisY;
+
+            // Assert
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void DiagonalIncidentVectorProducesMirroredRefractedVector()
+        {
+            // Arrange
+            Vec3 incidentVector = Vec3.One.Normalized();    // Diagonal for all 3 axes
+            Vec3 normal = Vec3.AxisY;
+            float currRefractIndex = 1.0f;  // Simple values for easy verification
+            float nextRefractIndex = 1.0f;
+
+            // Act
+            Vec3 result = Calc.Refract(incidentVector, normal, currRefractIndex, nextRefractIndex);
+            Vec3 expected = -Vec3.One.Normalized();
+
+            // Assert
+            Assert.AreEqual(expected, result);
+        }
     }
 }

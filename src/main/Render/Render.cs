@@ -198,6 +198,7 @@ namespace rt.Render
 
         public static Vec3 Refract(Vec3 incidentVector, Vec3 normal, float currRefractionIndex, float nextRefractionIndex)
         {
+            // #todo Handle total internal reflection
             float relativeRefractionIndex = currRefractionIndex / nextRefractionIndex;
             float iDotN = Vec3.Dot(incidentVector, normal);
 

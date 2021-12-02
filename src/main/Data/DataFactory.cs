@@ -238,7 +238,9 @@ namespace rt.Data
             return new Material(
                 color: CreateVec3(data.Diffuse),
                 specularCoefficient: (float)data.SpecularCoefficient,
-                specularExponent: (float)data.SpecularExponent);
+                specularExponent: (float)data.SpecularExponent,
+                electricPermittivity: (float)data.ElectricPermittivity,
+                magneticPermeability: (float)data.MagneticPermeability);
         }
 
         private static Math.Vec3 CreateVec3(List<double> vec3)
