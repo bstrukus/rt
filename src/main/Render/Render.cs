@@ -233,7 +233,7 @@ namespace rt.Render
         public static Ray RefractedRay(Ray ray, HitInfo hitInfo, float currentRefractionIndex, float nextRefractionIndex)
         {
             // Snell's Law of Refraction
-            float nudgeDirection = currentRefractionIndex == 1.0f ? -1.0f : 1.0f;
+            float nudgeDirection = -1.0f;// currentRefractionIndex == 1.0f ? -1.0f : 1.0f;
             Vec3 newOrigin = hitInfo.Point + hitInfo.Normal * TransmissionNudgeEpsilon * nudgeDirection;
             Vec3 newDirection = Calc.Refract(-ray.Direction, hitInfo.Normal, currentRefractionIndex, nextRefractionIndex).Normalized();
             return new Ray(newOrigin, newDirection);

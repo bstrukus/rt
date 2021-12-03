@@ -60,6 +60,8 @@ namespace rt.Present
                 return new ColorReport(Vec3.Zero);
             }
 
+            hitInfo = new HitInfo(hitInfo.Point, currRefractionIndex == 1.0f ? hitInfo.Normal : -hitInfo.Normal, hitInfo.Distance, hitInfo.Material);
+
             //////////////////////////////////////////////////////////////////////////
             // Calculate lighting at current point
             var color = CalculateLighting(ray, hitInfo);
