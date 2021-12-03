@@ -64,7 +64,6 @@ namespace rt.Present
 
             //////////////////////////////////////////////////////////////////////////
             // Calculate lighting at current point
-            var color = CalculateLighting(ray, hitInfo);
 
             //////////////////////////////////////////////////////////////////////////
             // Calculate index of refraction
@@ -82,6 +81,8 @@ namespace rt.Present
             // Factor in energy lost to the surface
             reflectionCoefficient *= hitInfo.Material.SpecularCoefficient;
             transmissionCoefficient *= hitInfo.Material.SpecularCoefficient;
+
+            var color = CalculateLighting(ray, hitInfo, reflectionCoefficient);
 
             //////////////////////////////////////////////////////////////////////////
             // Calculate reflected lighting at current point
@@ -103,7 +104,7 @@ namespace rt.Present
             return color;
         }
 
-        private ColorReport CalculateLighting(Ray ray, HitInfo hitInfo)
+        private ColorReport CalculateLighting(Ray ray, HitInfo hitInfo, float reflectionCoefficient)
         {
             if (!this.HasLights())
             {
@@ -136,7 +137,8 @@ namespace rt.Present
                     Vec3 reflectionVector = Calc.Reflect(pointToLight, hitInfo.Normal).Normalized();
                     Vec3 pointToEye = (ray.Origin - hitInfo.Point).Normalized();
                     float specularCoefficient = Calc.SpecularCoefficient(reflectionVector, pointToEye,
-                                                                         hitInfo.Material.SpecularCoefficient,
+                                                                         //hitInfo.Material.SpecularCoefficient,
+                                                                         reflectionCoefficient,
                                                                          hitInfo.Material.SpecularExponent);
                     Vec3 specularReflectionTerm = specularCoefficient * light.Color;
 
