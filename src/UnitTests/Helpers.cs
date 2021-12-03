@@ -4,6 +4,7 @@
 
 namespace UnitTests
 {
+    using rt.Collide.Shapes;
     using rt.Math;
     using rt.Present;
 
@@ -21,6 +22,17 @@ namespace UnitTests
         public static Material SimpleMaterial(Vec3 color)
         {
             return new Material(color, 1.0f, 1.0f, 1.0f, 1.0f);
+        }
+
+        public static Box OriginCube(float size)
+        {
+            float halfSize = size / 2.0f;
+            return new Box(
+                cornerPoint: new Vec3(-halfSize, -halfSize, halfSize),
+                lengthVector: Vec3.AxisX * size,
+                widthVector: -Vec3.AxisZ * size,
+                heightVector: Vec3.AxisY * size,
+                material: Helpers.SimpleMaterial(Vec3.One));
         }
     }
 }

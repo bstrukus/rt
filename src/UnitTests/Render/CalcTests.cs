@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests.Render
 {
+    using rt.Collide;
     using rt.Math;
     using rt.Render;
 
@@ -65,6 +66,7 @@ namespace UnitTests.Render
             Vec3 normal = Vec3.AxisY;
             float currRefractIndex = 1.0f;  // Simple values for easy verification
             float nextRefractIndex = 1.0f;
+            float relativeRefractionIndex = currRefractIndex / nextRefractIndex;
 
             // Act
             Vec3 result = Calc.Refract(incidentVector, normal, currRefractIndex, nextRefractIndex);
@@ -72,6 +74,22 @@ namespace UnitTests.Render
 
             // Assert
             Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void VerifyRefractedRayStartsInsideBox()
+        {
+            // Arrange
+            var box = Helpers.OriginCube(1.0f);
+            var ray = new Ray(Vec3.AxisX, -Vec3.AxisX);
+            var hitInfo = box.TryIntersect(ray);
+
+            // Act
+            var refractedRay = Calc.RefractedRay(ray, hitInfo, 1.0f, 1.0f);
+            var result = Numbers.InRange(refractedRay.Origin.X, 0.4f, 0.5f);
+
+            // Assert
+            Assert.IsTrue(result);
         }
     }
 }

@@ -174,8 +174,14 @@ namespace rt.Render
         }
     }
 
+    /// <summary>
+    /// Contains common calculations used in ray tracing, extracted to a singular class for testability.
+    /// </summary>
     public static class Calc
     {
+        public const float ReflectionNudgeEpsilon = 0.001f;
+        public const float TransmissionNudgeEpsilon = 0.001f;
+
         public static float DiffuseCoefficient(Vec3 normal, Vec3 lightVector)
         {
             Debug.Assert(normal.IsNormalized());
@@ -209,6 +215,60 @@ namespace rt.Render
             }
 
             return (cosThetaT + relativeRefractionIndex * iDotN) * normal - relativeRefractionIndex * incidentVector;
+        }
+
+        public static Ray ReflectedRay(Ray ray, HitInfo hitInfo)
+        {
+            Vec3 newOrigin = hitInfo.Point + hitInfo.Normal * ReflectionNudgeEpsilon;
+            Vec3 newDirection = Calc.Reflect(-ray.Direction, hitInfo.Normal).Normalized();
+            return new Ray(newOrigin, newDirection);
+        }
+
+        /* #todo There might be a lot to do here to support transmission, a few thoughts
+         * - I'm not sure how my collision tests support rays that originate inside of the shape, I think ellipsoid is fine but
+         *   I don't think sphere supports getting any useful information
+         * - I'm not sure what to do with the surface normal if the collision originates inside of the shape, invert it?
+         */
+
+        public static Ray RefractedRay(Ray ray, HitInfo hitInfo, float currentRefractionIndex, float nextRefractionIndex)
+        {
+            // Snell's Law of Refraction
+            float nudgeDirection = currentRefractionIndex == 1.0f ? -1.0f : 1.0f;
+            Vec3 newOrigin = hitInfo.Point + hitInfo.Normal * TransmissionNudgeEpsilon * nudgeDirection;
+            Vec3 newDirection = Calc.Refract(-ray.Direction, hitInfo.Normal, currentRefractionIndex, nextRefractionIndex).Normalized();
+            return new Ray(newOrigin, newDirection);
+        }
+
+        public static float ReflectionCoefficient(Ray ray, HitInfo hitInfo, float currentRefractionIndex, float nextRefractionIndex)
+        {
+            // Fresnel Equations
+            Vec3 incidentVector = -ray.Direction;
+            Vec3 normal = hitInfo.Normal;
+
+            const float relativeMagneticPermeability = 1.0f;  // Assumption
+            float relativeRefractionIndex = currentRefractionIndex / nextRefractionIndex;
+            float cosThetaI = Vec3.Dot(incidentVector, normal);
+
+            // #optimize This is the same term calculated in the refracted ray equation
+            float radicand = 1.0f - (relativeRefractionIndex * relativeRefractionIndex) * (1.0f - (cosThetaI * cosThetaI));
+            if (radicand <= 0.0f)
+            {
+                // Handle total internal reflection
+                return 1.0f;
+            }
+            float cosThetaT = Numbers.Sqrt(radicand);
+
+            // Perpendicular ratio
+            float commonPerpendicularTerm = relativeRefractionIndex * cosThetaI;
+            float perpendicularCoefficient = (commonPerpendicularTerm - relativeMagneticPermeability * cosThetaT) /
+                                             (commonPerpendicularTerm + relativeMagneticPermeability * cosThetaT);
+
+            // Parallel ratio
+            float commonParallelTerm = relativeRefractionIndex * cosThetaT; ;
+            float parallelCoefficient = (relativeMagneticPermeability * cosThetaI - commonParallelTerm) /
+                                        (relativeMagneticPermeability * cosThetaI + commonParallelTerm);
+
+            return 0.5f * ((perpendicularCoefficient * perpendicularCoefficient) + (parallelCoefficient * parallelCoefficient));
         }
     }
 }

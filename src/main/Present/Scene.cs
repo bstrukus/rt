@@ -17,8 +17,6 @@ namespace rt.Present
     public class Scene
     {
         private const float ShadowFeelerEpsilon = 0.001f;
-        private const float ReflectionNudgeEpsilon = 0.001f;
-        private const float TransmissionNudgeEpsilon = 0.001f;
         private const float AirTransmissionFactor = 1.0f;
 
         public Vec3 AmbientColor { get; private set; }
@@ -76,8 +74,7 @@ namespace rt.Present
 
             //////////////////////////////////////////////////////////////////////////
             // Calculate reflection & transmission coefficients
-            float reflectionCoefficient = this.CalculateReflectionCoefficient(ray, hitInfo, currRefractionIndex,
-                                                                                            nextRefractionIndex);
+            float reflectionCoefficient = Calc.ReflectionCoefficient(ray, hitInfo, currRefractionIndex, nextRefractionIndex);
             float transmissionCoefficient = 1.0f - reflectionCoefficient;
 
             // Factor in energy lost to the surface
@@ -88,7 +85,7 @@ namespace rt.Present
             // Calculate reflected lighting at current point
             if (Numbers.AreNotEqual(reflectionCoefficient, 0.0f))
             {
-                var reflectedRay = this.CalculateReflectedRay(ray, hitInfo);
+                var reflectedRay = Calc.ReflectedRay(ray, hitInfo);
                 color += reflectionCoefficient * this.Trace(reflectedRay, currRefractionIndex, depth - 1);
             }
 
@@ -96,71 +93,12 @@ namespace rt.Present
             // Calculate transmitted lighting at current point
             if (Numbers.AreNotEqual(transmissionCoefficient, 0.0f))
             {
-                var transmittedRay = this.CalculateRefractedRay(ray, hitInfo, currRefractionIndex, nextRefractionIndex);
+                var transmittedRay = Calc.RefractedRay(ray, hitInfo, currRefractionIndex, nextRefractionIndex);
                 color += transmissionCoefficient * this.Trace(transmittedRay, nextRefractionIndex, depth - 1);
             }
 
             //////////////////////////////////////////////////////////////////////////
             return color;
-        }
-
-        private Ray CalculateReflectedRay(Ray ray, HitInfo hitInfo)
-        {
-            Vec3 newOrigin = hitInfo.Point + hitInfo.Normal * ReflectionNudgeEpsilon;
-            Vec3 newDirection = Calc.Reflect(-ray.Direction, hitInfo.Normal).Normalized();
-            return new Ray(newOrigin, newDirection);
-        }
-
-        /* #todo There might be a lot to do here to support transmission, a few thoughts
-         * - I'm not sure how my collision tests support rays that originate inside of the shape, I think ellipsoid is fine but
-         *   I don't think sphere supports getting any useful information
-         * - I'm not sure what to do with the surface normal if the collision originates inside of the shape, invert it?
-         */
-
-        private Ray CalculateRefractedRay(Ray ray, HitInfo hitInfo, float currentRefractionIndex, float nextRefractionIndex)
-        {
-            // Snell's Law of Refraction
-            Vec3 newOrigin = hitInfo.Point + hitInfo.Normal * TransmissionNudgeEpsilon; // #todo Might need to invert the normal
-            Vec3 newDirection = Calc.Refract(-ray.Direction, hitInfo.Normal, currentRefractionIndex, nextRefractionIndex).Normalized();
-            return new Ray(newOrigin, newDirection);
-        }
-
-        private float CalculateReflectionCoefficient(Ray ray, HitInfo hitInfo, float currentRefractionIndex, float nextRefractionIndex)
-        {
-            // Fresnel Equations
-            Vec3 incidentVector = -ray.Direction;
-            Vec3 normal = hitInfo.Normal;
-
-            const float relativeMagneticPermeability = 1.0f;  // Assumption
-            float relativeRefractionIndex = currentRefractionIndex / nextRefractionIndex;
-            float cosThetaI = Vec3.Dot(incidentVector, normal);
-
-            // #optimize This is the same term calculated in the refracted ray equation
-            float radicand = 1.0f - (relativeRefractionIndex * relativeRefractionIndex) * (1.0f - (cosThetaI * cosThetaI));
-            if (radicand >= 0.0f)
-            {
-                // Handle total internal reflection
-                return 1.0f;
-            }
-            float cosThetaT = Numbers.Sqrt(radicand);
-
-            // Perpendicular ratio
-            float commonPerpendicularTerm = relativeRefractionIndex * cosThetaI;
-            float perpendicularCoefficient = (commonPerpendicularTerm - relativeMagneticPermeability * cosThetaT) /
-                                             (commonPerpendicularTerm + relativeMagneticPermeability * cosThetaT);
-
-            // Parallel ratio
-            float commonParallelTerm = relativeRefractionIndex * cosThetaT; ;
-            float parallelCoefficient = (relativeMagneticPermeability * cosThetaI - commonParallelTerm) /
-                                        (relativeMagneticPermeability * cosThetaI + commonParallelTerm);
-
-            return 0.5f * ((perpendicularCoefficient * perpendicularCoefficient) + (parallelCoefficient * parallelCoefficient);
-        }
-
-        private float CalculateTransmissionCoefficient(HitInfo hitInfo)
-        {
-            // #todo #transmission
-            return 0.0f;
         }
 
         private ColorReport CalculateLighting(Ray ray, HitInfo hitInfo)
