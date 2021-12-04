@@ -2,15 +2,16 @@
  * #copyright_placeholder Copyright Ben Strukus
  */
 
+using System.Diagnostics;
+
 /// <summary>
 /// Information specific to setting up the render.
 /// </summary>
 namespace rt.Render
 {
-    using Collide;
-    using Math;
+    using rt.Collide;
+    using rt.Math;
     using rt.Utility;
-    using System.Diagnostics;
 
     /// <summary>
     /// The surface that rays pass through.
@@ -158,6 +159,11 @@ namespace rt.Render
             this.Color = color.Clamped(0.0f, 1.0f);
         }
 
+        public static ColorReport Black()
+        {
+            return new ColorReport(Vec3.Zero);
+        }
+
         public static ColorReport operator *(float scalar, ColorReport colorReport)
         {
             return new ColorReport(colorReport.Color * scalar);
@@ -179,8 +185,8 @@ namespace rt.Render
     /// </summary>
     public static class Calc
     {
-        public const float ReflectionNudgeEpsilon = 0.001f;
-        public const float TransmissionNudgeEpsilon = 0.001f;
+        public const float ReflectionNudgeEpsilon = 1.0e-4f;
+        public const float TransmissionNudgeEpsilon = 1.0e-4f;
 
         public static float DiffuseCoefficient(Vec3 normal, Vec3 lightVector)
         {
@@ -208,7 +214,7 @@ namespace rt.Render
             float relativeRefractionIndex = currRefractionIndex / nextRefractionIndex;
             float iDotN = Vec3.Dot(incidentVector, normal);
 
-            float cosThetaT = Numbers.Sqrt(1.0f - (relativeRefractionIndex * relativeRefractionIndex) * (1.0f - (iDotN * iDotN)));
+            float cosThetaT = Numbers.Sqrt(1.0f - Numbers.Squared(relativeRefractionIndex) * (1.0f - Numbers.Squared(iDotN)));
             if (iDotN >= 0.0f)
             {
                 cosThetaT *= -1.0f;
@@ -250,8 +256,8 @@ namespace rt.Render
             float cosThetaI = Vec3.Dot(incidentVector, normal);
 
             // #optimize This is the same term calculated in the refracted ray equation
-            float radicand = 1.0f - (relativeRefractionIndex * relativeRefractionIndex) * (1.0f - (cosThetaI * cosThetaI));
-            if (radicand <= 0.0f)
+            float radicand = 1.0f - Numbers.Squared(relativeRefractionIndex) * (1.0f - Numbers.Squared(cosThetaI));
+            if (radicand < 0.0f)
             {
                 // Handle total internal reflection
                 return 1.0f;
@@ -264,11 +270,11 @@ namespace rt.Render
                                              (commonPerpendicularTerm + relativeMagneticPermeability * cosThetaT);
 
             // Parallel ratio
-            float commonParallelTerm = relativeRefractionIndex * cosThetaT; ;
+            float commonParallelTerm = relativeRefractionIndex * cosThetaT;
             float parallelCoefficient = (relativeMagneticPermeability * cosThetaI - commonParallelTerm) /
                                         (relativeMagneticPermeability * cosThetaI + commonParallelTerm);
 
-            return 0.5f * ((perpendicularCoefficient * perpendicularCoefficient) + (parallelCoefficient * parallelCoefficient));
+            return 0.5f * Numbers.Squared(perpendicularCoefficient) + Numbers.Squared(parallelCoefficient);
         }
     }
 }

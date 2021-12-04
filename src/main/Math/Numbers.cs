@@ -101,5 +101,10 @@ namespace rt.Math
         {
             return System.MathF.Pow(baseValue, exponent);
         }
+
+        public static float Squared(float value)
+        {
+            return value * value;
+        }
     }
 }

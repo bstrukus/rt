@@ -28,7 +28,12 @@ namespace rt.Present
         {
             if (Levers.GetOption(Levers.Option.LimitObjects))
             {
-                this.hittables = hittables.GetRange(Levers.ObjectStart, Levers.ObjectLimit);
+                int objectLimit = Levers.ObjectLimit;
+                if (objectLimit < 0)
+                {
+                    objectLimit = hittables.Count - Levers.ObjectStart;
+                }
+                this.hittables = hittables.GetRange(Levers.ObjectStart, objectLimit);
             }
             else
             {
@@ -60,10 +65,10 @@ namespace rt.Present
                 return new ColorReport(Vec3.Zero);
             }
 
-            hitInfo = new HitInfo(hitInfo.Point, currRefractionIndex == 1.0f ? hitInfo.Normal : -hitInfo.Normal, hitInfo.Distance, hitInfo.Material);
-
-            //////////////////////////////////////////////////////////////////////////
-            // Calculate lighting at current point
+            if (currRefractionIndex != AirTransmissionFactor)
+            {
+                hitInfo.InvertNormal();
+            }
 
             //////////////////////////////////////////////////////////////////////////
             // Calculate index of refraction
@@ -82,7 +87,14 @@ namespace rt.Present
             reflectionCoefficient *= hitInfo.Material.SpecularCoefficient;
             transmissionCoefficient *= hitInfo.Material.SpecularCoefficient;
 
-            var color = CalculateLighting(ray, hitInfo, reflectionCoefficient);
+            var color = ColorReport.Black();
+
+            //////////////////////////////////////////////////////////////////////////
+            // Calculate lighting at current point, if we're in air and not inside of an object
+            if (currRefractionIndex == AirTransmissionFactor)
+            {
+                color += CalculateLighting(ray, hitInfo, reflectionCoefficient);
+            }
 
             //////////////////////////////////////////////////////////////////////////
             // Calculate reflected lighting at current point
@@ -137,7 +149,6 @@ namespace rt.Present
                     Vec3 reflectionVector = Calc.Reflect(pointToLight, hitInfo.Normal).Normalized();
                     Vec3 pointToEye = (ray.Origin - hitInfo.Point).Normalized();
                     float specularCoefficient = Calc.SpecularCoefficient(reflectionVector, pointToEye,
-                                                                         //hitInfo.Material.SpecularCoefficient,
                                                                          reflectionCoefficient,
                                                                          hitInfo.Material.SpecularExponent);
                     Vec3 specularReflectionTerm = specularCoefficient * light.Color;

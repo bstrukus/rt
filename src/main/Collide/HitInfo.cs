@@ -40,5 +40,10 @@ namespace rt.Collide
 
             this.Material = material;
         }
+
+        public void InvertNormal()
+        {
+            this.Normal = -this.Normal;
+        }
     }
 }

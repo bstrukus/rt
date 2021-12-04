@@ -1,6 +1,6 @@
 {
     "width": 500,
-    "renderDepth": 5,
+    "renderDepth": 15,
     "output": null,
-    "sceneFile": "ctest1.json"
+    "sceneFile": "ftest1.json"
 }
