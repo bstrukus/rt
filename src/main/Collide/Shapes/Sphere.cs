@@ -13,29 +13,22 @@ namespace rt.Collide.Shapes
     /// </summary>
     public class Sphere : Shape
     {
-        // #todo Make every property private, keep these Shape classes locked down
         // A unit sphere has a diameter of 1, so a radius of 1/2
-        public float Radius { get; private set; }
-
-        public Vec3 Center => this.Transform.Position;
+        private readonly float radius;
 
         public Sphere(Transform transform, Material material, float radius)
             : base(transform, material)
         {
-            this.Radius = radius;
+            this.radius = radius;
         }
 
         public override HitInfo TryIntersect(Ray ray)
         {
-            // #todo Revisit this, might need to be altered to support refractions
-            // This implementation is from the Real-Time Collision Detection book and may not be suitable for all my ray tracing
-            // needs!
-
             // Vector from sphere origin to ray origin
-            Vec3 m = ray.Origin - this.Center;
+            Vec3 m = ray.Origin - this.Transform.Position;
 
             float b = Vec3.Dot(m, ray.Direction);
-            float c = Vec3.Dot(m, m) - (this.Radius * this.Radius);
+            float c = Vec3.Dot(m, m) - Numbers.Squared(this.radius);
 
             // Exit if ray's origin is outside sphere (c > 0) and
             // ray is pointing away from sphere (b > 0)
@@ -56,7 +49,7 @@ namespace rt.Collide.Shapes
             discr = MathF.Sqrt(discr);
             float t = -b - discr;
 
-            // If t is negative, ray started inside sphere so clamp t to zero
+            // If t is negative, ray started inside sphere so use the greater of the two roots
             if (t < 0.0f)
             {
                 t = -b + discr;

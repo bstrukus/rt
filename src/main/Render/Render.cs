@@ -210,7 +210,6 @@ namespace rt.Render
 
         public static Vec3 Refract(Vec3 incidentVector, Vec3 normal, float currRefractionIndex, float nextRefractionIndex)
         {
-            // #todo Handle total internal reflection
             float relativeRefractionIndex = currRefractionIndex / nextRefractionIndex;
             float iDotN = Vec3.Dot(incidentVector, normal);
 
@@ -229,12 +228,6 @@ namespace rt.Render
             Vec3 newDirection = Calc.Reflect(-ray.Direction, hitInfo.Normal).Normalized();
             return new Ray(newOrigin, newDirection);
         }
-
-        /* #todo There might be a lot to do here to support transmission, a few thoughts
-         * - I'm not sure how my collision tests support rays that originate inside of the shape, I think ellipsoid is fine but
-         *   I don't think sphere supports getting any useful information
-         * - I'm not sure what to do with the surface normal if the collision originates inside of the shape, invert it?
-         */
 
         public static Ray RefractedRay(Ray ray, HitInfo hitInfo, float currentRefractionIndex, float nextRefractionIndex)
         {

@@ -4,14 +4,13 @@
 
 namespace rt.Present
 {
-    using Math;
+    using rt.Math;
 
     /// <summary>
     /// Describes the object's visual representation in the <see cref="Scene"/>
     /// </summary>
     public class Material
     {
-        // #todo Consider creating a standalone Color class
         public Vec3 Color { get; private set; }
 
         public float SpecularCoefficient { get; private set; }
@@ -21,8 +20,8 @@ namespace rt.Present
 
         public Vec3 TransmissionAttenuation;
 
-        private float electricPermittivity;
-        private float magneticPermeability;
+        private readonly float electricPermittivity;
+        private readonly float magneticPermeability;
 
         public Material(Vec3 color, float specularCoefficient, float specularExponent, float electricPermittivity, float magneticPermeability)
         {

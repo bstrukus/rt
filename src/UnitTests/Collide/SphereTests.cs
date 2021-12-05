@@ -23,17 +23,18 @@ namespace UnitTests.Collide
         public void TestDirectRayHitInSphereCenterAlongMajorAxis(float x, float y, float z)
         {
             // Arrange
+            float radius = 0.5f;
             var sphere = new Sphere(
                 Helpers.SimpleTransform(Vec3.Zero, 1.0f),
                 Helpers.SimpleMaterial(Vec3.AxisX),
-                0.5f);
+                radius);
             Vec3 rayVal = new Vec3(x, y, z);
             var ray = new Ray(-rayVal, rayVal);
 
             // Act
             var result = sphere.TryIntersect(ray);
             // Since we're doing simple tests along major axes, the expected hit point result is easily calculated
-            var pointOnSphere = -ray.Direction * sphere.Radius;
+            var pointOnSphere = -ray.Direction * radius;
             var sphereNormal = -ray.Direction;
 
             // Assert

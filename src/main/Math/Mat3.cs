@@ -8,8 +8,7 @@ namespace rt.Math
 {
     public class Mat3
     {
-        // #todo Need to find a way to make this const
-        public static Mat3 Identity = new Mat3(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+        public static readonly Mat3 Identity = new Mat3(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
 
         public float this[int i, int j]
         {

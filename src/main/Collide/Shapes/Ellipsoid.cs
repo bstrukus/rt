@@ -6,15 +6,14 @@ namespace rt.Collide.Shapes
 {
     using rt.Math;
     using rt.Present;
-    using System.Diagnostics;
 
     public class Ellipsoid : Shape
     {
-        private Vec3 center;
-        private Vec3 uAxis;
-        private Vec3 vAxis;
-        private Vec3 wAxis;
-        private Mat3 affineTransform;
+        private readonly Vec3 center;
+        private readonly Vec3 uAxis;
+        private readonly Vec3 vAxis;
+        private readonly Vec3 wAxis;
+        private readonly Mat3 affineTransform;
 
         public Ellipsoid(Vec3 center, Vec3 uAxis, Vec3 vAxis, Vec3 wAxis, Material material)
             : base(null, material)
