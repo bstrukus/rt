@@ -16,6 +16,7 @@ namespace rt.Collide.Shapes
         {
             private readonly Vec3 anchorPoint;
             private readonly Vec3[] axes;
+            private readonly Vec2[] affineRows;
 
             public Triangle(Vec3 vertexA, Vec3 vertexB, Vec3 vertexC)
             {
@@ -25,25 +26,28 @@ namespace rt.Collide.Shapes
                     vertexB - this.anchorPoint,
                     vertexC - this.anchorPoint
                 };
-            }
 
-            public Vec2 CalcAffineCoordinates(Vec3 point)
-            {
                 float A = Vec3.Dot(this.axes[0], this.axes[0]);
                 float B = Vec3.Dot(this.axes[1], this.axes[1]);
                 float C = Vec3.Dot(this.axes[0], this.axes[1]);
                 float det = 1.0f / (A * B - C * C);
 
                 // #todo Mat2 - This math would be best handled by a 2x2 matrix but, needs must!
-                Vec2 topRow = new Vec2(B, -C) * det;
-                Vec2 botRow = new Vec2(-C, A) * det;
+                this.affineRows = new Vec2[]
+                {
+                    new Vec2(B, -C) * det,
+                    new Vec2(-C, A) * det
+                };
+            }
 
+            public Vec2 CalcAffineCoordinates(Vec3 point)
+            {
                 Vec3 anchorToPoint = point - this.anchorPoint;
                 Vec2 pointValues = new Vec2(
                     Vec3.Dot(anchorToPoint, this.axes[0]),
                     Vec3.Dot(anchorToPoint, this.axes[1]));
-                float alpha = Vec2.Dot(topRow, pointValues);
-                float beta = Vec2.Dot(botRow, pointValues);
+                float alpha = Vec2.Dot(this.affineRows[0], pointValues);
+                float beta = Vec2.Dot(this.affineRows[1], pointValues);
 
                 return new Vec2(alpha, beta);
             }
