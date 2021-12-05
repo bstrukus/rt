@@ -14,9 +14,6 @@ namespace rt.Collide.Shapes
     {
         internal class Triangle
         {
-            // #idea the polygon is going to use triangles like this, having a plane per triangle seems overkill
-            public Plane Plane { get; private set; }
-
             private readonly Vec3 anchorPoint;
             private readonly Vec3[] axes;
 
@@ -28,8 +25,6 @@ namespace rt.Collide.Shapes
                     vertexB - this.anchorPoint,
                     vertexC - this.anchorPoint
                 };
-
-                this.Plane = new Plane(this.anchorPoint, Vec3.Cross(this.axes[0], this.axes[1]).Normalized());
             }
 
             public Vec2 CalcAffineCoordinates(Vec3 point)
@@ -54,13 +49,18 @@ namespace rt.Collide.Shapes
             }
         }
 
+        private readonly Plane plane;
         private readonly List<Triangle> triangles;
 
         public Polygon(List<Vec3> vertices, Material material)
             : base(null, material)
         {
+            Debug.Assert(vertices.Count > 2);
             this.triangles = new List<Triangle>(vertices.Count - 2);
             Vec3 first = vertices[0];
+
+            this.plane = new Plane(first, Vec3.Cross(vertices[1] - first, vertices[2] - first).Normalized());
+
             for (int i = 1; i < vertices.Count - 1; ++i)
             {
                 var newTriangle = new Triangle(first, vertices[i], vertices[i + 1]);
@@ -74,7 +74,7 @@ namespace rt.Collide.Shapes
 
             // Test to see if ray intersects plane in a non-negative way.  This will be the same for all triangles as they are
             // all coplanar.
-            float hitVal = this.triangles[0].Plane.CalcHitValue(ray);
+            float hitVal = this.plane.CalcHitValue(ray);
             if (hitVal < 0.0f)
             {
                 return null;
@@ -86,7 +86,7 @@ namespace rt.Collide.Shapes
                 Vec2 affineCoords = triangle.CalcAffineCoordinates(ray.GetPointAlong(hitVal));
                 if (affineCoords.X >= 0.0f && affineCoords.Y >= 0.0f && (affineCoords.X + affineCoords.Y) <= 1.0f)
                 {
-                    return new HitInfo(ray.GetPointAlong(hitVal), triangle.Plane.Normal, hitVal, base.Material);
+                    return new HitInfo(ray.GetPointAlong(hitVal), this.plane.Normal, hitVal, base.Material);
                 }
             }
 
