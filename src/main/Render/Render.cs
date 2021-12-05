@@ -3,6 +3,7 @@
  */
 
 using System.Diagnostics;
+using System;
 
 /// <summary>
 /// Information specific to setting up the render.
@@ -12,6 +13,7 @@ namespace rt.Render
     using rt.Collide;
     using rt.Math;
     using rt.Utility;
+    using System;
 
     /// <summary>
     /// The surface that rays pass through.
@@ -97,6 +99,7 @@ namespace rt.Render
 
         private readonly string fileName;
         private PixelBuffer buffer;
+        private int pixelCount;
 
         public Image(int width, int height, string fileName, int renderDepth)
         {
@@ -104,6 +107,7 @@ namespace rt.Render
             this.Height = height;
             this.fileName = fileName;
             this.RenderDepth = renderDepth;
+            this.pixelCount = this.Width * this.Height;
 
             this.buffer = new PixelBuffer(this.Width, this.Height);
         }
@@ -114,6 +118,16 @@ namespace rt.Render
             Debug.Assert(Numbers.InRange(y, 0, this.Height));
 
             this.buffer.SetPixel(x, y, color);
+            this.PrintProgress(x, y);
+        }
+
+        private void PrintProgress(int x, int y)
+        {
+            int currPixel = 1 + x + (y * this.Width);
+            float percentage = 100.0f * (float)currPixel / (float)this.pixelCount;
+            string progress = $"Progress = {percentage.ToString("0.00")}%";
+            Console.SetCursorPosition(0, Console.CursorTop - 1);
+            Console.WriteLine(progress);
         }
 
         public void Save()
