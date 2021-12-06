@@ -3,7 +3,6 @@
  */
 
 using System.Diagnostics;
-using System;
 
 /// <summary>
 /// Information specific to setting up the render.
@@ -13,7 +12,6 @@ namespace rt.Render
     using rt.Collide;
     using rt.Math;
     using rt.Utility;
-    using System;
 
     /// <summary>
     /// The surface that rays pass through.
@@ -125,9 +123,8 @@ namespace rt.Render
         {
             int currPixel = 1 + x + (y * this.Width);
             float percentage = 100.0f * (float)currPixel / (float)this.pixelCount;
-            string progress = $"Progress = {percentage.ToString("0.00")}%";
-            Console.SetCursorPosition(0, Console.CursorTop - 1);
-            Console.WriteLine(progress);
+            string progress = $"PROGRESS: {percentage.ToString("0.00")}%";
+            Log.WriteInPlace(progress);
         }
 
         public void Save()

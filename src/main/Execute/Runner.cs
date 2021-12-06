@@ -5,6 +5,7 @@
 namespace rt.Execute
 {
     using rt.Utility;
+    using System;
 
     public class Runner
     {
@@ -24,7 +25,7 @@ namespace rt.Execute
 
         public void Execute()
         {
-            this.StartTimer();
+            this.InitRender();
 
             // Generate rays from the camera's eye through the projection plane
             for (int y = 0; y < this.image.Height; ++y)
@@ -39,14 +40,20 @@ namespace rt.Execute
                 }
             }
 
-            this.EndTimer();
-            this.FinalizeImage();
+            this.FinishRender();
         }
 
-        private void FinalizeImage()
+        private void InitRender()
         {
-            this.image.Save();
+            this.StartTimer();
+            Log.Write("");  // Create a newline to help print progress correctly
+        }
 
+        private void FinishRender()
+        {
+            this.EndTimer();
+
+            this.image.Save();
             this.image.Open();
         }
 

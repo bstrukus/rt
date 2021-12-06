@@ -27,5 +27,16 @@ namespace rt.Utility
         {
             Console.WriteLine($"ERROR: {error}");
         }
+
+        public static void Write(string text)
+        {
+            Console.WriteLine(text);
+        }
+
+        public static void WriteInPlace(string text)
+        {
+            Console.SetCursorPosition(0, Console.CursorTop - 1);
+            Console.WriteLine(text);
+        }
     }
 }
