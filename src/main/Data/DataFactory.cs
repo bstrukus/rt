@@ -88,8 +88,13 @@ namespace rt.Data
 
             //////////////////////////////////////////////////////////////////////////
             var ambientColor = CreateVec3(this.sceneData.Ambient.Color);
+            var airValues = new Air(
+                electricPermittivity: (float)this.sceneData.Air.ElectricPermittivity,
+                magneticPermeability: (float)this.sceneData.Air.MagneticPermeability,
+                attenuationFactors: CreateVec3(this.sceneData.Air.AttenuationFactors)
+                );
 
-            return new Scene(hittables, lights, ambientColor);
+            return new Scene(hittables, lights, ambientColor, airValues);
         }
 
         private int LoadSpheres(ref List<IHittable> hittables)
@@ -237,6 +242,7 @@ namespace rt.Data
         {
             return new Material(
                 color: CreateVec3(data.Diffuse),
+                transmissionAttenuation: CreateVec3(data.TransmissionAttenuation),
                 specularCoefficient: (float)data.SpecularCoefficient,
                 specularExponent: (float)data.SpecularExponent,
                 electricPermittivity: (float)data.ElectricPermittivity,

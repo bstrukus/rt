@@ -23,9 +23,12 @@ namespace rt.Present
         private readonly float electricPermittivity;
         private readonly float magneticPermeability;
 
-        public Material(Vec3 color, float specularCoefficient, float specularExponent, float electricPermittivity, float magneticPermeability)
+        public Material(Vec3 color, Vec3 transmissionAttenuation,
+                        float specularCoefficient, float specularExponent,
+                        float electricPermittivity, float magneticPermeability)
         {
             this.Color = color;
+            this.TransmissionAttenuation = transmissionAttenuation;
 
             this.SpecularCoefficient = specularCoefficient;
             this.SpecularExponent = specularExponent;

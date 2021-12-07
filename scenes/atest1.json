@@ -1,0 +1,245 @@
+{
+  "camera": {
+    "eyeDirection": [
+      0.0,
+      0.0,
+      1.0
+    ],
+    "projectionPlane": {
+      "center": [
+        0.0,
+        0.6,
+        0.0
+      ],
+      "uAxis": [
+        0.67,
+        0.0,
+        0.0
+      ],
+      "vAxis": [
+        0.0,
+        0.5,
+        0.0
+      ]
+    }
+  },
+  "shapes": {
+    "spheres": [
+      {
+        "transform": {
+          "position": [
+            0.1,
+            0.5,
+            -1.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "radius": 0.5,
+        "material": {
+          "transmissionAttenuation": [
+            0.6,
+            0.8,
+            1.0
+          ],
+          "diffuse": [
+            0.2,
+            0.2,
+            0.2
+          ],
+          "specularCoefficient ": 1.0,
+          "specularExponent": 20.0,
+          "electricPermittivity": 2.3716,
+          "magneticPermeability": 1.0
+        }
+      }
+    ],
+    "boxes": [],
+    "polygons": [
+      {
+        "transform": null,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.7,
+            0.7,
+            0.7
+          ],
+          "specularCoefficient ": 0.2,
+          "specularExponent": 10.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        },
+        "vertices": [
+          [
+            6.0,
+            0.0,
+            6.0
+          ],
+          [
+            6.0,
+            0.0,
+            -6.0
+          ],
+          [
+            -6.0,
+            0.0,
+            -6.0
+          ],
+          [
+            -6.0,
+            0.0,
+            6.0
+          ]
+        ]
+      },
+      {
+        "transform": null,
+        "material": {
+          "transmissionAttenuation": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "diffuse": [
+            0.7,
+            0.7,
+            0.7
+          ],
+          "specularCoefficient ": 0.2,
+          "specularExponent": 10.0,
+          "electricPermittivity": 1000000.0,
+          "magneticPermeability": 1.0
+        },
+        "vertices": [
+          [
+            6.0,
+            0.0,
+            -6.0
+          ],
+          [
+            6.0,
+            6.0,
+            -6.0
+          ],
+          [
+            -6.0,
+            6.0,
+            -6.0
+          ],
+          [
+            -6.0,
+            0.0,
+            -6.0
+          ]
+        ]
+      }
+    ],
+    "ellipsoids": []
+  },
+  "lights": {
+    "points": [
+      {
+        "transform": {
+          "position": [
+            -1.0,
+            1.0,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.8,
+          0.8,
+          0.8
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            0.75,
+            0.5,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.5,
+          0.5,
+          0.5
+        ],
+        "radius": 0.1
+      },
+      {
+        "transform": {
+          "position": [
+            0.25,
+            1.0,
+            0.0
+          ],
+          "orientation": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "scale": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "color": [
+          0.25,
+          0.25,
+          0.25
+        ],
+        "radius": 0.1
+      }
+    ]
+  },
+  "ambient": null,
+  "air": {
+    "electricPermittivity": 1.0,
+    "magneticPermeability": 1.0,
+    "attenuation": [
+      0.95,
+      0.95,
+      0.95
+    ]
+  }
+}

@@ -189,6 +189,11 @@ namespace rt.Render
         {
             return new ColorReport(lhs.Color + rhs.Color);
         }
+
+        public void Scale(Vec3 color)
+        {
+            this.Color = Vec3.Multiply(this.Color, color);
+        }
     }
 
     /// <summary>
@@ -279,6 +284,13 @@ namespace rt.Render
                                         (relativeMagneticPermeability * cosThetaI + commonParallelTerm);
 
             return 0.5f * Numbers.Squared(perpendicularCoefficient) + Numbers.Squared(parallelCoefficient);
+        }
+
+        public static Vec3 DistanceScaledAttenuation(Vec3 attenuationFactor, float distance)
+        {
+            return new Vec3(Numbers.Pow(attenuationFactor.X, distance),
+                            Numbers.Pow(attenuationFactor.Y, distance),
+                            Numbers.Pow(attenuationFactor.Z, distance));
         }
     }
 }

@@ -11,6 +11,23 @@ namespace rt.Present
     using rt.Math;
     using rt.Render;
 
+    public class Air
+    {
+        // Index of refraction
+        public float ElectricPermittivity { get; private set; } // Relative
+
+        public float MagneticPermeability { get; private set; } // Relative
+
+        public Vec3 AttenuationFactors { get; private set; }
+
+        public Air(float electricPermittivity, float magneticPermeability, Vec3 attenuationFactors)
+        {
+            this.ElectricPermittivity = electricPermittivity;
+            this.MagneticPermeability = magneticPermeability;
+            this.AttenuationFactors = attenuationFactors;
+        }
+    }
+
     /// <summary>
     /// Holds information about hittable objects, lights, and other data.
     /// </summary>
@@ -20,11 +37,12 @@ namespace rt.Present
         private const float AirTransmissionFactor = 1.0f;
 
         public Vec3 AmbientColor { get; private set; }
+        public Air Air { get; private set; }
 
         private readonly List<IHittable> hittables;
         private readonly List<Light> lights;
 
-        public Scene(List<IHittable> hittables, List<Light> lights, Vec3 ambientColor)
+        public Scene(List<IHittable> hittables, List<Light> lights, Vec3 ambientColor, Air air)
         {
             if (Levers.GetOption(Levers.Option.LimitObjects))
             {
@@ -42,6 +60,7 @@ namespace rt.Present
             this.lights = lights;
 
             this.AmbientColor = ambientColor;
+            this.Air = air;
         }
 
         public ColorReport Trace(Ray ray, int depth)
@@ -91,8 +110,10 @@ namespace rt.Present
 
             //////////////////////////////////////////////////////////////////////////
             // Calculate lighting at current point, if we're in air and not inside of an object
+            Vec3 attenuationFactor = hitInfo.Material.TransmissionAttenuation;
             if (currRefractionIndex == AirTransmissionFactor)
             {
+                attenuationFactor = this.Air.AttenuationFactors;
                 color += CalculateLighting(ray, hitInfo, reflectionCoefficient);
             }
 
@@ -111,6 +132,12 @@ namespace rt.Present
                 var transmittedRay = Calc.RefractedRay(ray, hitInfo, currRefractionIndex, nextRefractionIndex);
                 color += transmissionCoefficient * this.Trace(transmittedRay, nextRefractionIndex, depth - 1);
             }
+
+            //////////////////////////////////////////////////////////////////////////
+            /// Attenuation
+            attenuationFactor = Calc.DistanceScaledAttenuation(attenuationFactor, hitInfo.Distance);
+
+            color.Scale(attenuationFactor);
 
             //////////////////////////////////////////////////////////////////////////
             return color;
@@ -136,44 +163,49 @@ namespace rt.Present
             foreach (var light in this.lights)
             {
                 // Shadow check
-                if (this.IsPathwayToLightClear(hitInfo, light))
+                if (this.IsPathwayToLightClear(hitInfo, light, out Vec3 pointToLight, out float lightDistance))
                 {
-                    // #optimize Can reuse the PointToLight vector from the shadow test
-                    Vec3 pointToLight = (light.Transform.Position - hitInfo.Point).Normalized();
+                    Vec3 lightColor = Vec3.Zero;
 
-                    // Diffuse
+                    //////////////////////////////////////////////////////////////////////////
+                    /// Diffuse
                     float diffuseCoefficient = Calc.DiffuseCoefficient(hitInfo.Normal, pointToLight);
-                    Vec3 diffuseReflectionTerm = diffuseCoefficient * Vec3.Multiply(objectColor, light.Color);
+                    lightColor += diffuseCoefficient * Vec3.Multiply(objectColor, light.Color);
 
-                    // Specular
+                    //////////////////////////////////////////////////////////////////////////
+                    /// Specular
                     Vec3 reflectionVector = Calc.Reflect(pointToLight, hitInfo.Normal).Normalized();
                     Vec3 pointToEye = (ray.Origin - hitInfo.Point).Normalized();
                     float specularCoefficient = Calc.SpecularCoefficient(reflectionVector, pointToEye,
                                                                          reflectionCoefficient,
                                                                          hitInfo.Material.SpecularExponent);
-                    Vec3 specularReflectionTerm = specularCoefficient * light.Color;
+                    lightColor += specularCoefficient * light.Color;
 
-                    finalColor += diffuseReflectionTerm + specularReflectionTerm;
+                    //////////////////////////////////////////////////////////////////////////
+                    /// Attenuation
+                    Vec3 attenuationTerm = Calc.DistanceScaledAttenuation(this.Air.AttenuationFactors, lightDistance);
+                    lightColor = Vec3.Multiply(lightColor, attenuationTerm);
+
+                    //////////////////////////////////////////////////////////////////////////
+                    finalColor += lightColor;
                 }
             }
             finalColor += Vec3.Multiply(objectColor, this.AmbientColor);
             return new ColorReport(finalColor);
         }
 
-        private bool IsPathwayToLightClear(HitInfo hitInfo, Light light)
+        private bool IsPathwayToLightClear(HitInfo hitInfo, Light light, out Vec3 pointToLight, out float distance)
         {
+            pointToLight = (light.Transform.Position - hitInfo.Point);
+            distance = pointToLight.Length();
+            pointToLight = pointToLight.Normalized();
+
             if (Levers.GetOption(Levers.Option.DisableShadows))
             {
                 return true;
             }
 
-            Vec3 origin = hitInfo.Point;
-            Vec3 surfaceNormal = hitInfo.Normal;
-            Vec3 direction = (light.Transform.Position - hitInfo.Point);
-            float distance = direction.Length();
-            direction = direction.Normalized();
-
-            var ray = new Ray(origin + surfaceNormal * ShadowFeelerEpsilon, direction);
+            var ray = new Ray(hitInfo.Point + hitInfo.Normal * ShadowFeelerEpsilon, pointToLight);
             HitInfo lightTrace = this.Project(ray);
             // #optimize Can test a segment against shapes, might be faster?
             return lightTrace == null || distance < lightTrace.Distance;
