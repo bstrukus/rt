@@ -5,6 +5,7 @@
 namespace rt.Utility
 {
     using System;
+    using System.IO;
 
     /// <summary>
     /// Helper class to handle directory resolving logic.
@@ -22,33 +23,64 @@ namespace rt.Utility
          *   2. Check to see if that file is in the dev path
          */
 
-        private static string OutputDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}";
-
-        private static string ConfigDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}..\\..\\..\\..\\";
-
-        // App dir: "rt\OUTPUT\rt\<target_config>\<netcoreapp_ver>\"
-        // Need to go up 4 levels to get to rt\
-        private static string SceneDirectory => $"{AppDomain.CurrentDomain.BaseDirectory}..\\..\\..\\..\\scenes\\";
-
-        // Test dir: "rt\OUTPUT\unit_tests\<target_config>\<netcoreapp_ver>\"
-        // Need to go up 4 levels to get to rt\
-        private static string TestSceneDirectory => $"{AppDomain.CurrentDomain.BaseDirectory}..\\..\\..\\..\\scenes\\unit_tests\\";
-
-        private static string OldSceneDirectory => $"{AppDomain.CurrentDomain.BaseDirectory}..\\..\\..\\..\\scenes\\unconverted\\";
-
-        public static string GetConfigFilePath(string configFile)
+        public static string Read(string filename)
         {
-            return $"{ConfigDirectory}{configFile}";
+            string filepath = string.Empty;
+            if (File.Exists($"{OutputDirectory}{filename}"))
+            {
+                // Next to EXE
+                Log.Info($"File \"{filename}\" found in the EXE's path.");
+                filepath = $"{OutputDirectory}{filename}";
+            }
+            else if (File.Exists($"{ProjectRootDirectory}{filename}"))
+            {
+                // At root of development directory
+                // This is where the dev_config would normally live
+                Log.Info($"File \"{filename}\" found in the root project path.");
+                filepath = $"{ProjectRootDirectory}{filename}";
+            }
+            else if (File.Exists($"{SceneDirectory}{filename}"))
+            {
+                // In the scene folder, part of the normal dev setup
+                Log.Info($"File \"{filename}\" found in the scene folder path.");
+                filepath = $"{SceneDirectory}{filename}";
+            }
+            else if (File.Exists($"{TestSceneDirectory}{filename}"))
+            {
+                // In the unit test scene folder, part of the normal dev setup
+                Log.Info($"File \"{filename}\" found in the test scene folder path.");
+                filepath = $"{TestSceneDirectory}{filename}";
+            }
+            else if (File.Exists($"{OldSceneDirectory}{filename}"))
+            {
+                // #todo Remove this once scene conversion is handled by Python scripts
+                // In the unconverted scene directory
+                Log.Info($"File \"{filename}\" found in the unconverted scene folder path.");
+                filepath = $"{OldSceneDirectory}{filename}";
+            }
+            else
+            {
+                Log.Error($"File \"{filename}\" not found in any of the expected paths!");
+                return string.Empty;
+            }
+
+            using StreamReader file = File.OpenText(filepath);
+            string fileContents = file.ReadToEnd();
+            return fileContents;
         }
+
+        private static readonly string OutputDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}";
+
+        // Need to go up 4 levels to get to rt\
+        private static readonly string ProjectRootDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}..\\..\\..\\..\\";
+
+        private static readonly string SceneDirectory = $"{ProjectRootDirectory}scenes\\";
+        private static readonly string TestSceneDirectory = $"{ProjectRootDirectory}scenes\\unit_tests\\";
+        private static readonly string OldSceneDirectory = $"{ProjectRootDirectory}scenes\\unconverted\\";
 
         public static string GetSceneFilePath(string sceneFile)
         {
             return $"{SceneDirectory}{sceneFile}";
-        }
-
-        public static string GetTestSceneFilePath(string sceneFile)
-        {
-            return $"{TestSceneDirectory}{sceneFile}";
         }
 
         public static string GetOldSceneFilePath(string oldSceneFile)

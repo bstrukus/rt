@@ -11,6 +11,7 @@ namespace rt.Utility
 {
     using rt.Data;
 
+    // #todo Re-implement this with Python scripts, remove it from the C# project
     internal class SceneConverter
     {
         private const char Delimiter = ' ';

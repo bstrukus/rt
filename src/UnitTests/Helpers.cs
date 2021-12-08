@@ -34,5 +34,10 @@ namespace UnitTests
                 heightVector: Vec3.AxisY * size,
                 material: Helpers.SimpleMaterial(Vec3.One));
         }
+
+        public static Air SimpleAir()
+        {
+            return new Air(1.0f, 1.0f, Vec3.One);
+        }
     }
 }

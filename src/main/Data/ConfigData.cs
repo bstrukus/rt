@@ -57,22 +57,6 @@ namespace rt.Data
             return string.Compare(tokens[1], extension) == 0;
         }
 
-        public string GetSceneFullFilePath()
-        {
-            // #todo Move this to Dir
-            if (string.IsNullOrEmpty(this.SceneDir))
-            {
-                // Use hardcoded file info
-                return Utility.Dir.GetSceneFilePath(this.SceneFile);
-            }
-            else
-            {
-                // #todo Build out scene filepath from config info
-                Log.Warning("NOT IMPLEMENTED - Input file info was provided, but is not currently being used.");
-                return null;
-            }
-        }
-
         public string GetOutputFilename()
         {
             // #todo Move this to Dir

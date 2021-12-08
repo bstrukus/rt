@@ -25,9 +25,7 @@ namespace rt.Data
 
         public ConfigData CreateConfig(string filename)
         {
-            using StreamReader file = File.OpenText(filename);
-            string fileContents = file.ReadToEnd();
-
+            string fileContents = Dir.Read(filename);
             var configData = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigData>(fileContents);
             if (configData == null || !configData.IsValid())
             {
@@ -40,9 +38,7 @@ namespace rt.Data
 
         public bool LoadScene(string filename)
         {
-            using StreamReader file = File.OpenText(filename);
-            string fileContents = file.ReadToEnd();
-
+            string fileContents = Dir.Read(filename);
             this.sceneData = Newtonsoft.Json.JsonConvert.DeserializeObject<SceneData>(fileContents);
             if (this.sceneData != null)
             {

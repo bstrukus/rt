@@ -18,10 +18,9 @@ namespace UnitTests.Data
         {
             // Arrange
             var dataFactory = new DataFactory();
-            string sceneFilePath = Dir.GetTestSceneFilePath(sceneFile);
 
             // Act
-            bool result = dataFactory.LoadScene(sceneFilePath);
+            bool result = dataFactory.LoadScene(sceneFile);
 
             // Assert
             Assert.IsTrue(result);

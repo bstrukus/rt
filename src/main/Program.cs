@@ -40,7 +40,7 @@ namespace rt
             Data.DataFactory dataFactory = new Data.DataFactory();
 
             // #todo Check to see if config file exists at the current directory first
-            var configData = dataFactory.CreateConfig(Dir.GetConfigFilePath(configFile));
+            var configData = dataFactory.CreateConfig(configFile);
             if (configData == null)
             {
                 Log.Error("Failure when loading config file");
@@ -58,7 +58,7 @@ namespace rt
             else if (configData.IsSceneRenderable)
             {
                 LogStart("LOAD SCENE");
-                dataFactory.LoadScene(configData.GetSceneFullFilePath());
+                dataFactory.LoadScene(configData.SceneFile);
 
                 var scene = dataFactory.CreateScene();
                 var camera = dataFactory.CreateCamera();

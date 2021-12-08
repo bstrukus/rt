@@ -165,12 +165,12 @@ namespace rt.Present
                 // Shadow check
                 if (this.IsPathwayToLightClear(hitInfo, light, out Vec3 pointToLight, out float lightDistance))
                 {
-                    Vec3 lightColor = Vec3.Zero;
+                    Vec3 lightColorFactor = Vec3.Zero;
 
                     //////////////////////////////////////////////////////////////////////////
                     /// Diffuse
                     float diffuseCoefficient = Calc.DiffuseCoefficient(hitInfo.Normal, pointToLight);
-                    lightColor += diffuseCoefficient * Vec3.Multiply(objectColor, light.Color);
+                    lightColorFactor += diffuseCoefficient * Vec3.Multiply(objectColor, light.Color);
 
                     //////////////////////////////////////////////////////////////////////////
                     /// Specular
@@ -179,15 +179,15 @@ namespace rt.Present
                     float specularCoefficient = Calc.SpecularCoefficient(reflectionVector, pointToEye,
                                                                          reflectionCoefficient,
                                                                          hitInfo.Material.SpecularExponent);
-                    lightColor += specularCoefficient * light.Color;
+                    lightColorFactor += specularCoefficient * light.Color;
 
                     //////////////////////////////////////////////////////////////////////////
                     /// Attenuation
                     Vec3 attenuationTerm = Calc.DistanceScaledAttenuation(this.Air.AttenuationFactors, lightDistance);
-                    lightColor = Vec3.Multiply(lightColor, attenuationTerm);
+                    lightColorFactor = Vec3.Multiply(lightColorFactor, attenuationTerm);
 
                     //////////////////////////////////////////////////////////////////////////
-                    finalColor += lightColor;
+                    finalColor += lightColorFactor;
                 }
             }
             finalColor += Vec3.Multiply(objectColor, this.AmbientColor);
@@ -213,7 +213,6 @@ namespace rt.Present
 
         private bool DebugLightCalc(HitInfo hitInfo, Ray ray, ref Vec3 outputColor)
         {
-            // #todo This can be written more clearly, switch statement?
             Vec3 objectColor = hitInfo.Material.Color;
 
             if (Levers.GetOption(Levers.Option.BooleanTest))
