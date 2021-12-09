@@ -23,15 +23,32 @@ namespace rt.Utility
          *   2. Check to see if that file is in the dev path
          */
 
+        private static readonly string OutputDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}";
+
+        // Need to go up 4 levels to get to rt\
+        private static readonly string ProjectRootDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}..\\..\\..\\..\\";
+
+        private static readonly string SceneDirectory = $"{ProjectRootDirectory}scenes\\";
+        private static readonly string TestSceneDirectory = $"{SceneDirectory}unit_tests\\";
+        private static readonly string OldSceneDirectory = $"{SceneDirectory}unconverted\\";
+
         public static string Read(string filename)
         {
-            string filepath = string.Empty;
+            string filepath;    // TBD by code below
+
+            //////////////////////////////////////////////////////////////////////////
+            /// Parameters adjacent to the EXE
             if (File.Exists($"{OutputDirectory}{filename}"))
             {
                 // Next to EXE
                 Log.Info($"File \"{filename}\" found in the EXE's path.");
                 filepath = $"{OutputDirectory}{filename}";
             }
+            //////////////////////////////////////////////////////////////////////////
+            /// #todo Paths specified by the config
+            /// else if (...)
+            //////////////////////////////////////////////////////////////////////////
+            /// Project-relative directories, used for development
             else if (File.Exists($"{ProjectRootDirectory}{filename}"))
             {
                 // At root of development directory
@@ -68,15 +85,6 @@ namespace rt.Utility
             string fileContents = file.ReadToEnd();
             return fileContents;
         }
-
-        private static readonly string OutputDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}";
-
-        // Need to go up 4 levels to get to rt\
-        private static readonly string ProjectRootDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}..\\..\\..\\..\\";
-
-        private static readonly string SceneDirectory = $"{ProjectRootDirectory}scenes\\";
-        private static readonly string TestSceneDirectory = $"{ProjectRootDirectory}scenes\\unit_tests\\";
-        private static readonly string OldSceneDirectory = $"{ProjectRootDirectory}scenes\\unconverted\\";
 
         public static string GetSceneFilePath(string sceneFile)
         {
