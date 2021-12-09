@@ -7,6 +7,7 @@ using System.Diagnostics;
 namespace rt.Render
 {
     using rt.Math;
+    using rt.Collide;
 
     /// <summary>
     /// Contains common calculations used in ray tracing, extracted to a singular class for testability.

@@ -39,7 +39,6 @@ namespace rt
             LogStart("CONFIG");
             Data.DataFactory dataFactory = new Data.DataFactory();
 
-            // #todo Check to see if config file exists at the current directory first
             var configData = dataFactory.CreateConfig(configFile);
             if (configData == null)
             {

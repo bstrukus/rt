@@ -23,7 +23,7 @@ namespace rt.Utility
          *   2. Check to see if that file is in the dev path
          */
 
-        private static readonly string OutputDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}";
+        private static readonly string OutputDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
         // Need to go up 4 levels to get to rt\
         private static readonly string ProjectRootDirectory = $"{AppDomain.CurrentDomain.BaseDirectory}..\\..\\..\\..\\";
