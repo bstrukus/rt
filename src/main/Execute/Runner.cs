@@ -45,27 +45,21 @@ namespace rt.Execute
 
         private void InitRender()
         {
-            this.StartTimer();
+            // Start our render timer
+            this.stopwatch = System.Diagnostics.Stopwatch.StartNew();
+
             Log.Write("");  // Create a newline to help print progress correctly
         }
 
         private void FinishRender()
         {
-            this.EndTimer();
-
-            this.image.Save();
-            this.image.Open();
-        }
-
-        private void StartTimer()
-        {
-            this.stopwatch = System.Diagnostics.Stopwatch.StartNew();
-        }
-
-        private void EndTimer()
-        {
+            // End the render timer
             this.stopwatch.Stop();
             Log.Info($"RUN TIME: " + string.Format("{0:0.00}", this.stopwatch.Elapsed.TotalSeconds) + " Mississippis");
+
+            // Save image
+            this.image.Save();
+            this.image.Open();
         }
     }
 }

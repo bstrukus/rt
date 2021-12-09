@@ -2,11 +2,11 @@
  * #copyright_placeholder Copyright Ben Strukus
  */
 
+using Newtonsoft.Json;
+using System.Collections.Generic;
+
 namespace rt.Data
 {
-    using Newtonsoft.Json;
-    using System.Collections.Generic;
-
     public class ShapeData : DataBase
     {
         [JsonProperty("spheres")]
