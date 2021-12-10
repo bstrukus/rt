@@ -21,7 +21,8 @@ namespace rt.Present
         public Vec3 TransmissionAttenuation;
 
         private readonly float electricPermittivity;
-        private readonly float magneticPermeability;
+
+        public float MagneticPermeability { get; private set; }
 
         public Material(Vec3 color, Vec3 transmissionAttenuation,
                         float specularCoefficient, float specularExponent,
@@ -34,9 +35,9 @@ namespace rt.Present
             this.SpecularExponent = specularExponent;
 
             this.electricPermittivity = electricPermittivity;
-            this.magneticPermeability = magneticPermeability;
+            this.MagneticPermeability = magneticPermeability;
 
-            this.IndexOfRefraction = Numbers.Sqrt(this.electricPermittivity * this.magneticPermeability);
+            this.IndexOfRefraction = Numbers.Sqrt(this.electricPermittivity * this.MagneticPermeability);
         }
     }
 }

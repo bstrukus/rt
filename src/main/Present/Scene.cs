@@ -18,12 +18,15 @@ namespace rt.Present
 
         public float MagneticPermeability { get; private set; } // Relative
 
+        public float IndexOfRefraction { get; private set; }
+
         public Vec3 AttenuationFactors { get; private set; }
 
         public Air(float electricPermittivity, float magneticPermeability, Vec3 attenuationFactors)
         {
             this.ElectricPermittivity = electricPermittivity;
             this.MagneticPermeability = magneticPermeability;
+            this.IndexOfRefraction = Numbers.Sqrt(this.ElectricPermittivity * this.MagneticPermeability);
             this.AttenuationFactors = attenuationFactors;
         }
     }
@@ -34,7 +37,6 @@ namespace rt.Present
     public class Scene
     {
         private const float ShadowFeelerEpsilon = 0.001f;
-        private const float AirTransmissionFactor = 1.0f;
 
         public Vec3 AmbientColor { get; private set; }
         public Air Air { get; private set; }
@@ -65,7 +67,7 @@ namespace rt.Present
 
         public ColorReport Trace(Ray ray, int depth)
         {
-            return Trace(ray, AirTransmissionFactor, depth);
+            return Trace(ray, this.Air.IndexOfRefraction, depth);
         }
 
         private ColorReport Trace(Ray ray, float currRefractionIndex, int depth)
@@ -84,22 +86,29 @@ namespace rt.Present
                 return new ColorReport(Vec3.Zero);
             }
 
-            if (currRefractionIndex != AirTransmissionFactor)
+            //////////////////////////////////////////////////////////////////////////
+            /// Determine if in air or in material, adjust properties accordingly
+            float relativeMagneticPermeability;
+            float nextRefractionIndex;
+            // Currently inside an object
+            if (currRefractionIndex != this.Air.IndexOfRefraction)
             {
                 hitInfo.InvertNormal();
+                relativeMagneticPermeability = hitInfo.Material.MagneticPermeability / this.Air.MagneticPermeability;
+                nextRefractionIndex = this.Air.IndexOfRefraction;
             }
-
-            //////////////////////////////////////////////////////////////////////////
-            // Calculate index of refraction
-            float nextRefractionIndex = currRefractionIndex == AirTransmissionFactor ?
-                                        hitInfo.Material.IndexOfRefraction :
-                                        AirTransmissionFactor;
-            // #optimize Equations within this part of the tracing process all utilize the relative refraction index, so might
-            // be worth calculating it here and passing it to the Calc functions
+            // Currently outside an object
+            else
+            {
+                relativeMagneticPermeability = this.Air.MagneticPermeability / hitInfo.Material.MagneticPermeability;
+                nextRefractionIndex = hitInfo.Material.IndexOfRefraction;
+            }
+            float relativeRefractionIndex = currRefractionIndex / nextRefractionIndex;
 
             //////////////////////////////////////////////////////////////////////////
             // Calculate reflection & transmission coefficients
-            float reflectionCoefficient = Calc.ReflectionCoefficient(ray, hitInfo, currRefractionIndex, nextRefractionIndex);
+            float reflectionCoefficient = Calc.ReflectionCoefficient(-ray.Direction, hitInfo.Normal, relativeRefractionIndex,
+                                                                                                     relativeMagneticPermeability);
             float transmissionCoefficient = 1.0f - reflectionCoefficient;
 
             // Factor in energy lost to the surface
@@ -111,7 +120,7 @@ namespace rt.Present
             //////////////////////////////////////////////////////////////////////////
             // Calculate lighting at current point, if we're in air and not inside of an object
             Vec3 attenuationFactor = hitInfo.Material.TransmissionAttenuation;
-            if (currRefractionIndex == AirTransmissionFactor)
+            if (currRefractionIndex == this.Air.IndexOfRefraction)
             {
                 attenuationFactor = this.Air.AttenuationFactors;
                 color += CalculateLighting(ray, hitInfo, reflectionCoefficient);
@@ -129,7 +138,7 @@ namespace rt.Present
             // Calculate transmitted lighting at current point
             if (Numbers.AreNotEqual(transmissionCoefficient, 0.0f))
             {
-                var transmittedRay = Calc.RefractedRay(ray, hitInfo, currRefractionIndex, nextRefractionIndex);
+                var transmittedRay = Calc.RefractedRay(ray, hitInfo, relativeRefractionIndex);
                 color += transmissionCoefficient * this.Trace(transmittedRay, nextRefractionIndex, depth - 1);
             }
 

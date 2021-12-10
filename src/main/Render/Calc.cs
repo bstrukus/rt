@@ -37,9 +37,8 @@ namespace rt.Render
             return 2.0f * Vec3.Dot(incidentVector, normal) * normal - incidentVector;
         }
 
-        public static Vec3 Refract(Vec3 incidentVector, Vec3 normal, float currRefractionIndex, float nextRefractionIndex)
+        public static Vec3 Refract(Vec3 incidentVector, Vec3 normal, float relativeRefractionIndex)
         {
-            float relativeRefractionIndex = currRefractionIndex / nextRefractionIndex;
             float iDotN = Vec3.Dot(incidentVector, normal);
 
             float cosThetaT = Numbers.Sqrt(1.0f - Numbers.Squared(relativeRefractionIndex) * (1.0f - Numbers.Squared(iDotN)));
@@ -58,24 +57,20 @@ namespace rt.Render
             return new Ray(newOrigin, newDirection);
         }
 
-        public static Ray RefractedRay(Ray ray, HitInfo hitInfo, float currentRefractionIndex, float nextRefractionIndex)
+        public static Ray RefractedRay(Ray ray, HitInfo hitInfo, float relativeRefractionIndex)
         {
             // Snell's Law of Refraction
             float nudgeDirection = -1.0f;// currentRefractionIndex == 1.0f ? -1.0f : 1.0f;
             Vec3 newOrigin = hitInfo.Point + hitInfo.Normal * TransmissionNudgeEpsilon * nudgeDirection;
-            Vec3 newDirection = Calc.Refract(-ray.Direction, hitInfo.Normal, currentRefractionIndex, nextRefractionIndex).Normalized();
+            Vec3 newDirection = Calc.Refract(-ray.Direction, hitInfo.Normal, relativeRefractionIndex).Normalized();
             return new Ray(newOrigin, newDirection);
         }
 
-        public static float ReflectionCoefficient(Ray ray, HitInfo hitInfo, float currentRefractionIndex, float nextRefractionIndex)
+        public static float ReflectionCoefficient(Vec3 incidentVector, Vec3 surfaceNormal, float relativeRefractionIndex,
+                                                                                           float relativeMagneticPermeability)
         {
             // Fresnel Equations
-            Vec3 incidentVector = -ray.Direction;
-            Vec3 normal = hitInfo.Normal;
-
-            const float relativeMagneticPermeability = 1.0f;  // Assumption
-            float relativeRefractionIndex = currentRefractionIndex / nextRefractionIndex;
-            float cosThetaI = Vec3.Dot(incidentVector, normal);
+            float cosThetaI = Vec3.Dot(incidentVector, surfaceNormal);
 
             // #optimize This is the same term calculated in the refracted ray equation
             float radicand = 1.0f - Numbers.Squared(relativeRefractionIndex) * (1.0f - Numbers.Squared(cosThetaI));
