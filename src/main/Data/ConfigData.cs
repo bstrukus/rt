@@ -3,6 +3,7 @@
  */
 
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace rt.Data
@@ -22,7 +23,7 @@ namespace rt.Data
         public string Output { get; set; }
 
         [JsonProperty("sceneFile")]
-        public string SceneFile { get; set; }
+        public List<string> SceneFiles { get; set; }
 
         [JsonProperty("sceneDir")]
         public string SceneDir { get; set; }
@@ -33,8 +34,21 @@ namespace rt.Data
         public override bool IsValid()
         {
             return this.Width > 0 && this.RenderDepth >= 0 &&
-                !string.IsNullOrEmpty(this.SceneFile) &&
+                //!string.IsNullOrEmpty(this.SceneFile) &&
+                this.SceneFiles != null && this.SceneFiles.Count > 0 && this.ValidateSceneFiles() &&
                 (this.IsSceneConversion || this.IsSceneRenderable);
+        }
+
+        private bool ValidateSceneFiles()
+        {
+            foreach (var scenefile in this.SceneFiles)
+            {
+                if (string.IsNullOrEmpty(scenefile))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public new void PrintData(int spaceCount)
@@ -43,13 +57,13 @@ namespace rt.Data
 
             base.Print("Width", this.Width);
             base.Print("Render Depth", this.RenderDepth);
-            base.Print("Output", this.GetOutputFilename());
-            base.Print("Scene", this.SceneFile);
+            //base.Print("Output", this.GetOutputFilename());
+            //base.Print("Scene", this.SceneFile);
             base.Print("Scene Directory", this.SceneDir);
         }
 
-        public bool IsSceneConversion => this.AreFileExtensionsSame(this.SceneFile, OldSceneFileExtension);
-        public bool IsSceneRenderable => this.AreFileExtensionsSame(this.SceneFile, SceneFileExtension);
+        public bool IsSceneConversion => false;//this.AreFileExtensionsSame(this.SceneFile, OldSceneFileExtension);
+        public bool IsSceneRenderable => true;//this.AreFileExtensionsSame(this.SceneFile, SceneFileExtension);
 
         private bool AreFileExtensionsSame(string filenameWithExtension, string extension)
         {
@@ -57,10 +71,10 @@ namespace rt.Data
             return string.Compare(tokens[1], extension) == 0;
         }
 
-        public string GetOutputFilename()
+        public string GetOutputFilename(string sceneFile)
         {
             // #todo Move this to Dir
-            var tokens = this.SceneFile.Split('.');
+            var tokens = sceneFile.Split('.');
             Debug.Assert(tokens.Length == 2);
 
             var fileExtension = tokens[1];

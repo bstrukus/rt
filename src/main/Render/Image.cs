@@ -29,7 +29,8 @@ namespace rt.Render
         /// </summary>
         public int RenderDepth { get; private set; }
 
-        private readonly string fileName;
+        public string FileName { get; private set; }
+
         private PixelBuffer buffer;
         private int pixelCount;
 
@@ -37,7 +38,7 @@ namespace rt.Render
         {
             this.Width = width;
             this.Height = height;
-            this.fileName = fileName;
+            this.FileName = fileName;
             this.RenderDepth = renderDepth;
             this.pixelCount = this.Width * this.Height;
 
@@ -63,12 +64,12 @@ namespace rt.Render
 
         public void Save()
         {
-            this.buffer.Save(this.fileName);
+            this.buffer.Save(this.FileName);
         }
 
         public void Open()
         {
-            string outputFile = Dir.GetOutputFilePath(this.fileName);
+            string outputFile = Dir.GetOutputFilePath(this.FileName);
 
             var p = new Process
             {

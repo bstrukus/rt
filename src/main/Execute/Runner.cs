@@ -9,6 +9,8 @@ namespace rt.Execute
 
     public class Runner
     {
+        public string Name => this.image.FileName;
+
         private readonly Render.Camera camera;
         private readonly Render.Image image;
         private readonly Present.Scene scene;

@@ -6,6 +6,7 @@ namespace rt
 {
     using Utility;
     using Execute;
+    using System.Collections.Generic;
 
     internal class Program
     {
@@ -19,22 +20,27 @@ namespace rt
             }
 
             LogStart("LOAD");
-            var runner = Load(args[0]);
+            var sceneRenderers = Load(args[0]);
             LogEnd("LOAD");
 
-            if (runner == null)
+            if (sceneRenderers == null || sceneRenderers.Count == 0)
             {
                 return;
             }
 
-            LogStart("RENDERING");
-            runner.Execute();
-            LogEnd("RENDERING");
+            foreach (var renderJob in sceneRenderers)
+            {
+                LogStart($"RENDERING: {renderJob.Name}");
+
+                renderJob.Execute();
+
+                LogEnd("RENDERING");
+            }
 
             LogEnd("PROGRAM");
         }
 
-        private static Runner Load(string configFile)
+        private static List<Runner> Load(string configFile)
         {
             LogStart("CONFIG");
             Data.DataFactory dataFactory = new Data.DataFactory();
@@ -45,31 +51,31 @@ namespace rt
                 Log.Error("Failure when loading config file");
             }
             LogEnd("CONFIG");
-
-            if (configData.IsSceneConversion)
+            //
+            //             if (configData.IsSceneConversion)
+            //             {
+            //                 LogStart("CONVERSION");
+            //                 // #todo Use the ConfigData to get this file information in the SceneConverter, maybe pass in the ConfigData?
+            //                 SceneConverter.Convert(configData.SceneFile);
+            //                 LogEnd("CONVERSION");
+            //                 return null;
+            //             }
+            //             else
             {
-                LogStart("CONVERSION");
-                // #todo Use the ConfigData to get this file information in the SceneConverter, maybe pass in the ConfigData?
-                SceneConverter.Convert(configData.SceneFile);
-                LogEnd("CONVERSION");
-                return null;
-            }
-            else if (configData.IsSceneRenderable)
-            {
-                LogStart("LOAD SCENE");
-                dataFactory.LoadScene(configData.SceneFile);
+                List<Runner> scenes = new List<Runner>(configData.SceneFiles.Count);
+                foreach (var sceneFile in configData.SceneFiles)
+                {
+                    LogStart($"LOAD SCENE: {sceneFile}");
+                    dataFactory.LoadScene(sceneFile);
 
-                var scene = dataFactory.CreateScene();
-                var camera = dataFactory.CreateCamera();
-                var image = dataFactory.CreateImage(configData);
-                LogEnd("LOAD SCENE");
+                    var scene = dataFactory.CreateScene();
+                    var camera = dataFactory.CreateCamera();
+                    var image = dataFactory.CreateImage(configData, sceneFile);
+                    scenes.Add(new Runner(scene, camera, image));
 
-                return new Runner(scene, camera, image);
-            }
-            else
-            {
-                Log.Error("Scene was neither converted nor rendered, unknown error");
-                return null;
+                    LogEnd("LOAD SCENE");
+                }
+                return scenes;
             }
         }
 

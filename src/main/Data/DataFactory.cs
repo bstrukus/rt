@@ -183,7 +183,7 @@ namespace rt.Data
                 plane: this.CreateProjectionPlane());
         }
 
-        public Image CreateImage(ConfigData configData)
+        public Image CreateImage(ConfigData configData, string filename)
         {
             Debug.Assert(configData != null);
             var camera = this.CreateCamera();
@@ -194,7 +194,7 @@ namespace rt.Data
             int width = configData.Width;
             int height = (int)((float)width / aspectRatio);
 
-            return new Image(width, height, configData.GetOutputFilename(), configData.RenderDepth);
+            return new Image(width, height, configData.GetOutputFilename(filename), configData.RenderDepth);
         }
 
         public static bool ValidateList(List<double> vector, int expectedCount, bool shouldBeNormalizedValues = true)
