@@ -1,0 +1,19 @@
+{
+    "width": 1920,
+    "renderDepth": 10,
+    "output": null,
+    "sceneFile":
+    [
+        "atest1.json",
+        "atest2.json",
+        "btest1.json",
+        "ctest1.json",
+        "etest1.json",
+        "ftest1.json",
+        "ptest1.json",
+        "rtest1.json",
+        "stest1.json",
+        "ttest1.json",
+        "ttest2.json"
+    ]
+}
