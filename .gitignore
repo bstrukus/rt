@@ -1,2 +1,4 @@
 OUTPUT/*
 SCRATCH/*
+hooks/*
+lfs/*
