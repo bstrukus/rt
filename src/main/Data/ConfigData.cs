@@ -31,6 +31,15 @@ namespace rt.Data
         [JsonProperty("renderDepth")]
         public int RenderDepth { get; set; }
 
+        [JsonProperty("debugOptions")]
+        public List<string> DebugOptions { get; set; }
+
+        [JsonProperty("debugObjectStart")]
+        public int DebugObjectStart { get; set; }
+
+        [JsonProperty("debugObjectLimit")]
+        public int DebugObjectLimit { get; set; } = -1;
+
         public override bool IsValid()
         {
             return this.Width > 0 && this.RenderDepth >= 0 &&

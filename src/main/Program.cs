@@ -50,6 +50,7 @@ namespace rt
             {
                 Log.Error("Failure when loading config file");
             }
+            InitializeLevers(configData);
             LogEnd("CONFIG");
             //
             //             if (configData.IsSceneConversion)
@@ -77,6 +78,22 @@ namespace rt
                 }
                 return scenes;
             }
+        }
+
+        private static void InitializeLevers(Data.ConfigData configData)
+        {
+            var activeOptions = new System.Collections.Generic.List<Levers.Option>();
+            if (configData?.DebugOptions != null)
+            {
+                foreach (var name in configData.DebugOptions)
+                {
+                    if (System.Enum.TryParse<Levers.Option>(name, out var opt))
+                    {
+                        activeOptions.Add(opt);
+                    }
+                }
+            }
+            Levers.Initialize(activeOptions, configData?.DebugObjectStart ?? 0, configData?.DebugObjectLimit ?? -1);
         }
 
         private static void LogStart(string state)
